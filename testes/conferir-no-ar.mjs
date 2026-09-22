@@ -96,7 +96,15 @@ try {
     ok(resposta.status === 200 && corpo.includes('id="root"'), `GET ${rota} → HTTP ${resposta.status}, devolveu o app`)
   }
 
-  // 5. O que NÃO pode estar no ar
+  // 5. O ícone da marca tem de estar servido de verdade (não só presente no repositório)
+  const { resposta: rIcone } = await buscar('/oren-ai-192.png')
+  ok(rIcone.status === 200, `GET /oren-ai-192.png → HTTP ${rIcone.status}`)
+  ok(
+    (rIcone.headers.get('content-type') || '').includes('image/png'),
+    `o ícone é servido como image/png: "${rIcone.headers.get('content-type')}"`,
+  )
+
+  // 6. O que NÃO pode estar no ar
   if (asset) {
     const { corpo: js } = await buscar(asset)
     ok(!js.includes('base44'), 'o bundle servido não menciona a plataforma base44')

@@ -1,8 +1,9 @@
 import React from 'react'
 import { Link, NavLink, Outlet } from 'react-router-dom'
-import { ArrowLeft, Stethoscope } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react'
 import { TELAS_DEMO } from '@/data/demo'
 import { FaixaDemo } from '@/components/demo/AvisoDemo'
+import { MarcaOren } from '@/components/marca/OrenEmblema'
 
 // ============================================================================
 // MOLDE DA DEMONSTRAÇÃO
@@ -18,12 +19,9 @@ export default function DemoShell() {
 
       <header className="sticky top-0 z-40 glass">
         <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 px-4">
-          <Link to="/demo" className="flex items-center gap-2 text-base font-extrabold tracking-tight">
-            <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary">
-              <Stethoscope className="h-3.5 w-3.5 text-primary-foreground" />
-            </span>
-            Transleitor<span className="text-primary">.</span>
-            <span className="ml-1 hidden text-[10px] font-bold uppercase tracking-wider text-muted-foreground sm:inline">
+          <Link to="/demo" className="flex items-center gap-2">
+            <MarcaOren tamanho={30} />
+            <span className="hidden text-[10px] font-bold uppercase tracking-wider text-muted-foreground sm:inline">
               demonstração
             </span>
           </Link>

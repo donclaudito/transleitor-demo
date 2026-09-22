@@ -27,6 +27,35 @@ essa amostra com a identidade da capa transformaria a "amostra" em ficção — 
 página inteira é não inventar. O bloco `.tema-app` **repete** os valores de `:root`, e essa cópia é
 conferida por teste: divergiu, reprova.
 
+### O emblema é ARQUIVO, não desenho
+
+`public/oren-ai-{512,192,180,64,32}.png` são gerados do PNG oficial da marca (2048×2048) por
+`ferramentas/gerar-icones-oren.py`:
+
+```bash
+python ferramentas/gerar-icones-oren.py CAMINHO_DO_EMBLEMA.png
+```
+
+O script **mede** o círculo em vez de adivinhar, e faz três coisas que um "salvar como" não faz:
+
+1. **recorta justo** — no original o círculo ocupa ~58% do quadro, o resto é preto;
+2. **aplica máscara circular com alfa** — o fundo é preto e a capa é azul-marinho; recorte quadrado
+   deixaria um quadrado preto visível sobre o marinho;
+3. **descarta a marca d'água** de geração que existe no canto inferior direito (não é marca).
+
+**A primeira versão da capa tinha um SVG desenhado à mão**, aproximado da marca a partir de uma
+imagem pequena. Aproximação de marca é erro — o traçado e a cor não eram os da marca. O SVG foi
+removido e `conferir.mjs` **reprova** se um `viewBox` voltar para `OrenEmblema.jsx`: existe **um só**
+emblema neste projeto.
+
+**Cor da marca, medida e não escolhida no olho:** `#acd8c3` (menta, média de 42.691 amostras do anel).
+
+> **[DECISÃO pendente] Menta ou ciano?** O emblema é **menta sobre azul-marinho**. O acento da capa
+> hoje é **ciano**, tirado da imagem de capa que o Dr. Claudio enviou. As duas cores convivem sem
+> quebrar, mas não são a mesma família. Trocar o acento para a menta do emblema é uma linha em
+> `.tema-oren` (`--primary`) — falta a decisão dele.
+
+
 ---
 
 ## O que este site é — e o que ele não é
@@ -57,7 +86,7 @@ npm run dev        # servidor local
 
 ```bash
 npm run lint       # ESLint (no-undef ligado de propósito)
-npm run conferir   # 592 asserções: imports, avisos, rotas, mojibake, espelho de tema, proibições de rede
+npm run conferir   # 600 asserções: imports, avisos, rotas, mojibake, espelho de tema, ícones, proibições de rede
 npm run smoke      # renderiza as 15 telas e confere marcas de texto
 npm run build      # build de produção
 npm run servir     # serve dist/ num servidor Node puro, para conferir o que é SERVIDO
@@ -66,8 +95,12 @@ npm run provar     # tudo acima, em ordem
 ```
 
 `npm run servir` existe porque `vite preview` também carrega o `vite.config.js` — e isso passa pelo
-esbuild. O servidor de `testes/servir-dist.mjs` só entrega arquivos de `dist/`, do mesmo jeito que o
-GitHub Pages entrega, sem depender de nada disso.
+esbuild. O servidor de `testes/servir-dist.mjs` só entrega arquivos de `dist/`, sem depender disso — e
+ele **imita o Vercel**, que é o host de produção: rota sem extensão devolve o `index.html` (é o que o
+`rewrites` faz) e `/assets/` sai com cache imutável (é o que os `headers` fazem). Assim
+`npm run servir` + `npm run no-ar http://127.0.0.1:4173` é um **ensaio local da produção**. Ressalva: o
+GitHub Pages **não** reescreve rota — lá quem resolve rota profunda é o par `public/404.html` + o
+despertador no `index.html`.
 
 ### Por que a prova de renderização existe
 
@@ -102,8 +135,12 @@ src/
 testes/
   conferir.mjs                 conferências estáticas
   conferir-no-ar.mjs           confere o que está NO AR
-  servir-dist.mjs              serve dist/ sem passar pelo Vite
+  servir-dist.mjs              serve dist/ imitando o host (rewrite + cache dos assets)
   smoke/entrada.jsx            prova de renderização das 15 telas
+ferramentas/
+  gerar-icones-oren.py         recorta o PNG da marca e gera o conjunto de ícones
+public/
+  oren-ai-*.png                ícones da marca — GERADOS, não editar à mão
 ```
 
 ### As onze telas
@@ -158,7 +195,7 @@ O arquivo `vercel.json` já resolve tudo o que o Vercel precisa saber:
 | `outputDirectory: dist` | Saída do Vite. |
 | `framework: vite` | Detecção explícita, em vez de depender do palpite da plataforma. |
 | `Cache-Control` imutável em `/assets/` | O nome do arquivo tem hash do conteúdo: se mudar, muda o nome. Segurar em cache é seguro. |
-| `buildCommand` com as verificações | O deploy **não publica código não conferido**: lint, 592 asserções e prova de renderização rodam antes do build. |
+| `buildCommand` com as verificações | O deploy **não publica código não conferido**: lint, 600 asserções e prova de renderização rodam antes do build. |
 
 **No Vercel o site fica na raiz**, então `VITE_BASE_PATH` **não** deve ser definida (o padrão do
 `vite.config.js` é `/`).
@@ -258,8 +295,8 @@ Para publicar, uma das duas:
 
 ## Limites declarados
 
-- **Não verificado em navegador.** O que está provado é: lint sem erros, 592 asserções de
-  conferência, renderização das 15 telas com 54 marcas de texto e build `exit 0`. A aparência na
+- **Não verificado em navegador.** O que está provado é: lint sem erros, 600 asserções de
+  conferência, renderização das 15 telas com 55 marcas de texto e build `exit 0`. A aparência na
   tela (layout, toque no iPad, comportamento de rolagem) não foi medida: não há navegador no
   ambiente onde isto foi construído.
 - **A demonstração não demonstra o aplicativo funcionando.** Ela mostra o formato das telas e o

@@ -1,53 +1,40 @@
-import React, { useId } from 'react'
+import React from 'react'
 
 // ============================================================================
-// EMBLEMA OREN.AI
+// EMBLEMA OREN.AI — o arquivo da marca, não um desenho meu
 //
-// O símbolo da marca: anel ciano, brilho interno e o traçado de pulso em degraus — a mesma
-// linguagem visual do material da marca (azul-marinho profundo, ciano, "Inteligência Cirúrgica").
+// HISTÓRICO, PARA NÃO SE REPETIR: na primeira versão da capa eu desenhei o emblema à mão em SVG,
+// a partir da imagem de capa que o Dr. Claudio mandou (baixa resolução). O resultado era uma
+// APROXIMAÇÃO — e aproximação de marca é erro: o traçado e a cor não eram os da marca.
+// Agora o emblema vem do arquivo oficial (2048×2048), recortado e com fundo transparente por
+// `gerar-icones-oren.py`. O SVG foi removido; existe UM só emblema neste projeto.
 //
-// O id do gradiente é único por instância (`useId`): o emblema aparece mais de uma vez na capa
-// (cabeçalho e herói), e id repetido em SVG faz o navegador usar o primeiro — o segundo
-// renderizaria sem brilho, sem erro nenhum no console. Foi por isso que o id não é fixo.
+// Por que arquivo separado e não embutido: o mesmo desenho serve de ícone de aba, ícone de app e
+// marca na tela. Embutir obrigaria a manter três cópias do mesmo traçado.
 // ============================================================================
-export default function OrenEmblema({ tamanho = 96, className = '', brilho = true }) {
-  const bruto = useId()
-  const idGradiente = `oren-brilho-${bruto.replace(/:/g, '')}`
 
+// O prefixo do site (GitHub Pages serve em subpasta; Vercel e local servem na raiz).
+const BASE = import.meta.env.BASE_URL || '/'
+
+export default function OrenEmblema({ tamanho = 96, className = '' }) {
   return (
-    <svg
+    <img
+      src={`${BASE}oren-ai-192.png`}
       width={tamanho}
       height={tamanho}
-      viewBox="0 0 96 96"
-      className={className}
-      role="img"
-      aria-label="Oren.AI"
-    >
-      <defs>
-        <radialGradient id={idGradiente} cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#22d3ee" stopOpacity="0.30" />
-          <stop offset="62%" stopColor="#22d3ee" stopOpacity="0.07" />
-          <stop offset="100%" stopColor="#22d3ee" stopOpacity="0" />
-        </radialGradient>
-      </defs>
-
-      <circle cx="48" cy="48" r="47" fill={`url(#${idGradiente})`} />
-      <circle cx="48" cy="48" r="38" fill="#04121c" />
-      <circle cx="48" cy="48" r="38" fill="none" stroke="#22d3ee" strokeOpacity="0.45" strokeWidth="1.25" />
-      <path
-        d="M24 51 H35 V59 H46 V33 H57 V51 H72"
-        fill="none"
-        stroke="#22d3ee"
-        strokeWidth="4.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        style={brilho ? { filter: 'drop-shadow(0 0 7px rgba(34, 211, 238, 0.75))' } : undefined}
-      />
-    </svg>
+      // Sem texto alternativo e fora da árvore de acessibilidade DE PROPÓSITO: o nome da marca
+      // está escrito ao lado, em texto. Descrever a imagem de novo faria o leitor de tela dizer
+      // "Oren.AI" duas vezes seguidas.
+      alt=""
+      aria-hidden="true"
+      draggable={false}
+      className={`select-none ${className}`}
+      style={{ width: tamanho, height: tamanho }}
+    />
   )
 }
 
-// Marca completa: emblema + nome, com a hierarquia que o Dr. Claudio definiu — Oren.AI é a
+// Marca completa: emblema + nome, com a hierarquia definida pelo Dr. Claudio — Oren.AI é a
 // MARCA-MÃE e o Transleitor é o PRODUTO dentro dela. Por isso os dois aparecem, nesta ordem.
 export function MarcaOren({ tamanho = 40, comProduto = true, className = '' }) {
   return (

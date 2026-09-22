@@ -46,6 +46,8 @@ const TELAS = [
       // A amostra da tela do aplicativo dentro da moldura do herói.
       'Escolha o ambiente',
       'sem alteração',
+      // O emblema da marca é ARQUIVO, não desenho em SVG: se o <img> sumir, isto reprova.
+      'oren-ai-192.png',
     ],
   ],
   ['Molde da demonstração', DemoShell, ['demonstração', 'Voltar à apresentação']],

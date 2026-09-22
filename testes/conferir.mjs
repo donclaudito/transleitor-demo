@@ -229,6 +229,38 @@ for (const arquivo of ARQUIVOS) {
 }
 
 // ---------------------------------------------------------------------------
+// 6. ÍCONE DA MARCA: o que a página pede tem de existir de verdade
+//
+// Arquivo de ícone ausente não quebra build nem lint: a página abre com um quadradinho vazio na
+// aba, e ninguém percebe até alguém olhar a aba. Esta conferência fecha esse silêncio.
+// ---------------------------------------------------------------------------
+{
+  const html = readFileSync(join(RAIZ, 'index.html'), 'utf8')
+  const pedidos = [...html.matchAll(/(?:href|src)="\/([^"]+\.(?:png|svg|ico|webmanifest))"/g)].map((m) => m[1])
+
+  ok(pedidos.length >= 2, `esperava ícones declarados no index.html; achei ${pedidos.length}`)
+  for (const arquivo of pedidos) {
+    ok(existsSync(join(RAIZ, 'public', arquivo)), `index.html pede "/${arquivo}", que não existe em public/`)
+  }
+
+  const emblema = readFileSync(join(SRC, 'components', 'marca', 'OrenEmblema.jsx'), 'utf8')
+  const usados = [...emblema.matchAll(/`\$\{BASE\}([^`]+)`/g)].map((m) => m[1])
+  ok(usados.length >= 1, 'não achei o arquivo do emblema referenciado em OrenEmblema.jsx')
+  for (const arquivo of usados) {
+    ok(existsSync(join(RAIZ, 'public', arquivo)), `OrenEmblema aponta para "${arquivo}", que não existe em public/`)
+  }
+
+  // O EMBLEMA DESENHADO À MÃO NÃO PODE VOLTAR.
+  // A primeira versão trazia um SVG meu, aproximado da marca a partir de uma imagem pequena — e
+  // aproximação de marca é erro: o traçado e a cor não eram os da marca. Agora existe UM só
+  // emblema, o arquivo oficial. Um `viewBox` aqui significa que alguém voltou a desenhar.
+  ok(
+    !/viewBox/.test(emblema),
+    'OrenEmblema.jsx voltou a desenhar o emblema em SVG — tem de usar o arquivo da marca',
+  )
+}
+
+// ---------------------------------------------------------------------------
 console.log(`\n${assercoes} asserções, ${falhas.length} falha(s)`)
 if (falhas.length) {
   console.log('\nFALHAS:')
