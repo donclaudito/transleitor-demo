@@ -18,7 +18,7 @@ export default function LandingCTA() {
             Comece a usar <span className="text-primary">agora mesmo</span>
           </h2>
           <p className="text-muted-foreground mb-8 max-w-md mx-auto">
-            Veja as telas do Transleitor agora, sem cadastro e sem instalar nada — são onze telas
+            Veja as telas do Transleitor agora, sem cadastro e sem instalar nada — são quatorze telas
             navegáveis para você entender como ele é na mão de quem usa.
           </p>
           <Link

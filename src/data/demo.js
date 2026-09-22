@@ -35,6 +35,12 @@ export const AVISO_DEMO = {
 // ---------------------------------------------------------------------------
 export const TELAS_DEMO = [
   {
+    rota: '/demo/mapa',
+    nome: 'Mapa do aplicativo',
+    icone: '🗺️',
+    resumo: 'Todas as telas de uma vez: as 34 rotas, o que cada uma faz e quais têm demonstração.',
+  },
+  {
     rota: '/demo/menu',
     nome: 'Menu — a central do plantão',
     icone: '🧭',
@@ -99,6 +105,18 @@ export const TELAS_DEMO = [
     nome: 'Auditor de segurança',
     icone: '🛡️',
     resumo: 'Como o aplicativo se examina em busca de furos e o que faz com o que encontra.',
+  },
+  {
+    rota: '/demo/minha-llm',
+    nome: 'Use a sua própria chave de IA',
+    icone: '🔑',
+    resumo: 'Módulo novo: o profissional usa a chave dele, sem gastar os créditos da plataforma.',
+  },
+  {
+    rota: '/demo/integracoes',
+    nome: 'Integração com a instituição',
+    icone: '🏥',
+    resumo: 'Módulo novo: destino, credencial e dialeto — genérico, com o envio ainda desligado.',
   },
 ];
 
@@ -546,6 +564,7 @@ export const SEGURANCA_DEMO = {
 // Avisos por tela (o que a demonstração NÃO faz naquela tela específica)
 // ---------------------------------------------------------------------------
 export const LIMITES_POR_TELA = {
+  '/demo/mapa': 'As rotas listadas são as reais do aplicativo, mas nenhuma delas é navegável aqui: o mapa aponta para a demonstração quando ela existe, e diz "não demonstrada" quando não existe. Nada é contado ou medido nesta página.',
   '/demo/menu': 'Os cartões de ambiente não navegam nesta demonstração. A tela desenhada é a real do aplicativo, mas a moldura e o brilho em volta são da página de apresentação.',
   '/demo/evolucao': 'Nenhuma IA é chamada aqui: o texto da pré-visualização é montado com os itens que você clicar. Nada é gravado.',
   '/demo/captura': 'Nenhum arquivo é lido, nenhuma câmera é aberta e nenhum texto é extraído. Os valores mostrados são fixos.',
@@ -557,4 +576,6 @@ export const LIMITES_POR_TELA = {
   '/demo/monitoramento': 'Os números e a trilha são de exemplo. Nada é medido nesta página.',
   '/demo/direitos': 'Nenhuma exportação e nenhuma eliminação acontecem. A tela mostra as cinco etapas do procedimento.',
   '/demo/seguranca': 'Nenhuma varredura é executada. A tela mostra as categorias verificadas e o formato do relatório.',
+  '/demo/minha-llm': 'Nenhuma chave é digitada e nenhum provedor é consultado. A lista de modelos e as linhas cadastradas são fixas.',
+  '/demo/integracoes': 'Nenhum destino é gravado e nenhum segredo é consultado. O envio ao hospital não existe nesta demonstração — e, no aplicativo, também não está ligado.',
 };

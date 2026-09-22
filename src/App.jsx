@@ -5,6 +5,7 @@ import NaoEncontrada from '@/pages/NaoEncontrada'
 import ScrollToTop from '@/components/ScrollToTop'
 import DemoShell from '@/components/demo/DemoShell'
 import DemoIndex from '@/pages/demo/DemoIndex'
+import DemoMapa from '@/pages/demo/DemoMapa'
 import DemoMenu from '@/pages/demo/DemoMenu'
 import DemoEvolucao from '@/pages/demo/DemoEvolucao'
 import DemoCaptura from '@/pages/demo/DemoCaptura'
@@ -16,6 +17,8 @@ import DemoElio from '@/pages/demo/DemoElio'
 import DemoMonitoramento from '@/pages/demo/DemoMonitoramento'
 import DemoDireitos from '@/pages/demo/DemoDireitos'
 import DemoSeguranca from '@/pages/demo/DemoSeguranca'
+import DemoMinhaLLM from '@/pages/demo/DemoMinhaLLM'
+import DemoIntegracoes from '@/pages/demo/DemoIntegracoes'
 
 // O site pode ser servido na raiz (máquina local, domínio próprio) ou dentro de uma subpasta
 // (GitHub Pages serve em /<repo>/). O Vite já publica o valor certo em BASE_URL; o roteador
@@ -33,6 +36,7 @@ export default function App() {
         {/* A demonstração navegável. Todas as telas são ilustrativas e não executam função. */}
         <Route path="/demo" element={<DemoShell />}>
           <Route index element={<DemoIndex />} />
+          <Route path="mapa" element={<DemoMapa />} />
           <Route path="menu" element={<DemoMenu />} />
           <Route path="evolucao" element={<DemoEvolucao />} />
           <Route path="captura" element={<DemoCaptura />} />
@@ -44,6 +48,8 @@ export default function App() {
           <Route path="monitoramento" element={<DemoMonitoramento />} />
           <Route path="direitos" element={<DemoDireitos />} />
           <Route path="seguranca" element={<DemoSeguranca />} />
+          <Route path="minha-llm" element={<DemoMinhaLLM />} />
+          <Route path="integracoes" element={<DemoIntegracoes />} />
         </Route>
 
         {/* Endereços antigos do aplicativo não existem aqui: quem chegar por um link velho vai

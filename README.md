@@ -162,7 +162,7 @@ e o texto estava certo. Agora há asserção para a fonte da amostra.
 
 ## O que este site é — e o que ele não é
 
-**É:** a capa de apresentação do produto e onze telas ilustrativas do aplicativo, navegáveis de
+**É:** a capa de apresentação do produto e quatorze telas ilustrativas do aplicativo, navegáveis de
 verdade, com conteúdo fixo escrito para a demonstração.
 
 **Não é:** o aplicativo. Nada aqui grava, consulta, envia ou recebe nada.
@@ -188,7 +188,7 @@ npm run dev        # servidor local
 
 ```bash
 npm run lint       # ESLint (no-undef ligado de propósito)
-npm run conferir   # 662 asserções: imports, avisos, rotas, mojibake, espelho de tema, ícones, tipografia, proibições de rede
+npm run conferir   # 728 asserções: imports, avisos, rotas, mojibake, espelho de tema, ícones, tipografia, proibições de rede
 npm run smoke      # renderiza as 15 telas e confere marcas de texto
 npm run build      # build de produção
 npm run servir     # serve dist/ num servidor Node puro, para conferir o que é SERVIDO
@@ -233,22 +233,23 @@ src/
     ui/                        design system (shadcn/ui copiado do aplicativo)
   pages/
     LandingPage.jsx            capa
-    demo/                      as onze telas demonstradas
+    demo/                      as quatorze telas demonstradas
 testes/
   conferir.mjs                 conferências estáticas
   conferir-no-ar.mjs           confere o que está NO AR
   servir-dist.mjs              serve dist/ imitando o host (rewrite + cache dos assets)
-  smoke/entrada.jsx            prova de renderização das 15 telas
+  smoke/entrada.jsx            prova de renderização das 18 telas
 ferramentas/
   gerar-icones-oren.py         recorta o PNG da marca e gera o conjunto de ícones
 public/
   oren-ai-*.png                ícones da marca — GERADOS, não editar à mão
 ```
 
-### As onze telas
+### As quatorze telas
 
 | Rota | Tela |
 |---|---|
+| `/demo/mapa` | **Mapa do aplicativo** — as 34 rotas reais, com o que cada uma faz |
 | `/demo/menu` | Menu — a central do plantão (escolher o ambiente) |
 | `/demo/evolucao` | Evolução SOAP com o painel de sinais da especialidade |
 | `/demo/captura` | Captura de laudo/exame por foto ou PDF |
@@ -260,6 +261,37 @@ public/
 | `/demo/monitoramento` | Uso e trilha de IA |
 | `/demo/direitos` | Direitos do titular |
 | `/demo/seguranca` | Auditor de segurança |
+| `/demo/minha-llm` | **Use a sua própria chave de IA** — módulo novo do aplicativo |
+| `/demo/integracoes` | **Integração com a instituição** — módulo novo, genérico, envio desligado |
+
+### O mapa do aplicativo, e por que ele é honesto
+
+A demonstração cobre **14 das 34 rotas** do aplicativo. O mapa (`/demo/mapa`) lista **todas**, e cada
+linha diz uma de duas coisas: *tem demonstração* (com o link) ou **não demonstrada**. A barra de
+cobertura diz 41%.
+
+**A lista é lida do aplicativo, não escrita de memória:** as rotas vêm do roteador (`App.jsx`), e os
+números — **24 páginas, 34 rotas, 35 entidades, 17 funções de backend** — da contagem dos arquivos.
+É por isso que o mapa inclui uma tela que existe no código mas **não tem rota** (`OAuthConsent`, do
+provedor de identidade): esconder isso seria maquiar o inventário.
+
+`conferir.mjs` **reprova link morto** no mapa: todo `demo:` tem de apontar para uma tela que existe.
+
+### Os dois módulos novos do aplicativo (22/09/2026)
+
+| Módulo | O que ele faz | O que ele **não** faz |
+|---|---|---|
+| **Use a sua própria chave de IA** (`/minha-llm`) | O profissional cadastra a chave do provedor que ele já paga e usa sem gastar os créditos da plataforma — no texto e na leitura de imagem. Entidade própria com acesso **por dono do registro** | Não promete qual modelo é melhor: a lista é a que **o provedor** devolve para aquela chave. E avisa, na tela, que o texto clínico vai para o provedor escolhido — **transferência internacional é decisão do médico** |
+| **Integração com a instituição** (`/integracoes`) | Cadastra destino, credencial e **dialeto** (`json`, `hl7v2`, `fhir`, `soap`, `arquivo`). Genérico de propósito — o teste do aplicativo **reprova citar fornecedor** na tela, e aqui também. Só administrador. Valida o endereço em código: **só https**, sem credencial na URL, sem loopback nem rede interna | **O envio não está ligado** — e a tela diz isso em letra grande. Falta a confirmação do Encarregado (DPO) sobre a base legal. **Só o dialeto JSON está implementado**; os outros aparecem na lista marcados como "não implementado", porque marcar HL7 como pronto sem implementar seria a mentira mais fácil da tela. A credencial é o **nome de um segredo** (ponteiro, nunca o valor), e a conferência do conteúdo **proíbe o nome do paciente**, permitindo o do profissional |
+
+> **Por que o exemplo medido (Tasy) aparece no README e não na tela:** o aplicativo tem teste que
+> reprova citar fornecedor na interface — nome de fornecedor no produto envelhece, exclui os outros e
+> transforma decisão de arquitetura em preferência comercial. `conferir.mjs` **reprova** se um nome de
+> fornecedor voltar para `DemoIntegracoes.jsx`, e tem controle negativo: o comentário que explica a
+> regra **pode** citar (e cita), porque comentário não é tela.
+
+Os dois entraram na demonstração no mesmo dia em que foram encontrados na pesquisa — a demonstração
+estava desatualizada em relação ao aplicativo, e isso é o tipo de coisa que envelhece calada.
 
 **A tela de Menu é fonte única.** O mesmo componente (`components/demo/PainelMenu.jsx`) desenha a
 tela da demonstração **e** a amostra dentro da moldura do herói da capa. Duas cópias divergiriam na
@@ -297,7 +329,7 @@ O arquivo `vercel.json` já resolve tudo o que o Vercel precisa saber:
 | `outputDirectory: dist` | Saída do Vite. |
 | `framework: vite` | Detecção explícita, em vez de depender do palpite da plataforma. |
 | `Cache-Control` imutável em `/assets/` | O nome do arquivo tem hash do conteúdo: se mudar, muda o nome. Segurar em cache é seguro. |
-| `buildCommand` com as verificações | O deploy **não publica código não conferido**: lint, 662 asserções e prova de renderização rodam antes do build. |
+| `buildCommand` com as verificações | O deploy **não publica código não conferido**: lint, 728 asserções e prova de renderização rodam antes do build. |
 
 **No Vercel o site fica na raiz**, então `VITE_BASE_PATH` **não** deve ser definida (o padrão do
 `vite.config.js` é `/`).
@@ -398,8 +430,8 @@ Para publicar, uma das duas:
 
 ## Limites declarados
 
-- **Não verificado em navegador.** O que está provado é: lint sem erros, 662 asserções de
-  conferência, renderização das 15 telas com 61 marcas de texto e build `exit 0`. A aparência na
+- **Não verificado em navegador.** O que está provado é: lint sem erros, 728 asserções de
+  conferência, renderização das 18 telas com 75 marcas de texto e build `exit 0`. A aparência na
   tela (layout, toque no iPad, comportamento de rolagem) não foi medida: não há navegador no
   ambiente onde isto foi construído.
 - **A demonstração não demonstra o aplicativo funcionando.** Ela mostra o formato das telas e o

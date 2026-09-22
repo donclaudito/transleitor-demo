@@ -17,6 +17,7 @@ import { MemoryRouter } from 'react-router-dom'
 import LandingPage from '@/pages/LandingPage'
 import NaoEncontrada from '@/pages/NaoEncontrada'
 import DemoIndex from '@/pages/demo/DemoIndex'
+import DemoMapa from '@/pages/demo/DemoMapa'
 import DemoMenu from '@/pages/demo/DemoMenu'
 import DemoEvolucao from '@/pages/demo/DemoEvolucao'
 import DemoCaptura from '@/pages/demo/DemoCaptura'
@@ -28,6 +29,8 @@ import DemoElio from '@/pages/demo/DemoElio'
 import DemoMonitoramento from '@/pages/demo/DemoMonitoramento'
 import DemoDireitos from '@/pages/demo/DemoDireitos'
 import DemoSeguranca from '@/pages/demo/DemoSeguranca'
+import DemoMinhaLLM from '@/pages/demo/DemoMinhaLLM'
+import DemoIntegracoes from '@/pages/demo/DemoIntegracoes'
 import DemoShell from '@/components/demo/DemoShell'
 
 // [nome, componente, marcas que PRECISAM aparecer no HTML renderizado]
@@ -77,6 +80,21 @@ const TELAS = [
   ['Monitoramento', DemoMonitoramento, ['Monitoramento e trilha de IA', 'O que nunca entra', 'Trilha de uso']],
   ['Direitos do titular', DemoDireitos, ['Direitos do titular', '15 dias', '20 anos']],
   ['Auditor de segurança', DemoSeguranca, ['Auditor de segurança', 'Ficha de achado', 'Severidade']],
+  [
+    'Mapa do aplicativo',
+    DemoMapa,
+    ['Mapa do aplicativo', 'todas as telas', 'O que esta demonstração cobre', 'Não demonstrada', 'funções de backend'],
+  ],
+  [
+    'Use a sua própria chave de IA',
+    DemoMinhaLLM,
+    ['Use a sua própria chave de IA', 'Sem gastar créditos da plataforma', 'Minhas linhas', 'transferência para outro serviço'],
+  ],
+  [
+    'Integração com a instituição',
+    DemoIntegracoes,
+    ['Integração com o sistema da instituição', 'O envio ainda não está ligado', 'Conferir segredo', 'O nome do paciente não sai daqui', 'não implementado'],
+  ],
   ['Página não encontrada', NaoEncontrada, ['Esta página não existe aqui', 'Ver a demonstração']],
 ]
 

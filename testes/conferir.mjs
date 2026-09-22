@@ -110,7 +110,7 @@ ok(importsConferidos > 50, `esperava conferir muitos imports nomeados; conferi $
 // A regra dura desta peça: quem abre um link direto precisa saber que é ilustrativo.
 // ---------------------------------------------------------------------------
 const PAGINAS_DEMO = arquivosDe(join(SRC, 'pages', 'demo'))
-ok(PAGINAS_DEMO.length === 12, `esperava 12 arquivos de tela em pages/demo; achei ${PAGINAS_DEMO.length}`)
+ok(PAGINAS_DEMO.length === 15, `esperava 15 arquivos de tela em pages/demo; achei ${PAGINAS_DEMO.length}`)
 
 for (const pagina of PAGINAS_DEMO) {
   const fonte = readFileSync(pagina, 'utf8')
@@ -122,7 +122,7 @@ for (const pagina of PAGINAS_DEMO) {
 // Toda tela declarada na navegação precisa existir de verdade (rota sem arquivo = link morto).
 const dadosDemo = readFileSync(join(SRC, 'data', 'demo.js'), 'utf8')
 const rotas = [...dadosDemo.matchAll(/rota:\s*'(\/demo\/[a-z-]+)'/g)].map((m) => m[1])
-ok(rotas.length === 11, `esperava 11 telas na navegação; achei ${rotas.length}`)
+ok(rotas.length === 14, `esperava 14 telas na navegação; achei ${rotas.length}`)
 
 const app = readFileSync(join(SRC, 'App.jsx'), 'utf8')
 for (const rota of rotas) {
@@ -251,16 +251,34 @@ const PROIBIDOS = [
   { padrao: /localStorage|sessionStorage/, motivo: 'armazenamento no navegador' },
 ]
 
+// A checagem mede CÓDIGO, não comentário.
+//
+// ISTO JÁ REPROVOU UM COMENTÁRIO MEU: o mapa do aplicativo documenta de onde vieram os números
+// ("lido de `base44/entities` e `base44/functions`") — e o conferidor acusou "referência à
+// plataforma". Comentário não faz chamada, e é a quinta vez que este projeto tropeça em medir texto
+// bruto: a regra é tirar o comentário antes. A garantia que importa continua sendo dupla — aqui
+// nenhum arquivo de `src/` CHAMA nada, e `conferir-no-ar.mjs` confere que o bundle SERVIDO não traz
+// a palavra.
+const semComentario = (texto) =>
+  texto.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '')
+
 for (const arquivo of ARQUIVOS) {
   const relativo = relative(SRC, arquivo).replace(/\\/g, '/')
   // components/ui é código de terceiro copiado (shadcn) e não é usado nas telas; o resto é nosso.
   if (relativo.startsWith('components/ui/')) continue
-  const fonte = readFileSync(arquivo, 'utf8')
+  const fonte = semComentario(readFileSync(arquivo, 'utf8'))
   for (const { padrao, motivo } of PROIBIDOS) {
     const achou = padrao.test(fonte)
     ok(!achou, `${motivo} em src/${relativo}`)
   }
 }
+
+// CONTROLE NEGATIVO: o removedor não pode estar cegando a checagem. Uma chamada real tem de ser
+// acusada mesmo depois de os comentários saírem.
+ok(
+  /\bfetch\s*\(/.test(semComentario('const x = await fetch("/api") // comentário')),
+  'controle negativo: o removedor de comentário cegou a checagem de chamada de rede',
+)
 
 // ---------------------------------------------------------------------------
 // 6. ÍCONE DA MARCA: o que a página pede tem de existir de verdade
@@ -453,6 +471,61 @@ for (const arquivo of ARQUIVOS) {
   // detectado. Sem os dois, a regra poderia estar proibindo a palavra "IA" — ou não medindo nada.
   ok(!/\b[ao] IA\b/i.test('Multi-modelo de IA'), 'controle negativo: a categoria "de IA" passou a ser proibida')
   ok(/\b[ao] IA\b/i.test('A IA muda conforme o setor'), 'controle negativo: o sujeito "A IA" deixou de ser detectado')
+}
+
+// ---------------------------------------------------------------------------
+// 9. O MAPA DO APLICATIVO NÃO PODE TER LINK MORTO
+//
+// O mapa lista as rotas reais do app e aponta, quando existe, para a tela equivalente AQUI. Um
+// `demo:` com caminho errado vira link quebrado no meio da demonstração — e o conferidor de rotas
+// do App.jsx não pega isso, porque lá a rota existe; o que não existe é o destino do link.
+// ---------------------------------------------------------------------------
+{
+  const mapa = readFileSync(join(SRC, 'data', 'mapaDoApp.js'), 'utf8')
+  const apontados = [...mapa.matchAll(/demo:\s*'(\/demo\/[a-z-]+)'/g)].map((m) => m[1])
+  ok(apontados.length >= 10, `esperava o mapa apontar para várias telas; apontou ${apontados.length}`)
+
+  const dados = readFileSync(join(SRC, 'data', 'demo.js'), 'utf8')
+  const existentes = new Set([...dados.matchAll(/rota:\s*'(\/demo\/[a-z-]+)'/g)].map((m) => m[1]))
+
+  for (const destino of apontados) {
+    ok(existentes.has(destino), `o mapa aponta para "${destino}", que não é uma tela desta demonstração`)
+  }
+
+  // Controle negativo: um destino inventado tem de ser acusado — senão a conferência acima
+  // passaria por não estar medindo nada.
+  ok(
+    !existentes.has('/demo/nao-existe'),
+    'controle negativo: uma rota inexistente foi aceita como tela da demonstração',
+  )
+}
+
+// ---------------------------------------------------------------------------
+// 10. A TELA DE INTEGRAÇÃO NÃO CITA FORNECEDOR
+//
+// Regra do PRÓPRIO aplicativo: o desenho da integração é genérico e o teste dele reprova citar
+// fornecedor na tela. Nome de fornecedor no produto envelhece, exclui os outros e transforma uma
+// decisão de arquitetura em preferência comercial. O README pode citar o exemplo medido; a TELA, não.
+// ---------------------------------------------------------------------------
+{
+  const bruto = readFileSync(join(SRC, 'pages', 'demo', 'DemoIntegracoes.jsx'), 'utf8')
+  const codigo = bruto.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '')
+
+  for (const fornecedor of ['Tasy', 'Philips', 'MV', 'Soul MV']) {
+    ok(
+      !new RegExp(fornecedor, 'i').test(codigo),
+      `a tela de integração cita o fornecedor "${fornecedor}" — o desenho é genérico`,
+    )
+  }
+  // Ela TEM de falar de dialeto: é o que substitui o nome do fornecedor.
+  ok(/dialeto/i.test(codigo), 'a tela de integração não fala em dialeto — sem isso ela não explica a genericidade')
+
+  // CONTROLE NEGATIVO: o removedor de comentário não pode estar cegando a checagem — o meu próprio
+  // comentário acima cita fornecedores, e é assim que ele tem de continuar: fora da medida.
+  ok(
+    /Tasy/i.test(bruto),
+    'controle negativo: o comentário que explica a regra deixou de citar o fornecedor (ou o removedor sumiu com ele)',
+  )
 }
 
 // ---------------------------------------------------------------------------
