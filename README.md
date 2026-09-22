@@ -115,7 +115,26 @@ clínica numa página de apresentação, que é exatamente o que o aplicativo n�
 
 ## Publicação
 
-O build aceita o prefixo do site por variável de ambiente, porque o GitHub Pages serve o projeto em
+Duas hospedagens estão preparadas: **Vercel** (a escolhida) e GitHub Pages (que este plano recusou).
+
+### Vercel — a hospedagem escolhida
+
+O arquivo `vercel.json` já resolve tudo o que o Vercel precisa saber:
+
+| Configuração | Por quê |
+|---|---|
+| `rewrites: /(.*) → /index.html` | Rota do React no cliente. Sem isto, um F5 em `/demo/evolucao` daria 404. No Vercel isto **substitui** o truque do `404.html`, que é do Pages. |
+| `outputDirectory: dist` | Saída do Vite. |
+| `framework: vite` | Detecção explícita, em vez de depender do palpite da plataforma. |
+| `Cache-Control` imutável em `/assets/` | O nome do arquivo tem hash do conteúdo: se mudar, muda o nome. Segurar em cache é seguro. |
+| `buildCommand` com as verificações | O deploy **não publica código não conferido**: lint, 533 asserções e prova de renderização rodam antes do build. |
+
+**No Vercel o site fica na raiz**, então `VITE_BASE_PATH` **não** deve ser definida (o padrão do
+`vite.config.js` é `/`).
+
+### GitHub Pages — o caminho que este plano não permitiu
+
+O build aceita o prefixo do site por variável de ambiente, porque o Pages serve o projeto em
 `/<nome-do-repo>/`:
 
 ```bash
