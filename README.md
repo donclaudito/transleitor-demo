@@ -163,6 +163,36 @@ O arquivo `vercel.json` já resolve tudo o que o Vercel precisa saber:
 **No Vercel o site fica na raiz**, então `VITE_BASE_PATH` **não** deve ser definida (o padrão do
 `vite.config.js` é `/`).
 
+#### Publicação automática — e o que a bloqueava (medido)
+
+O projeto está **ligado** a `github:donclaudito/transleitor-demo`: cada push em `main` dispara um
+deploy de produção sozinho. Não é preciso rodar `vercel deploy` a cada mudança.
+
+**O bloqueio, e a lição:** os primeiros pushes automáticos ficaram parados em `BLOCKED`:
+
+```
+The deployment was blocked because the commit author doesn't have permission
+to create deployments for this project.
+```
+
+O autor dos commits era `donclaudito <seu-email@gmail.com>` — um e-mail de exemplo, que não é o da
+conta Vercel (`clauorenstein@gmail.com`). A Vercel recusa commit de autor que não seja membro da
+equipe: é proteção contra alguém que consiga dar push publicar em seu nome. **O mesmo bloqueio
+atingiu o deploy pela linha de comando**, porque a CLI anexa o autor do commit local ao enviar.
+
+Correção aplicada, **só neste repositório** (o `git config --global` ficou intocado):
+
+```bash
+git config user.email "clauorenstein@gmail.com"
+```
+
+Quem for publicar este repositório precisa do mesmo ajuste — ou de ser membro da equipe
+`donclauditos-projects`.
+
+**Como diagnosticar de novo**, sem depender da CLI (que mostra `UNKNOWN` nesses casos): a API do
+Vercel devolve o estado e o motivo. `GET /v6/deployments` traz `readyState`, `meta.githubCommitSha`
+e `errorMessage`.
+
 #### Verificação feita na produção (medida)
 
 `node testes/conferir-no-ar.mjs https://transleitor-demo.vercel.app` → **0 falhas**:
@@ -170,12 +200,16 @@ O arquivo `vercel.json` já resolve tudo o que o Vercel precisa saber:
 | Conferência | Resultado |
 |---|---|
 | `GET /` | HTTP 200, é o nosso `index.html` |
-| Bundle que **a página servida** referencia | `/assets/index-Cwe1mpKo.js`, 495.594 bytes — **mesmo hash do build conferido localmente** |
-| Marcas de texto de tela no bundle baixado | **14/14** |
+| Bundle que **a página servida** referencia | o mesmo hash do build conferido localmente |
+| Marcas de texto de tela no bundle baixado | **18/18** |
 | `Cache-Control` dos assets | `public, max-age=31536000, immutable` |
-| `GET /demo/evolucao`, `/demo/cirurgia`, `/demo/seguranca` | HTTP 200, devolvem o app (rewrite funcionando) |
+| `GET /demo/menu`, `/demo/evolucao`, `/demo/cirurgia`, `/demo/seguranca` | HTTP 200, devolvem o app (rewrite funcionando) |
 | `base44` e chave de serviço no bundle servido | ausentes |
 | Controle negativo do conferidor | reprova marca inexistente |
+
+Esta verificação foi o que pegou o rebrand **não publicado**: o conferidor acusou 4 marcas ausentes
+no ar enquanto o build local estava correto — o que levou ao diagnóstico do bloqueio de autor.
+Conferir o que está NO AR, e não o que foi enviado, é o que separa "publiquei" de "está publicado".
 
 
 ### GitHub Pages — o caminho que este plano não permitiu
