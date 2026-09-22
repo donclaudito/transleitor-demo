@@ -132,12 +132,46 @@ for (const rota of rotas) {
 
 // ---------------------------------------------------------------------------
 // 3. Arquivo com acento não pode ter sido gravado torto (mojibake)
+//
+// ISTO JÁ FALHOU UMA VEZ, E A CHECAGEM NÃO PEGOU — porque ela só olhava `src/`.
+// Em 22/09/2026 um `Get-Content | Set-Content` do PowerShell passou o README de UTF-8 para CP1252 e
+// de volta: o arquivo inteiro virou `Ã©`, `Ã£`, `Ã§`. As 608 asserções da época passaram verdes,
+// porque nenhuma delas lia o README. O conserto foi `git checkout` + ferramenta de edição.
+// Agora a conferência cobre TAMBÉM os arquivos de texto do projeto (não só os de `src/`).
 // ---------------------------------------------------------------------------
+const ARQUIVOS_DE_TEXTO = [
+  'README.md',
+  'index.html',
+  'package.json',
+  'vercel.json',
+  'vite.config.js',
+  'tailwind.config.js',
+  'eslint.config.js',
+  '.github/workflows/deploy-pages.yml',
+  'ferramentas/gerar-icones-oren.py',
+  ...arquivosDe(join(RAIZ, 'testes')),
+]
+
+ok(ARQUIVOS_DE_TEXTO.length > 8, `esperava cobrir os arquivos de texto do projeto; cobri ${ARQUIVOS_DE_TEXTO.length}`)
+
+for (const relativo of ARQUIVOS_DE_TEXTO) {
+  // `resolve`, e não `join`: esta lista mistura nome relativo ('README.md') com caminho absoluto
+  // (o que `arquivosDe` devolve), e `join` concatenaria os dois.
+  const arquivo = resolve(RAIZ, relativo)
+  if (!existsSync(arquivo)) {
+    ok(false, `arquivo de texto esperado não existe: ${relativo}`)
+    continue
+  }
+  const texto = readFileSync(arquivo, 'utf8')
+  ok(!texto.includes('\uFFFD'), `caractere de substituição (U+FFFD) em ${relativo}`)
+  // "Ã©", "Ã£", "Ã§" são mojibake de verdade. "Ã" isolado NÃO é: "NÃO" e "CIRURGIÃO" têm Ã legítimo.
+  ok(!/Ã[©£§µº]/.test(texto), `mojibake (Ã©/Ã£/Ã§) em ${relativo}`)
+}
+
 for (const arquivo of ARQUIVOS) {
   const texto = readFileSync(arquivo, 'utf8')
   const nome = relative(RAIZ, arquivo)
   ok(!texto.includes('\uFFFD'), `caractere de substituição (U+FFFD) em ${nome}`)
-  // "Ã©", "Ã£", "Ã§" são mojibake de verdade. "Ã" isolado NÃO é: "NÃO" e "CIRURGIÃO" têm Ã legítimo.
   ok(!/Ã[©£§µº]/.test(texto), `mojibake (Ã©/Ã£/Ã§) em ${nome}`)
 }
 
@@ -257,6 +291,54 @@ for (const arquivo of ARQUIVOS) {
   ok(
     !/viewBox/.test(emblema),
     'OrenEmblema.jsx voltou a desenhar o emblema em SVG — tem de usar o arquivo da marca',
+  )
+}
+
+// ---------------------------------------------------------------------------
+// 7. TIPOGRAFIA DA CAPA — as armadilhas silenciosas da serifa display
+//
+// Nenhuma delas quebra build, lint ou teste de renderização: a página simplesmente aparece com a
+// fonte errada, ou com o negrito FABRICADO pelo navegador borrando as hairlines da serifa. Por isso
+// cada uma vira asserção.
+// ---------------------------------------------------------------------------
+{
+  const html = readFileSync(join(RAIZ, 'index.html'), 'utf8')
+  const css = readFileSync(join(SRC, 'index.css'), 'utf8')
+
+  // (a) As três famílias têm de ser pedidas — se a URL combinada quebrar, TODAS caem em silêncio,
+  //     inclusive a Inter, que é a fonte do corpo do aplicativo inteiro.
+  for (const familia of ['Inter', 'Instrument+Serif', 'Sora']) {
+    ok(html.includes(`family=${familia}`), `o index.html não pede a família "${familia}"`)
+  }
+
+  // (b) Fonte por <link>, nunca por `@import` dentro do CSS: `@import` é render-blocking e
+  //     serializa a descoberta (o navegador só descobre o CSS de fonte depois de baixar o nosso).
+  ok(!/@import\s+url\(/.test(css), 'o index.css voltou a carregar fonte por @import (deve ser <link> no index.html)')
+
+  // (c) A capa tem de usar SERIFA. Se alguém trocar por uma sans, a página fica com a fonte errada
+  //     e nada acusa.
+  const blocoOren = (() => {
+    const semComentario = css.replace(/\/\*[\s\S]*?\*\//g, '')
+    const i = semComentario.indexOf('.tema-oren')
+    const abre = semComentario.indexOf('{', i)
+    return semComentario.slice(abre + 1, semComentario.indexOf('}', abre))
+  })()
+  const fonteDaCapa = (blocoOren.match(/--font-display\s*:\s*([^;]+);/) || [])[1] || ''
+  ok(/Instrument Serif/.test(fonteDaCapa), `a capa não usa a serifa display: "${fonteDaCapa.trim()}"`)
+  ok(/\bserif\b\s*$/.test(fonteDaCapa.trim()), `a cadeia de fallback não termina em serif: "${fonteDaCapa.trim()}"`)
+
+  // (d) PESO 400 NA MANCHETE. A Instrument Serif só existe em 400; com `font-extrabold` o navegador
+  //     FABRICA o negrito, e numa serifa de alto contraste isso borra as hairlines.
+  ok(
+    /\.tema-oren h1,\s*\.tema-oren h2\s*\{[^}]*font-weight:\s*400/.test(css),
+    'as manchetes da capa não estão fixadas em peso 400 (risco de negrito fabricado)',
+  )
+
+  // (e) O contrário também: h3/h4 são título de CARTÃO e continuam na sans do projeto. Sem esta
+  //     regra, a mudança de `--font-display` arrastaria todo cartão da capa para a serifa.
+  ok(
+    /\.tema-oren h3,\s*\.tema-oren h4\s*\{[^}]*font-family:\s*var\(--font-heading\)/.test(css),
+    'os títulos de cartão da capa não voltam para a sans do projeto',
   )
 }
 

@@ -1,4 +1,8 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Sora:wght@600;700;800&display=swap');
+/* AS FONTES NÃO SÃO CARREGADAS AQUI.
+   Elas vêm por <link> no index.html — `@import` dentro de CSS é render-blocking e serializa a
+   descoberta (o navegador só descobre o CSS de fonte depois de baixar este arquivo). O motivo
+   completo está no comentário do próprio index.html.
+   Fontes: Inter e Sora (as do aplicativo) e Instrument Serif (a serifa display da capa). */
 
 @tailwind base;
 @tailwind components;
@@ -279,6 +283,13 @@
   --shadow-soft: 0 1px 2px hsl(213 70% 2% / 0.5), 0 8px 24px hsl(187 92% 53% / 0.09), 0 28px 60px hsl(213 70% 2% / 0.5);
   --shadow-glow: 0 0 0 1px hsl(187 92% 60% / 0.26), 0 16px 44px hsl(187 92% 53% / 0.24);
 
+  /* A CAPA TROCA DE TIPOGRAFIA, NÃO SÓ DE COR.
+     O material da marca usa uma serifa display de alto contraste (a referência que o Dr. Claudio
+     mandou). Instrument Serif é a mais próxima disponível no Google Fonts: alto contraste, ar
+     editorial e elegante em corpo grande. Só existe no peso 400 — por isso o peso das manchetes
+     da capa é reduzido abaixo; sem isso o navegador FABRICA o negrito e a serifa fica suja. */
+  --font-display: 'Instrument Serif', 'Playfair Display', Georgia, 'Times New Roman', serif;
+
   background-color: hsl(var(--background));
   background-image: var(--gradient-mesh);
   background-attachment: fixed;
@@ -327,4 +338,43 @@ body:has(.tema-oren) {
   background-color: hsl(var(--background));
   background-image: none;
   color: hsl(var(--foreground));
+}
+
+/* ============================================================================
+   TIPOGRAFIA DA CAPA — serifa display nas manchetes
+   ----------------------------------------------------------------------------
+   A regra base do projeto (`h1..h4 { font-family: var(--font-display) }`) é boa para o aplicativo,
+   mas na capa `--font-display` virou serifa — e isso arrastaria TODO h3/h4 de cartão para a serifa
+   junto. Uma coisa é a manchete, outra é o título de um cartão pequeno.
+
+   Então o escopo é explícito:
+     - h1 e h2 (manchete e título de seção) -> serifa display, peso 400;
+     - h3 e h4 (título de cartão) -> volta para a sans do projeto.
+   Os seletores são mais específicos que as classes utilitárias do Tailwind, então vencem sem
+   precisar de `!important`.
+
+   PESO 400 NÃO É ESCOLHA ESTÉTICA: a Instrument Serif só existe em 400. Com `font-extrabold` o
+   navegador FABRICA o negrito, e numa serifa de alto contraste isso borra as hairlines — o defeito
+   clássico de serifa display na web.
+   ============================================================================ */
+.tema-oren h1,
+.tema-oren h2 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: -0.015em;
+}
+
+.tema-oren h3,
+.tema-oren h4 {
+  font-family: var(--font-heading);
+  letter-spacing: -0.01em;
+}
+
+/* A MARCA É SERIFA EM QUALQUER LUGAR — capa e demonstração.
+   O nome Oren.AI é a marca, não elemento de interface: ele não deve mudar de tipo conforme a tela
+   em que aparece. Por isso esta classe não depende do escopo do tema. */
+.fonte-marca {
+  font-family: 'Instrument Serif', 'Playfair Display', Georgia, 'Times New Roman', serif;
+  font-weight: 400;
+  letter-spacing: -0.01em;
 }

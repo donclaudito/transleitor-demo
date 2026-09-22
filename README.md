@@ -55,6 +55,38 @@ emblema neste projeto.
 > quebrar, mas não são a mesma família. Trocar o acento para a menta do emblema é uma linha em
 > `.tema-oren` (`--primary`) — falta a decisão dele.
 
+### Tipografia: serifa display na capa
+
+A capa usa uma **serifa de alto contraste** nas manchetes (a referência que o Dr. Claudio mandou).
+Escolhida a **Instrument Serif** — a mais próxima no Google Fonts: alto contraste, ar editorial,
+elegante em corpo grande. Alternativas próximas, se ele preferir: **Playfair Display** (mais
+"revista de moda") e **Bodoni Moda** (Didone, serifa ainda mais fina).
+
+O escopo é o mesmo da cor — **capa só**, via `.tema-oren`:
+
+| Elemento | Fonte | Por quê |
+|---|---|---|
+| `h1`, `h2` (manchete e título de seção) | Instrument Serif, **peso 400** | São as manchetes da capa |
+| `h3`, `h4` (título de cartão) | Inter (a sans do projeto) | Título de cartão pequeno não é manchete; sem esta regra a serifa invadiria todos os cartões |
+| `.fonte-marca` (o nome Oren.AI) | Instrument Serif, **em qualquer tela** | O nome é a marca, não elemento de interface — não muda de tipo conforme a tela |
+
+**Peso 400 não é escolha estética.** A Instrument Serif **só existe em 400**. Com `font-extrabold` o
+navegador **fabrica** o negrito, e numa serifa de alto contraste isso borra as hairlines — o defeito
+clássico de serifa display na web. `conferir.mjs` reprova se o peso 400 for retirado.
+
+**Fonte carregada por `<link>`, não por `@import`.** O projeto carregava as fontes com `@import`
+dentro do CSS, que é **render-blocking e serializa a descoberta**: o navegador precisa baixar o nosso
+CSS para só então descobrir que existe outro CSS de fonte para baixar. Agora vão no `index.html`,
+com `preconnect`. `conferir.mjs` reprova se um `@import url(` voltar ao CSS.
+
+> **[DECISÃO pendente] Fonte de terceiro e IP do visitante.** As fontes vêm do **Google Fonts**: o
+> navegador de quem visita faz um pedido a `fonts.googleapis.com` / `fonts.gstatic.com`, e o IP do
+> visitante chega ao Google. Isto **já existia** neste projeto antes da serifa (Inter e Sora), e não
+> é telemetria nossa — mas numa página de marca médica é o tipo de transferência que se decide
+> conscientemente, não por herança. A saída é **auto-hospedar** as três famílias (`public/fontes/` +
+> `@font-face`), o que remove o terceiro do caminho e ainda tira uma conexão externa do carregamento
+> crítico. Instrument Serif é **SIL OFL 1.1**, que permite redistribuir. Falta a decisão dele.
+
 
 ---
 
@@ -86,7 +118,7 @@ npm run dev        # servidor local
 
 ```bash
 npm run lint       # ESLint (no-undef ligado de propósito)
-npm run conferir   # 600 asserções: imports, avisos, rotas, mojibake, espelho de tema, ícones, proibições de rede
+npm run conferir   # 629 asserções: imports, avisos, rotas, mojibake, espelho de tema, ícones, tipografia, proibições de rede
 npm run smoke      # renderiza as 15 telas e confere marcas de texto
 npm run build      # build de produção
 npm run servir     # serve dist/ num servidor Node puro, para conferir o que é SERVIDO
@@ -195,7 +227,7 @@ O arquivo `vercel.json` já resolve tudo o que o Vercel precisa saber:
 | `outputDirectory: dist` | Saída do Vite. |
 | `framework: vite` | Detecção explícita, em vez de depender do palpite da plataforma. |
 | `Cache-Control` imutável em `/assets/` | O nome do arquivo tem hash do conteúdo: se mudar, muda o nome. Segurar em cache é seguro. |
-| `buildCommand` com as verificações | O deploy **não publica código não conferido**: lint, 600 asserções e prova de renderização rodam antes do build. |
+| `buildCommand` com as verificações | O deploy **não publica código não conferido**: lint, 629 asserções e prova de renderização rodam antes do build. |
 
 **No Vercel o site fica na raiz**, então `VITE_BASE_PATH` **não** deve ser definida (o padrão do
 `vite.config.js` é `/`).
@@ -296,7 +328,7 @@ Para publicar, uma das duas:
 
 ## Limites declarados
 
-- **Não verificado em navegador.** O que está provado é: lint sem erros, 600 asserções de
+- **Não verificado em navegador.** O que está provado é: lint sem erros, 629 asserções de
   conferência, renderização das 15 telas com 55 marcas de texto e build `exit 0`. A aparência na
   tela (layout, toque no iPad, comportamento de rolagem) não foi medida: não há navegador no
   ambiente onde isto foi construído.

@@ -8,6 +8,18 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/oren-ai-32.png" />
     <link rel="icon" type="image/png" sizes="192x192" href="/oren-ai-192.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/oren-ai-180.png" />
+    <!-- TIPOGRAFIA — carregada AQUI, e não com `@import` dentro do CSS.
+         `@import` dentro de folha de estilo é render-blocking e serializa a descoberta:
+         o navegador precisa baixar o nosso CSS para só então descobrir que existe outro CSS de
+         fonte para baixar. Com <link> os dois pedidos saem em paralelo, e o `preconnect` já abre a
+         conexão com o Google Fonts antes de o CSS chegar.
+         Inter e Sora são as fontes do aplicativo; Instrument Serif é a serifa display da capa. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Instrument+Serif:ital@0;1&family=Sora:wght@600;700;800&display=swap"
+    />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Transleitor — demonstração navegável do aplicativo de documentação clínica com IA. Página de apresentação do produto: as telas são ilustrativas e não executam nenhuma função." />
     <meta name="robots" content="index, follow" />

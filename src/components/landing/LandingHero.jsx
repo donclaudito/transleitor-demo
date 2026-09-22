@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Play, Sparkles, Shield, Clock, Activity, ClipboardCheck } from 'lucide-react';
+import { ArrowRight, Play, Shield, Clock, Activity, ClipboardCheck } from 'lucide-react';
 import { motion } from 'framer-motion';
 import OrenEmblema from '@/components/marca/OrenEmblema';
 import MolduraApp from '@/components/demo/MolduraApp';
@@ -13,9 +13,13 @@ import PainelMenu from '@/components/demo/PainelMenu';
 // A amostra vem do MESMO componente que desenha a tela em /demo/menu (PainelMenu): se o menu do
 // aplicativo mudar, a capa muda junto e ninguém precisa lembrar de atualizar os dois.
 //
-// A identidade Oren.AI (azul-marinho + ciano) vem do escopo `.tema-oren` em index.css, e a
-// moldura devolve o tema do aplicativo por dentro (`.tema-app`) — a amostra mostra o app como
-// ele é, não vestido com a cor da capa.
+// TIPOGRAFIA (pedido do Dr. Claudio): a marca usa uma serifa display de alto contraste. O peso das
+// manchetes é 400 de propósito — a Instrument Serif só existe nesse peso, e forçar negrito faria o
+// navegador FABRICAR o negrito, borrando as hairlines. A regra está em `.tema-oren h1/h2` no
+// index.css, junto com o motivo.
+//
+// A marca aparece nas três linhas pedidas, na ordem pedida: Oren.AI (marca-mãe) → Inteligência
+// Cirúrgica por Oren.AI (a linha) → Inteligência Médica (a manchete).
 // ============================================================================
 export default function LandingHero() {
   return (
@@ -30,28 +34,20 @@ export default function LandingHero() {
       <div className="mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-[1.02fr_1fr] lg:gap-14">
         {/* ---------------- COLUNA ESQUERDA: marca e proposta ---------------- */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-          <div className="mb-7 flex items-center gap-3.5">
-            <OrenEmblema tamanho={58} className="flex-shrink-0" />
-            <div>
-              <p className="text-2xl font-extrabold leading-none tracking-tight">
+          <div className="mb-8 flex items-center gap-4">
+            <OrenEmblema tamanho={62} className="flex-shrink-0" />
+            <div className="min-w-0">
+              <p className="fonte-marca text-3xl leading-none md:text-4xl">
                 Oren<span className="text-primary">.AI</span>
               </p>
-              <p className="mt-1.5 text-[10px] font-bold uppercase tracking-[0.3em] text-primary">
-                Inteligência Cirúrgica
+              <p className="mt-2.5 text-[11px] font-bold uppercase leading-snug tracking-[0.14em] text-primary">
+                Inteligência Cirúrgica por Oren.AI
               </p>
             </div>
           </div>
 
-          <span className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/10 px-4 py-1.5 text-xs font-bold text-primary">
-            <Sparkles className="h-3.5 w-3.5" /> Plataforma Clínica com IA Adaptativa
-          </span>
-
-          <h1 className="mb-6 text-4xl font-extrabold leading-[1.05] tracking-tight md:text-6xl">
-            Documentação clínica
-            <br />
-            <span className="bg-gradient-to-r from-primary to-accent-foreground bg-clip-text text-transparent">
-              inteligente e completa
-            </span>
+          <h1 className="mb-7 text-5xl leading-[1.02] tracking-tight md:text-6xl lg:text-7xl">
+            Inteligência Médica
           </h1>
 
           <p className="mb-9 max-w-xl text-base leading-relaxed text-muted-foreground md:text-lg">

@@ -41,7 +41,9 @@ export function MarcaOren({ tamanho = 40, comProduto = true, className = '' }) {
     <span className={`inline-flex items-center gap-2.5 ${className}`}>
       <OrenEmblema tamanho={tamanho} className="flex-shrink-0" />
       <span className="flex flex-col leading-none">
-        <span className="text-base font-extrabold tracking-tight">
+        {/* A marca é serifa em qualquer tela (`.fonte-marca`), inclusive na demonstração: o nome
+            não é elemento de interface, é a marca — não deve mudar de tipo conforme a tela. */}
+        <span className="fonte-marca text-xl leading-none">
           Oren<span className="text-primary">.AI</span>
         </span>
         {comProduto && (

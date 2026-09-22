@@ -36,12 +36,12 @@ const TELAS = [
     'Capa',
     LandingPage,
     [
-      'Documentação clínica',
+      // As três linhas de marca pedidas pelo Dr. Claudio, na ordem pedida.
+      'Inteligência Médica',
+      'Inteligência Cirúrgica por Oren.AI',
       'Ver a demonstração',
       'Ver demonstração',
-      // Marca: Oren.AI é a marca-mãe, Transleitor é o produto dentro dela.
       'Oren',
-      'Inteligência Cirúrgica',
       'Precisão · Tecnologia · Resultado',
       // A amostra da tela do aplicativo dentro da moldura do herói.
       'Escolha o ambiente',
