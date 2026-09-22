@@ -13,12 +13,16 @@
          o navegador precisa baixar o nosso CSS para só então descobrir que existe outro CSS de
          fonte para baixar. Com <link> os dois pedidos saem em paralelo, e o `preconnect` já abre a
          conexão com o Google Fonts antes de o CSS chegar.
-         Inter e Sora são as fontes do aplicativo; Instrument Serif é a serifa display da capa. -->
+
+         DUAS FAMÍLIAS, E SÓ DUAS:
+           - Instrument Serif -> a serifa display da CAPA;
+           - Poppins          -> as PÁGINAS DA DEMONSTRAÇÃO (a sans geométrica da referência).
+         Inter e Sora saíram: nada mais as usa, e fonte que ninguém usa é pedido desperdiçado. -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Instrument+Serif:ital@0;1&family=Sora:wght@600;700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Poppins:wght@300;400;500;600;700;800&display=swap"
     />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Transleitor — demonstração navegável do aplicativo de documentação clínica com IA. Página de apresentação do produto: as telas são ilustrativas e não executam nenhuma função." />

@@ -87,6 +87,34 @@ com `preconnect`. `conferir.mjs` reprova se um `@import url(` voltar ao CSS.
 (Oren.AI) e a manchete (Inteligência Médica). `conferir.mjs` **reprova** se a frase voltar — o
 conferidor de marcas do render não pegaria, porque ele só confere o que **tem** de aparecer.
 
+### As páginas da demonstração: Poppins
+
+Segunda referência do Dr. Claudio, agora para as **páginas da demonstração**: uma **sans
+geométrica** (letras redondas, "a" de um só andar, e a diferença de peso entre o texto pesado em
+caixa alta e o corpo regular). Escolhida a **Poppins**. As três variáveis de fonte (`--font-heading`,
+`--font-body`, `--font-display`) apontam para ela porque a referência usa **uma** família em pesos
+diferentes — não duas.
+
+> **CONSEQUÊNCIA, REGISTRADA:** o **aplicativo de verdade** usa **Sora** (títulos) e **Inter**
+> (texto). Com esta mudança, **a demonstração deixa de ser fiel à tipografia do aplicativo** — ela
+> passa a mostrar as telas na Poppins. Inter e Sora saíram do pedido de fonte porque nada mais as
+> usa. Se a intenção for preservar a fidelidade ao app, o caminho é a Poppins **só nos títulos** e o
+> corpo de volta na Inter: é uma variável.
+
+Resultado: **duas famílias, e só duas** no carregamento — Instrument Serif (capa) e Poppins
+(demonstração). `conferir.mjs` reprova se Inter ou Sora voltarem a ser pedidas sem uso.
+
+#### O defeito que essa mudança revelou
+
+A moldura do herói (a "amostra da tela real do aplicativo") fica **dentro** de `.tema-oren`, que
+troca a tipografia da capa inteira — e `font-family` é **herdado**. Sem um reset, a amostra aparecia
+escrita na **serifa da capa**: uma amostra mentirosa, justamente o que a seção "O emblema é ARQUIVO"
+diz que não pode acontecer. O `.tema-app` agora devolve `var(--font-body)`.
+
+**Isso passou por dois deploys sem ninguém notar**, porque o conferidor de marcas só olha **texto** —
+e o texto estava certo. Agora há asserção para a fonte da amostra.
+
+
 > **[DECISÃO pendente] Fonte de terceiro e IP do visitante.** As fontes vêm do **Google Fonts**: o
 > navegador de quem visita faz um pedido a `fonts.googleapis.com` / `fonts.gstatic.com`, e o IP do
 > visitante chega ao Google. Isto **já existia** neste projeto antes da serifa (Inter e Sora), e não
@@ -126,7 +154,7 @@ npm run dev        # servidor local
 
 ```bash
 npm run lint       # ESLint (no-undef ligado de propósito)
-npm run conferir   # 645 asserções: imports, avisos, rotas, mojibake, espelho de tema, ícones, tipografia, proibições de rede
+npm run conferir   # 650 asserções: imports, avisos, rotas, mojibake, espelho de tema, ícones, tipografia, proibições de rede
 npm run smoke      # renderiza as 15 telas e confere marcas de texto
 npm run build      # build de produção
 npm run servir     # serve dist/ num servidor Node puro, para conferir o que é SERVIDO
@@ -235,7 +263,7 @@ O arquivo `vercel.json` já resolve tudo o que o Vercel precisa saber:
 | `outputDirectory: dist` | Saída do Vite. |
 | `framework: vite` | Detecção explícita, em vez de depender do palpite da plataforma. |
 | `Cache-Control` imutável em `/assets/` | O nome do arquivo tem hash do conteúdo: se mudar, muda o nome. Segurar em cache é seguro. |
-| `buildCommand` com as verificações | O deploy **não publica código não conferido**: lint, 645 asserções e prova de renderização rodam antes do build. |
+| `buildCommand` com as verificações | O deploy **não publica código não conferido**: lint, 650 asserções e prova de renderização rodam antes do build. |
 
 **No Vercel o site fica na raiz**, então `VITE_BASE_PATH` **não** deve ser definida (o padrão do
 `vite.config.js` é `/`).
@@ -336,7 +364,7 @@ Para publicar, uma das duas:
 
 ## Limites declarados
 
-- **Não verificado em navegador.** O que está provado é: lint sem erros, 645 asserções de
+- **Não verificado em navegador.** O que está provado é: lint sem erros, 650 asserções de
   conferência, renderização das 15 telas com 54 marcas de texto e build `exit 0`. A aparência na
   tela (layout, toque no iPad, comportamento de rolagem) não foi medida: não há navegador no
   ambiente onde isto foi construído.

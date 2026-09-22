@@ -111,7 +111,7 @@ try {
   const linkFonte = (html.match(/https:\/\/fonts\.googleapis\.com\/css2\?[^"]+/) || [])[0]
   ok(Boolean(linkFonte), 'a página servida pede folha de fonte')
   if (linkFonte) {
-    for (const familia of ['Inter', 'Instrument+Serif', 'Sora']) {
+    for (const familia of ['Instrument+Serif', 'Poppins']) {
       ok(linkFonte.includes(`family=${familia}`), `a folha de fonte pede a família "${familia}"`)
     }
     const rf = await fetch(linkFonte)

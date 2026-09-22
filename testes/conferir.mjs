@@ -305,11 +305,45 @@ for (const arquivo of ARQUIVOS) {
   const html = readFileSync(join(RAIZ, 'index.html'), 'utf8')
   const css = readFileSync(join(SRC, 'index.css'), 'utf8')
 
-  // (a) As três famílias têm de ser pedidas — se a URL combinada quebrar, TODAS caem em silêncio,
-  //     inclusive a Inter, que é a fonte do corpo do aplicativo inteiro.
-  for (const familia of ['Inter', 'Instrument+Serif', 'Sora']) {
+  // (a) As famílias pedidas têm de ser as das duas referências — e SÓ elas. Se a URL combinada
+  //     quebrar, TODAS caem em silêncio e a página inteira aparece na fonte padrão do sistema.
+  for (const familia of ['Instrument+Serif', 'Poppins']) {
     ok(html.includes(`family=${familia}`), `o index.html não pede a família "${familia}"`)
   }
+  // Fonte que ninguém usa é pedido desperdiçado, e o pedido é de terceiro (ver decisão pendente
+  // no README). Inter e Sora saíram quando as páginas da demonstração passaram para a Poppins.
+  for (const familia of ['Inter', 'Sora']) {
+    ok(!html.includes(`family=${familia}`), `o index.html voltou a pedir "${familia}", que nada usa`)
+  }
+
+  // (a2) A DEMONSTRAÇÃO usa a família da referência nas três variáveis. A referência usa UMA
+  //      família em pesos diferentes — não duas.
+  const raizCss = (() => {
+    const semComentario = css.replace(/\/\*[\s\S]*?\*\//g, '')
+    const i = semComentario.indexOf(':root')
+    const abre = semComentario.indexOf('{', i)
+    return semComentario.slice(abre + 1, semComentario.indexOf('}', abre))
+  })()
+  for (const variavel of ['--font-heading', '--font-body', '--font-display']) {
+    const valor = (raizCss.match(new RegExp(`${variavel}\\s*:\\s*([^;]+);`)) || [])[1] || ''
+    ok(/Poppins/.test(valor), `${variavel} não está na família da referência: "${valor.trim()}"`)
+  }
+
+  // (a3) A AMOSTRA DENTRO DA MOLDURA TEM DE MOSTRAR A FONTE DO APLICATIVO.
+  //      A moldura do herói vive dentro de `.tema-oren`, que troca a tipografia por herança. Sem o
+  //      reset em `.tema-app`, a "tela real do aplicativo" aparece escrita na serifa da capa —
+  //      amostra mentirosa. Este defeito existiu por dois deploys porque nada media a fonte da
+  //      amostra: o conferidor de marcas só olha texto, e o texto estava certo.
+  const blocoApp = (() => {
+    const semComentario = css.replace(/\/\*[\s\S]*?\*\//g, '')
+    const i = semComentario.indexOf('.tema-app')
+    const abre = semComentario.indexOf('{', i)
+    return semComentario.slice(abre + 1, semComentario.indexOf('}', abre))
+  })()
+  ok(
+    /font-family\s*:\s*var\(--font-body\)/.test(blocoApp),
+    'a amostra dentro da moldura não reseta a fonte: ela herda a serifa da capa e mente sobre o aplicativo',
+  )
 
   // (b) Fonte por <link>, nunca por `@import` dentro do CSS: `@import` é render-blocking e
   //     serializa a descoberta (o navegador só descobre o CSS de fonte depois de baixar o nosso).
