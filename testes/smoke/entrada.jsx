@@ -17,6 +17,7 @@ import { MemoryRouter } from 'react-router-dom'
 import LandingPage from '@/pages/LandingPage'
 import NaoEncontrada from '@/pages/NaoEncontrada'
 import DemoIndex from '@/pages/demo/DemoIndex'
+import DemoMenu from '@/pages/demo/DemoMenu'
 import DemoEvolucao from '@/pages/demo/DemoEvolucao'
 import DemoCaptura from '@/pages/demo/DemoCaptura'
 import DemoImagem from '@/pages/demo/DemoImagem'
@@ -31,9 +32,29 @@ import DemoShell from '@/components/demo/DemoShell'
 
 // [nome, componente, marcas que PRECISAM aparecer no HTML renderizado]
 const TELAS = [
-  ['Capa', LandingPage, ['Documentação clínica', 'Ver a demonstração', 'Ver demonstração']],
+  [
+    'Capa',
+    LandingPage,
+    [
+      'Documentação clínica',
+      'Ver a demonstração',
+      'Ver demonstração',
+      // Marca: Oren.AI é a marca-mãe, Transleitor é o produto dentro dela.
+      'Oren',
+      'Inteligência Cirúrgica',
+      'Precisão · Tecnologia · Resultado',
+      // A amostra da tela do aplicativo dentro da moldura do herói.
+      'Escolha o ambiente',
+      'sem alteração',
+    ],
+  ],
   ['Molde da demonstração', DemoShell, ['demonstração', 'Voltar à apresentação']],
   ['Índice da demonstração', DemoIndex, ['Demonstração navegável', 'Evolução SOAP', 'Auditor de segurança']],
+  [
+    'Menu do aplicativo',
+    DemoMenu,
+    ['Menu — a central do plantão', 'Escolha o ambiente', 'Ambiente Hospitalar', 'Clínicas &amp; Ambulatório', 'O que vem depois do menu'],
+  ],
   ['Evolução SOAP', DemoEvolucao, ['Sinais &amp; Sintomas', 'Evolução — pré-visualização', 'Subjetivo', 'Prescrição']],
   ['Captura de laudo', DemoCaptura, ['Capturar laudo/exame', 'O que foi extraído', 'Identificadores restantes']],
   ['Análise de imagem', DemoImagem, ['Análise de imagem médica', 'EXAME E TÉCNICA', 'LIMITAÇÕES DESTA ANÁLISE', 'FONTES CONFERIDAS']],

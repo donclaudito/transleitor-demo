@@ -35,6 +35,12 @@ export const AVISO_DEMO = {
 // ---------------------------------------------------------------------------
 export const TELAS_DEMO = [
   {
+    rota: '/demo/menu',
+    nome: 'Menu — a central do plantão',
+    icone: '🧭',
+    resumo: 'A primeira tela: escolher o ambiente antes de qualquer evolução.',
+  },
+  {
     rota: '/demo/evolucao',
     nome: 'Evolução SOAP',
     icone: '📝',
@@ -540,6 +546,7 @@ export const SEGURANCA_DEMO = {
 // Avisos por tela (o que a demonstração NÃO faz naquela tela específica)
 // ---------------------------------------------------------------------------
 export const LIMITES_POR_TELA = {
+  '/demo/menu': 'Os cartões de ambiente não navegam nesta demonstração. A tela desenhada é a real do aplicativo, mas a moldura e o brilho em volta são da página de apresentação.',
   '/demo/evolucao': 'Nenhuma IA é chamada aqui: o texto da pré-visualização é montado com os itens que você clicar. Nada é gravado.',
   '/demo/captura': 'Nenhum arquivo é lido, nenhuma câmera é aberta e nenhum texto é extraído. Os valores mostrados são fixos.',
   '/demo/imagem': 'Nenhuma imagem é analisada. O conteúdo das cinco seções é fixo e está marcado como exemplo.',

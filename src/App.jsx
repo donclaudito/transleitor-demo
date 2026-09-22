@@ -5,6 +5,7 @@ import NaoEncontrada from '@/pages/NaoEncontrada'
 import ScrollToTop from '@/components/ScrollToTop'
 import DemoShell from '@/components/demo/DemoShell'
 import DemoIndex from '@/pages/demo/DemoIndex'
+import DemoMenu from '@/pages/demo/DemoMenu'
 import DemoEvolucao from '@/pages/demo/DemoEvolucao'
 import DemoCaptura from '@/pages/demo/DemoCaptura'
 import DemoImagem from '@/pages/demo/DemoImagem'
@@ -32,6 +33,7 @@ export default function App() {
         {/* A demonstração navegável. Todas as telas são ilustrativas e não executam função. */}
         <Route path="/demo" element={<DemoShell />}>
           <Route index element={<DemoIndex />} />
+          <Route path="menu" element={<DemoMenu />} />
           <Route path="evolucao" element={<DemoEvolucao />} />
           <Route path="captura" element={<DemoCaptura />} />
           <Route path="imagem" element={<DemoImagem />} />

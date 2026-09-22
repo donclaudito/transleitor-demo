@@ -10,6 +10,12 @@
 //      função, então procurar por `htmlSeguro` ou `TelaDemo` não provaria nada.
 //
 // Uso:  node testes/conferir-no-ar.mjs https://seu-site.vercel.app
+//
+// ARMADILHA MEDIDA (24/09/2026): procurar estas marcas com `Get-Content` do PowerShell deu FALSO
+// NEGATIVO em toda marca acentuada — "Inteligência Cirúrgica" aparecia como ausente no bundle,
+// enquanto o Node lia 11/11. Era decodificação do terminal, não defeito do site. Este arquivo usa
+// `fetch` + `response.text()`, que decodificam UTF-8 corretamente. Se um dia a conferência acusar
+// ausência só em texto acentuado, desconfie do leitor antes de "consertar" o site.
 // ============================================================================
 const BASE = (process.argv[2] || '').replace(/\/+$/, '')
 
@@ -20,6 +26,11 @@ if (!BASE) {
 
 // Marcas de TEXTO DE TELA (sobrevivem à minificação) e as rotas profundas a testar.
 const MARCAS = [
+  // Marca: Oren.AI é a mãe, Transleitor é o produto dentro dela.
+  'Inteligência Cirúrgica',
+  'Precisão · Tecnologia · Resultado',
+  'Escolha o ambiente',
+  'Menu — a central do plantão',
   'Demonstração ilustrativa',
   'Ver a demonstração',
   'Evolução — pré-visualização',
@@ -36,7 +47,7 @@ const MARCAS = [
   'Polaciúria',
 ]
 
-const ROTAS_PROFUNDAS = ['/demo/evolucao', '/demo/cirurgia', '/demo/seguranca']
+const ROTAS_PROFUNDAS = ['/demo/menu', '/demo/evolucao', '/demo/cirurgia', '/demo/seguranca']
 
 let falhas = 0
 const ok = (condicao, texto) => {

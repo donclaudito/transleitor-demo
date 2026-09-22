@@ -110,7 +110,7 @@ ok(importsConferidos > 50, `esperava conferir muitos imports nomeados; conferi $
 // A regra dura desta peça: quem abre um link direto precisa saber que é ilustrativo.
 // ---------------------------------------------------------------------------
 const PAGINAS_DEMO = arquivosDe(join(SRC, 'pages', 'demo'))
-ok(PAGINAS_DEMO.length === 11, `esperava 11 arquivos de tela em pages/demo; achei ${PAGINAS_DEMO.length}`)
+ok(PAGINAS_DEMO.length === 12, `esperava 12 arquivos de tela em pages/demo; achei ${PAGINAS_DEMO.length}`)
 
 for (const pagina of PAGINAS_DEMO) {
   const fonte = readFileSync(pagina, 'utf8')
@@ -122,7 +122,7 @@ for (const pagina of PAGINAS_DEMO) {
 // Toda tela declarada na navegação precisa existir de verdade (rota sem arquivo = link morto).
 const dadosDemo = readFileSync(join(SRC, 'data', 'demo.js'), 'utf8')
 const rotas = [...dadosDemo.matchAll(/rota:\s*'(\/demo\/[a-z-]+)'/g)].map((m) => m[1])
-ok(rotas.length === 10, `esperava 10 telas na navegação; achei ${rotas.length}`)
+ok(rotas.length === 11, `esperava 11 telas na navegação; achei ${rotas.length}`)
 
 const app = readFileSync(join(SRC, 'App.jsx'), 'utf8')
 for (const rota of rotas) {
@@ -139,6 +139,56 @@ for (const arquivo of ARQUIVOS) {
   ok(!texto.includes('\uFFFD'), `caractere de substituição (U+FFFD) em ${nome}`)
   // "Ã©", "Ã£", "Ã§" são mojibake de verdade. "Ã" isolado NÃO é: "NÃO" e "CIRURGIÃO" têm Ã legítimo.
   ok(!/Ã[©£§µº]/.test(texto), `mojibake (Ã©/Ã£/Ã§) em ${nome}`)
+}
+
+// ---------------------------------------------------------------------------
+// 3-B. O ESPELHO DO TEMA DO APLICATIVO NÃO PODE DIVERGIR
+//
+// A capa veste a identidade Oren.AI por escopo (`.tema-oren`). A moldura dentro dela devolve o
+// tema do aplicativo (`.tema-app`) para a amostra não virar ficção — e esse bloco REPETE os
+// valores de `:root`. Cópia que ninguém confere é cópia que envelhece: aqui a divergência reprova.
+// ---------------------------------------------------------------------------
+{
+  // Medir código é tirar o comentário antes — já produziu falso positivo neste projeto.
+  const css = readFileSync(join(SRC, 'index.css'), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '')
+
+  const blocoDe = (seletor) => {
+    const inicio = css.indexOf(seletor)
+    if (inicio < 0) return null
+    const abre = css.indexOf('{', inicio)
+    const fecha = css.indexOf('}', abre)
+    if (abre < 0 || fecha < 0) return null
+    return css.slice(abre + 1, fecha)
+  }
+
+  const declaracoes = (texto) => {
+    const mapa = new Map()
+    if (!texto) return mapa
+    for (const m of texto.matchAll(/(--[a-z0-9-]+)\s*:\s*([^;]+);/gi)) mapa.set(m[1], m[2].trim())
+    return mapa
+  }
+
+  const raiz = declaracoes(blocoDe(':root'))
+  const espelho = declaracoes(blocoDe('.tema-app'))
+  const capa = declaracoes(blocoDe('.tema-oren'))
+
+  ok(raiz.size > 10, `esperava variáveis em :root; achei ${raiz.size}`)
+  ok(espelho.size > 10, `esperava variáveis em .tema-app; achei ${espelho.size}`)
+  ok(capa.size > 10, `esperava variáveis em .tema-oren; achei ${capa.size}`)
+
+  for (const [nome, valor] of espelho) {
+    ok(
+      raiz.get(nome) === valor,
+      `o espelho .tema-app divergiu de :root em ${nome}: "${valor}" contra "${raiz.get(nome)}"`,
+    )
+  }
+
+  // Controle negativo: se o tema da capa ficasse igual ao do aplicativo, a conferência acima
+  // passaria por acidente (dois blocos copiados iguais) e a capa sairia sem identidade própria.
+  ok(
+    capa.get('--primary') !== raiz.get('--primary'),
+    'controle negativo: o tema da capa está com a mesma cor primária do aplicativo',
+  )
 }
 
 // ---------------------------------------------------------------------------

@@ -1,17 +1,37 @@
-# Transleitor — página de apresentação e demonstração
+# Oren.AI — página de apresentação e demonstração do Transleitor
 
-Site de apresentação do produto Transleitor: a capa de marketing e uma **demonstração navegável e
-não-funcional** das telas do aplicativo, para que um futuro usuário entenda o que ele faz antes de
-pedir acesso.
+Site de apresentação do **Transleitor**, o produto de documentação clínica da **Oren.AI**: a capa de
+marketing e uma **demonstração navegável e não-funcional** das telas do aplicativo, para que um
+futuro usuário entenda o que ele faz antes de pedir acesso.
 
 Este repositório é **separado** do aplicativo. O aplicativo guarda dado de paciente real; aqui não
 existe backend, banco, login nem chave de API. É uma peça estática.
 
 ---
 
+## Marca: Oren.AI é a mãe, Transleitor é o produto
+
+**Decisão do Dr. Claudio.** A hierarquia aparece nos dois lugares onde importa: o cabeçalho da capa
+(`MarcaOren` em `src/components/marca/OrenEmblema.jsx`) e o rodapé. Nunca os dois nomes soltos, um
+substituindo o outro.
+
+A identidade (azul-marinho profundo, ciano, traçado de pulso) vale **na capa** — e só nela:
+
+| Escopo | Onde | O que veste |
+|---|---|---|
+| `.tema-oren` | `src/index.css` | A capa inteira: re-declara os tokens do Tailwind. Nenhum componente da capa precisou saber que a cor mudou. |
+| `.tema-app` | `src/index.css` | A **amostra do aplicativo** dentro da moldura do herói. Devolve o tema claro real do app. |
+
+**Por que a amostra não usa a cor da capa:** a moldura mostra uma tela real do aplicativo. Vestir
+essa amostra com a identidade da capa transformaria a "amostra" em ficção — e o argumento desta
+página inteira é não inventar. O bloco `.tema-app` **repete** os valores de `:root`, e essa cópia é
+conferida por teste: divergiu, reprova.
+
+---
+
 ## O que este site é — e o que ele não é
 
-**É:** a capa de apresentação do produto e dez telas ilustrativas do aplicativo, navegáveis de
+**É:** a capa de apresentação do produto e onze telas ilustrativas do aplicativo, navegáveis de
 verdade, com conteúdo fixo escrito para a demonstração.
 
 **Não é:** o aplicativo. Nada aqui grava, consulta, envia ou recebe nada.
@@ -37,8 +57,8 @@ npm run dev        # servidor local
 
 ```bash
 npm run lint       # ESLint (no-undef ligado de propósito)
-npm run conferir   # 533 asserções: imports, avisos, rotas, mojibake, proibições de rede
-npm run smoke      # renderiza as 14 telas e confere marcas de texto
+npm run conferir   # 592 asserções: imports, avisos, rotas, mojibake, espelho de tema, proibições de rede
+npm run smoke      # renderiza as 15 telas e confere marcas de texto
 npm run build      # build de produção
 npm run servir     # serve dist/ num servidor Node puro, para conferir o que é SERVIDO
 npm run no-ar https://SEU-SITE.vercel.app   # confere o que está NO AR (não o que foi enviado)
@@ -72,21 +92,25 @@ src/
     paineisEspecialidade.js    tabela curada de conteúdo por área (vinda do aplicativo)
     painelSintomas.js          painel geral, para área sem tabela própria
   components/
+    marca/                     emblema e marca Oren.AI
     landing/                   a capa (mesma do aplicativo, com CTA para a demonstração)
-    demo/                      molde, botão que não executa e avisos
+    demo/                      molde, botão que não executa, avisos, moldura e o menu do app
     ui/                        design system (shadcn/ui copiado do aplicativo)
   pages/
     LandingPage.jsx            capa
-    demo/                      as dez telas demonstradas
+    demo/                      as onze telas demonstradas
 testes/
   conferir.mjs                 conferências estáticas
-  smoke/entrada.jsx            prova de renderização das 14 telas
+  conferir-no-ar.mjs           confere o que está NO AR
+  servir-dist.mjs              serve dist/ sem passar pelo Vite
+  smoke/entrada.jsx            prova de renderização das 15 telas
 ```
 
-### As dez telas
+### As onze telas
 
 | Rota | Tela |
 |---|---|
+| `/demo/menu` | Menu — a central do plantão (escolher o ambiente) |
 | `/demo/evolucao` | Evolução SOAP com o painel de sinais da especialidade |
 | `/demo/captura` | Captura de laudo/exame por foto ou PDF |
 | `/demo/imagem` | Análise de imagem médica em cinco seções |
@@ -97,6 +121,10 @@ testes/
 | `/demo/monitoramento` | Uso e trilha de IA |
 | `/demo/direitos` | Direitos do titular |
 | `/demo/seguranca` | Auditor de segurança |
+
+**A tela de Menu é fonte única.** O mesmo componente (`components/demo/PainelMenu.jsx`) desenha a
+tela da demonstração **e** a amostra dentro da moldura do herói da capa. Duas cópias divergiriam na
+primeira mudança, e a capa passaria a mostrar uma tela que não existe.
 
 ---
 
@@ -130,7 +158,7 @@ O arquivo `vercel.json` já resolve tudo o que o Vercel precisa saber:
 | `outputDirectory: dist` | Saída do Vite. |
 | `framework: vite` | Detecção explícita, em vez de depender do palpite da plataforma. |
 | `Cache-Control` imutável em `/assets/` | O nome do arquivo tem hash do conteúdo: se mudar, muda o nome. Segurar em cache é seguro. |
-| `buildCommand` com as verificações | O deploy **não publica código não conferido**: lint, 533 asserções e prova de renderização rodam antes do build. |
+| `buildCommand` com as verificações | O deploy **não publica código não conferido**: lint, 592 asserções e prova de renderização rodam antes do build. |
 
 **No Vercel o site fica na raiz**, então `VITE_BASE_PATH` **não** deve ser definida (o padrão do
 `vite.config.js` é `/`).
@@ -196,8 +224,8 @@ Para publicar, uma das duas:
 
 ## Limites declarados
 
-- **Não verificado em navegador.** O que está provado é: lint sem erros, 533 asserções de
-  conferência, renderização das 14 telas com 44 marcas de texto e build `exit 0`. A aparência na
+- **Não verificado em navegador.** O que está provado é: lint sem erros, 592 asserções de
+  conferência, renderização das 15 telas com 54 marcas de texto e build `exit 0`. A aparência na
   tela (layout, toque no iPad, comportamento de rolagem) não foi medida: não há navegador no
   ambiente onde isto foi construído.
 - **A demonstração não demonstra o aplicativo funcionando.** Ela mostra o formato das telas e o

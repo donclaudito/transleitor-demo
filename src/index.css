@@ -236,3 +236,95 @@
     text-shadow: none !important;
   }
 }
+
+/* ============================================================================
+   TEMA DA CAPA — identidade Oren.AI (azul-marinho + ciano)
+   ----------------------------------------------------------------------------
+   POR QUE ISTO EXISTE E POR QUE É UM ESCOPO, NÃO UMA TROCA DE TEMA:
+   a identidade Oren.AI vale na CAPA. As telas da demonstração continuam com o
+   visual real do aplicativo — que é o que o usuário vai ver quando entrar. Se o
+   site inteiro mudasse de cor, a demonstração deixaria de ser amostra fiel.
+
+   Como funciona: quase todo o CSS do projeto usa os tokens do Tailwind
+   (`bg-background`, `text-muted-foreground`, `bg-primary`...). Redeclarar as
+   variáveis dentro de `.tema-oren` re-veste a capa inteira sem tocar em nenhum
+   componente.
+   ============================================================================ */
+.tema-oren {
+  --background: 213 62% 5%;
+  --foreground: 195 38% 94%;
+  --card: 213 46% 9%;
+  --card-foreground: 195 38% 94%;
+  --popover: 213 46% 10%;
+  --popover-foreground: 195 38% 94%;
+  --primary: 187 92% 53%;
+  --primary-foreground: 213 70% 5%;
+  --secondary: 213 38% 13%;
+  --secondary-foreground: 195 28% 88%;
+  --muted: 213 34% 13%;
+  --muted-foreground: 200 16% 68%;
+  --accent: 190 55% 14%;
+  --accent-foreground: 187 90% 72%;
+  --destructive: 0 72% 56%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 200 42% 18%;
+  --input: 200 38% 16%;
+  --ring: 187 92% 53%;
+  --gradient-primary: linear-gradient(135deg, hsl(187 95% 58%) 0%, hsl(196 92% 52%) 45%, hsl(206 90% 50%) 100%);
+  --gradient-primary-soft: linear-gradient(135deg, hsl(187 92% 53% / 0.18), hsl(206 90% 50% / 0.10));
+  --gradient-mesh: radial-gradient(at 14% 8%, hsl(187 92% 53% / 0.16) 0px, transparent 44%),
+                   radial-gradient(at 88% 4%, hsl(206 90% 55% / 0.13) 0px, transparent 40%),
+                   radial-gradient(at 76% 92%, hsl(196 85% 50% / 0.11) 0px, transparent 46%),
+                   radial-gradient(at 8% 96%, hsl(213 80% 50% / 0.10) 0px, transparent 42%);
+  --shadow-soft: 0 1px 2px hsl(213 70% 2% / 0.5), 0 8px 24px hsl(187 92% 53% / 0.09), 0 28px 60px hsl(213 70% 2% / 0.5);
+  --shadow-glow: 0 0 0 1px hsl(187 92% 60% / 0.26), 0 16px 44px hsl(187 92% 53% / 0.24);
+
+  background-color: hsl(var(--background));
+  background-image: var(--gradient-mesh);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+/* A CAPA MANDA TAMBÉM NO FUNDO DA JANELA.
+   Sem isto, a sobra de rolagem (overscroll) e a área além do conteúdo mostrariam o fundo claro
+   do aplicativo por trás de uma capa escura — moldura errada na borda. */
+body:has(.tema-oren) {
+  background-color: hsl(213 62% 5%);
+  background-image: none;
+}
+
+/* ============================================================================
+   TEMA DO APLICATIVO — para a MOLDURA dentro da capa
+   ----------------------------------------------------------------------------
+   A capa re-veste tudo com a identidade Oren.AI, e a moldura do herói fica dentro dela. A moldura
+   tem de mostrar o aplicativo COMO ELE É (tema claro), não a marca da capa — senão a "amostra"
+   seria ficção.
+
+   ATENÇÃO, ISTO É ESPELHO: estes valores repetem os de `:root` lá em cima. Se a paleta do
+   aplicativo mudar, esta lista muda junto — `testes/conferir.mjs` lê os dois blocos e reprova
+   divergência.
+   ============================================================================ */
+.tema-app {
+  --background: 250 32% 97%;
+  --foreground: 245 30% 12%;
+  --card: 0 0% 100%;
+  --card-foreground: 245 30% 12%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 245 30% 12%;
+  --primary: 255 78% 60%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 250 20% 94%;
+  --secondary-foreground: 245 25% 22%;
+  --muted: 250 18% 94%;
+  --muted-foreground: 250 12% 45%;
+  --accent: 262 80% 96%;
+  --accent-foreground: 262 80% 38%;
+  --border: 250 22% 89%;
+  --input: 250 20% 91%;
+  --ring: 255 78% 60%;
+
+  background-color: hsl(var(--background));
+  background-image: none;
+  color: hsl(var(--foreground));
+}

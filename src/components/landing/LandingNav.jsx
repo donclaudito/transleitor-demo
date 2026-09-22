@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Menu, X, Stethoscope, ArrowRight } from 'lucide-react';
+import { Menu, X, ArrowRight } from 'lucide-react';
+import { MarcaOren } from '@/components/marca/OrenEmblema';
 
-// CAPA DE APRESENTAÇÃO DO PRODUTO.
+// CAPA DE APRESENTAÇÃO — cabeçalho.
 //
-// Duas mudanças em relação à capa do aplicativo, e só duas:
-//   1. saiu a consulta à plataforma que decidia se o botão "Capturar laudo/exame" aparecia (aqui
-//      não há login, então o botão aparece sempre e leva à demonstração);
-//   2. "Acessar App" virou "Ver demonstração" — no lugar do aplicativo, que exige login e guarda
-//      dado real, entra a demonstração ilustrativa.
+// A hierarquia da marca é a definida pelo Dr. Claudio: Oren.AI é a MARCA-MÃE e o Transleitor é o
+// PRODUTO dentro dela. Por isso o cabeçalho traz os dois, nesta ordem (MarcaOren já faz isso).
+//
+// Não há login nesta página: o botão de captura aparece sempre e leva à demonstração, em vez de
+// depender da consulta à plataforma que existia na versão do aplicativo.
 export default function LandingNav() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -29,41 +30,65 @@ export default function LandingNav() {
 
   return (
     <nav className={`sticky top-0 z-50 transition-all duration-300 ${scrolled ? 'glass shadow-soft' : 'bg-transparent'}`}>
-      <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-2 text-lg font-extrabold tracking-tight">
-          <span className="w-8 h-8 rounded-xl bg-primary flex items-center justify-center">
-            <Stethoscope className="w-4 h-4 text-primary-foreground" />
-          </span>
-          Transleitor<span className="text-primary">.</span>
+      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-6">
+        <Link to="/" aria-label="Oren.AI — início">
+          <MarcaOren tamanho={36} />
         </Link>
-        <div className="hidden md:flex items-center gap-7">
-          {links.map(l => (
-            <a key={l.label} href={l.href} className="text-sm text-muted-foreground hover:text-foreground transition-colors font-medium">
+
+        <div className="hidden items-center gap-7 lg:flex">
+          {links.map((l) => (
+            <a
+              key={l.label}
+              href={l.href}
+              className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+            >
               {l.label}
             </a>
           ))}
-          <Link to="/demo/captura" className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-primary/10 text-primary border border-primary/30 text-sm font-bold hover:bg-primary/20 transition-all">
+          <Link
+            to="/demo/captura"
+            className="inline-flex items-center gap-1.5 rounded-xl border border-primary/30 bg-primary/10 px-4 py-2.5 text-sm font-bold text-primary transition-all hover:bg-primary/20"
+          >
             📄 Capturar laudo/exame
           </Link>
-          <Link to="/demo" className="group inline-flex items-center gap-1.5 px-5 py-2.5 bg-primary text-primary-foreground rounded-xl text-sm font-bold hover:opacity-90 transition-all shadow-lg btn-press">
-            Ver demonstração <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+          <Link
+            to="/demo"
+            className="group inline-flex items-center gap-1.5 rounded-xl bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground shadow-lg transition-all hover:opacity-90 btn-press"
+          >
+            Ver demonstração
+            <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
           </Link>
         </div>
-        <button className="md:hidden p-2" onClick={() => setMenuOpen(!menuOpen)} aria-label="Abrir menu">
-          {menuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+
+        <button className="p-2 lg:hidden" onClick={() => setMenuOpen(!menuOpen)} aria-label="Abrir menu">
+          {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
       </div>
+
       {menuOpen && (
-        <div className="md:hidden px-6 pb-4 space-y-1 glass border-t border-border">
-          {links.map(l => (
-            <a key={l.label} href={l.href} className="block py-2.5 text-sm text-muted-foreground" onClick={() => setMenuOpen(false)}>
+        <div className="space-y-1 border-t border-border px-6 pb-4 glass lg:hidden">
+          {links.map((l) => (
+            <a
+              key={l.label}
+              href={l.href}
+              className="block py-2.5 text-sm text-muted-foreground"
+              onClick={() => setMenuOpen(false)}
+            >
               {l.label}
             </a>
           ))}
-          <Link to="/demo/captura" className="block px-5 py-2.5 rounded-xl bg-primary/10 text-primary border border-primary/30 text-sm font-bold text-center" onClick={() => setMenuOpen(false)}>
+          <Link
+            to="/demo/captura"
+            className="block rounded-xl border border-primary/30 bg-primary/10 px-5 py-2.5 text-center text-sm font-bold text-primary"
+            onClick={() => setMenuOpen(false)}
+          >
             📄 Capturar laudo/exame
           </Link>
-          <Link to="/demo" className="block px-5 py-2.5 bg-primary text-primary-foreground rounded-xl text-sm font-bold text-center" onClick={() => setMenuOpen(false)}>
+          <Link
+            to="/demo"
+            className="block rounded-xl bg-primary px-5 py-2.5 text-center text-sm font-bold text-primary-foreground"
+            onClick={() => setMenuOpen(false)}
+          >
             Ver demonstração
           </Link>
         </div>

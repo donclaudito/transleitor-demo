@@ -18,7 +18,7 @@ export default function LandingCTA() {
             Comece a usar <span className="text-primary">agora mesmo</span>
           </h2>
           <p className="text-muted-foreground mb-8 max-w-md mx-auto">
-            Veja as telas do Transleitor agora, sem cadastro e sem instalar nada — são dez telas
+            Veja as telas do Transleitor agora, sem cadastro e sem instalar nada — são onze telas
             navegáveis para você entender como ele é na mão de quem usa.
           </p>
           <Link
@@ -33,12 +33,16 @@ export default function LandingCTA() {
         </motion.div>
       </section>
 
-      <footer className="py-8 px-6 border-t border-border text-center text-xs text-muted-foreground">
-        © {new Date().getFullYear()} Transleitor — IA Clínica Adaptativa · Documentação médica inteligente
-        <span className="block mt-2 max-w-2xl mx-auto">
+      <footer className="px-6 py-10 text-center text-xs text-muted-foreground border-t border-border">
+        <p className="font-bold text-foreground">
+          Oren<span className="text-primary">.AI</span> — Inteligência Cirúrgica
+        </p>
+        <p className="mt-1">Transleitor · IA Clínica Adaptativa · Documentação médica inteligente</p>
+        <p className="mx-auto mt-3 max-w-2xl leading-relaxed">
           Página de apresentação do produto. A demonstração é ilustrativa: pacientes fictícios, sem
           identificação, e nenhuma coleta de dados nesta página.
-        </span>
+        </p>
+        <p className="mt-3">© {new Date().getFullYear()} Oren.AI</p>
       </footer>
     </>
   );
