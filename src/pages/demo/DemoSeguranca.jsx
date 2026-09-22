@@ -20,7 +20,7 @@ export default function DemoSeguranca() {
   return (
     <TelaDemo
       titulo="🛡️ Auditor de segurança"
-      descricao="Um auditor interno que examina o próprio aplicativo em busca de furos — como um colega revisando o protocolo do hospital — e só registra o que encontra com a sua permissão."
+      descricao="Um auditor interno que examina o próprio aplicativo em busca de furos — como um profissional revisando o protocolo do hospital — e só registra o que encontra com a sua permissão."
       acoes={<EtiquetaExemplo>formato do relatório</EtiquetaExemplo>}
     >
       <p className="flex items-start gap-2 rounded-2xl border border-amber-500/30 bg-amber-500/10 p-4 text-xs leading-relaxed text-amber-800 dark:text-amber-200">

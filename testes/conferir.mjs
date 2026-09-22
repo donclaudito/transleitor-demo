@@ -578,12 +578,14 @@ ok(
 // ---------------------------------------------------------------------------
 // 12. QUEM TRABALHA COM O MÉDICO: profissionais dele + Assistentes da Oren.AI
 //
-// Duas passadas a pedido do Dr. Claudio. A primeira tirou "de IA" e pôs a marca como sujeito
-// ("Colegas da Oren.AI"). A segunda tirou "Colegas" de vez: quem trabalha com o médico são os
-// profissionais dele e os assistentes da Oren.AI — não "colegas".
+// Três passadas a pedido do Dr. Claudio. A primeira tirou "de IA" e pôs a marca como sujeito
+// ("Colegas da Oren.AI"). A segunda tirou "Colegas" do TÍTULO. A terceira tirou a mesma palavra
+// do SITE INTEIRO: no texto corrido ela virou "assistente" (a Ellah, três vezes) e "profissional"
+// (a metáfora do auditor, duas vezes).
 //
-// A palavra "colega" sozinha continua permitida no texto corrido (é português correto e aparece
-// nas descrições dos cartões). O que a trava proíbe são os TÍTULOS antigos.
+// Por isso esta trava é mais larga que as anteriores: não basta vigiar o título, tem de reprovar
+// a palavra em qualquer arquivo. As duas primeiras regras (os títulos antigos) ficam porque
+// continuam sendo o erro mais provável de alguém reintroduzir.
 // ---------------------------------------------------------------------------
 {
   const TITULO = 'Nossos profissionais e nossos Assistentes da Oren.AI que trabalham com você'
@@ -596,6 +598,9 @@ ok(
     const nome = relative(RAIZ, arquivo)
     ok(!/colegas de ia/i.test(fonte), `voltou "Colegas de IA" em ${nome}`)
     ok(!/colegas da oren\.ai/i.test(fonte), `voltou "Colegas da Oren.AI" em ${nome}`)
+    // A palavra, em qualquer forma e em qualquer lugar. Era o buraco que sobrava: o título estava
+    // limpo e as cinco frases do texto corrido não.
+    ok(!/colega/i.test(fonte), `voltou a palavra antiga do título em ${nome}`)
   }
 
   // O TÍTULO NOVO ONDE SE LÊ: na capa, no smoke e no README — os três lugares que escaparam
@@ -604,14 +609,28 @@ ok(
   ok(readFileSync(SMOKE, 'utf8').includes(TITULO), 'o título novo da seção de agentes saiu do smoke')
   ok(readFileSync(README, 'utf8').includes(TITULO), 'o título novo da seção de agentes saiu do README')
 
-  // CONTROLE NEGATIVO: as regras têm de PEGAR os títulos antigos.
+  // AS SUBSTITUIÇÕES DO TEXTO CORRIDO também ficam travadas: se alguém desfizer uma delas, reprova.
+  const FRASES_NOVAS = [
+    [CAPA, 'Uma assistente virtual com quem você conversa por chat'],
+    [CAPA, 'como um profissional revisando o protocolo do hospital'],
+    [join(SRC, 'components', 'landing', 'LandingFeatures.jsx'), 'Uma assistente virtual disponível 24h durante o plantão'],
+    [join(SRC, 'pages', 'demo', 'DemoElio.jsx'), 'Uma assistente virtual com quem o médico conversa'],
+    [join(SRC, 'pages', 'demo', 'DemoSeguranca.jsx'), 'como um profissional revisando o protocolo do hospital'],
+  ]
+  for (const [arquivo, frase] of FRASES_NOVAS) {
+    ok(readFileSync(arquivo, 'utf8').includes(frase), `a frase nova saiu de ${relative(RAIZ, arquivo)}: "${frase}"`)
+  }
+
+  // CONTROLE NEGATIVO: as regras têm de PEGAR o que foi proibido.
   ok(/colegas de ia/i.test('Colegas de IA que trabalham com você'),
     'controle negativo: a regra deixou de reconhecer "Colegas de IA"')
   ok(/colegas da oren\.ai/i.test('Colegas da Oren.AI que trabalham com você'),
     'controle negativo: a regra deixou de reconhecer "Colegas da Oren.AI"')
-  // E o controle do outro lado: "colega" no meio de uma frase NÃO pode ser proibido.
-  ok(!/colegas de ia/i.test('Uma colega virtual com quem você conversa'),
-    'controle negativo: a regra está banindo "colega" no texto corrido')
+  ok(/colega/i.test('Uma colega virtual com quem você conversa'),
+    'controle negativo: a regra deixou de reconhecer a palavra no texto corrido')
+  // E o outro lado, para a regra não virar proibição burra de coisa parecida:
+  ok(!/colega/i.test('O colégio de médicos reuniu-se ontem'),
+    'controle negativo: a regra está reprovando palavra parecida (colégio)')
 }
 
 // ---------------------------------------------------------------------------

@@ -18,7 +18,7 @@ export default function DemoElio() {
   return (
     <TelaDemo
       titulo="💬 Ellah — assistente clínica"
-      descricao="Uma colega virtual com quem o médico conversa em linguagem natural, dentro do aplicativo. Ela trabalha com o modelo de IA que o médico escolher e só com os dados que ele fornecer."
+      descricao="Uma assistente virtual com quem o médico conversa em linguagem natural, dentro do aplicativo. Ela trabalha com o modelo de IA que o médico escolher e só com os dados que ele fornecer."
       acoes={<EtiquetaExemplo>conversa fixa de exemplo</EtiquetaExemplo>}
     >
       <div className="grid gap-6 lg:grid-cols-[280px_1fr]">

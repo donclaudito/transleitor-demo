@@ -50,6 +50,12 @@ Adaptativa" — a marca já está dita na linha.
 O título da seção de agentes mudou duas vezes — hoje ele nomeia quem trabalha com você:
 **"Nossos profissionais e nossos Assistentes da Oren.AI que trabalham com você"**.
 
+A mesma palavra saiu do **site inteiro**, não só do título: onde ela aparecia no texto corrido, hoje
+se lê **"assistente"** (a Ellah, três vezes) e **"profissional"** (a metáfora do auditor, duas vezes).
+"Assistente" não é sinônimo de dicionário — é a palavra que o site já usava para ela ("Assistente
+clínica de plantão, 24h"). E "revisor" foi evitado de propósito nas frases do auditor, porque já é o
+nome de outro agente (`Revisor da evolução`).
+
 A identidade (azul-marinho profundo, ciano, traçado de pulso) vale **na capa** — e só nela:
 
 | Escopo | Onde | O que veste |
@@ -189,8 +195,8 @@ npm run dev        # servidor local
 
 ```bash
 npm run lint       # ESLint (no-undef ligado de propósito)
-npm run conferir   # 754 asserções: imports, avisos, rotas, mojibake, espelho de tema, ícones, tipografia, proibições de rede
-npm run smoke      # renderiza as 15 telas e confere marcas de texto
+npm run conferir   # 1162 asserções: imports, avisos, rotas, mojibake, espelho de tema, ícones, tipografia, proibições de rede
+npm run smoke      # renderiza as 19 telas e confere 81 marcas de texto
 npm run build      # build de produção
 npm run servir     # serve dist/ num servidor Node puro, para conferir o que é SERVIDO
 npm run no-ar https://SEU-SITE.vercel.app   # confere o que está NO AR (não o que foi enviado)
@@ -397,7 +403,7 @@ e `errorMessage`.
 | Conferência | Resultado |
 |---|---|
 | `GET /` | HTTP 200, é o nosso `index.html` |
-| Bundle que **a página servida** referencia | `/assets/index-u3iSRXXv.js`, 504.338 bytes — **mesmo hash do build conferido localmente** |
+| Bundle que **a página servida** referencia | `/assets/index-EbUO5MMU.js`, 545.004 bytes — **mesmo hash do build conferido localmente** |
 | Marcas de texto de tela no bundle baixado | **18/18** |
 | Ícone da marca servido | `/oren-ai-192.png` → 200, `image/png`, 47.032 bytes, **sha256 idêntico ao arquivo local** (`c3dac23ee203ac80…`) |
 | `Cache-Control` dos assets | `public, max-age=31536000, immutable` |
