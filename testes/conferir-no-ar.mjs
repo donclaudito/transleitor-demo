@@ -104,7 +104,23 @@ try {
     `o ícone é servido como image/png: "${rIcone.headers.get('content-type')}"`,
   )
 
-  // 6. O que NÃO pode estar no ar
+  // 6. A FONTE TEM DE CARREGAR DE VERDADE.
+  // Se a URL de fonte estiver malformada, o Google devolve erro e TODAS as famílias caem para a
+  // fonte padrão do sistema — em silêncio, sem erro no console do visitante. A página fica com a
+  // cara errada e nada acusa. Por isso a URL é buscada aqui, de fora.
+  const linkFonte = (html.match(/https:\/\/fonts\.googleapis\.com\/css2\?[^"]+/) || [])[0]
+  ok(Boolean(linkFonte), 'a página servida pede folha de fonte')
+  if (linkFonte) {
+    for (const familia of ['Inter', 'Instrument+Serif', 'Sora']) {
+      ok(linkFonte.includes(`family=${familia}`), `a folha de fonte pede a família "${familia}"`)
+    }
+    const rf = await fetch(linkFonte)
+    const cssFonte = await rf.text()
+    ok(rf.status === 200, `GET da folha de fonte → HTTP ${rf.status}`)
+    ok(/Instrument Serif/.test(cssFonte), 'a folha de fonte devolvida declara a Instrument Serif')
+  }
+
+  // 7. O que NÃO pode estar no ar
   if (asset) {
     const { corpo: js } = await buscar(asset)
     ok(!js.includes('base44'), 'o bundle servido não menciona a plataforma base44')
