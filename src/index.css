@@ -1,0 +1,238 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Sora:wght@600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 250 32% 97%;
+    --foreground: 245 30% 12%;
+    --card: 0 0% 100%;
+    --card-foreground: 245 30% 12%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 245 30% 12%;
+    --primary: 255 78% 60%;
+    --primary-foreground: 0 0% 100%;
+    --primary-soft: 255 78% 96%;
+    --secondary: 250 20% 94%;
+    --secondary-foreground: 245 25% 22%;
+    --muted: 250 18% 94%;
+    --muted-foreground: 250 12% 45%;
+    --accent: 262 80% 96%;
+    --accent-foreground: 262 80% 38%;
+    --destructive: 0 80% 58%;
+    --destructive-foreground: 0 0% 98%;
+    --success: 152 62% 42%;
+    --warning: 38 92% 52%;
+    --border: 250 22% 89%;
+    --input: 250 20% 91%;
+    --ring: 255 78% 60%;
+    --chart-1: 255 78% 60%;
+    --chart-2: 192 70% 48%;
+    --chart-3: 152 62% 45%;
+    --chart-4: 38 92% 55%;
+    --chart-5: 330 80% 60%;
+    --radius: 1rem;
+    --font-heading: 'Inter', system-ui, sans-serif;
+    --font-body: 'Inter', system-ui, sans-serif;
+    --font-display: 'Sora', 'Inter', system-ui, sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    --gradient-primary: linear-gradient(135deg, hsl(255 85% 68%) 0%, hsl(245 82% 62%) 45%, hsl(225 85% 58%) 100%);
+    --gradient-primary-soft: linear-gradient(135deg, hsl(255 85% 72% / 0.16), hsl(225 85% 62% / 0.10));
+    --gradient-mesh: radial-gradient(at 18% 12%, hsl(255 85% 70% / 0.14) 0px, transparent 45%),
+                     radial-gradient(at 86% 8%, hsl(192 80% 60% / 0.12) 0px, transparent 42%),
+                     radial-gradient(at 78% 88%, hsl(262 80% 66% / 0.13) 0px, transparent 48%),
+                     radial-gradient(at 12% 92%, hsl(225 85% 62% / 0.10) 0px, transparent 44%);
+    --shadow-soft: 0 1px 2px hsl(245 30% 12% / 0.04), 0 6px 18px hsl(255 78% 60% / 0.07), 0 22px 48px hsl(245 30% 12% / 0.06);
+    --shadow-glow: 0 0 0 1px hsl(255 85% 70% / 0.18), 0 12px 36px hsl(255 78% 60% / 0.28);
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 245 25% 22%;
+    --sidebar-primary: 255 78% 60%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 250 30% 95%;
+    --sidebar-accent-foreground: 245 25% 18%;
+    --sidebar-border: 250 22% 90%;
+    --sidebar-ring: 255 78% 60%;
+  }
+
+  .dark {
+    --background: 226 42% 7%;
+    --foreground: 226 30% 97%;
+    --card: 226 38% 10%;
+    --card-foreground: 226 30% 95%;
+    --popover: 226 36% 11%;
+    --popover-foreground: 226 30% 95%;
+    --primary: 152 75% 46%;
+    --primary-foreground: 152 60% 8%;
+    --primary-soft: 152 75% 46% / 0.14;
+    --secondary: 226 30% 13%;
+    --secondary-foreground: 226 25% 90%;
+    --muted: 226 28% 13%;
+    --muted-foreground: 226 15% 72%;
+    --accent: 152 35% 15%;
+    --accent-foreground: 152 70% 85%;
+    --destructive: 0 70% 56%;
+    --destructive-foreground: 0 0% 98%;
+    --success: 152 60% 52%;
+    --warning: 38 92% 58%;
+    --border: 156 40% 26%;
+    --input: 156 35% 20%;
+    --ring: 152 85% 55%;
+    --chart-1: 152 75% 50%;
+    --chart-2: 166 70% 48%;
+    --chart-3: 226 70% 60%;
+    --chart-4: 38 92% 60%;
+    --chart-5: 190 75% 55%;
+    --gradient-primary: linear-gradient(135deg, hsl(152 75% 46%) 0%, hsl(166 72% 42%) 45%, hsl(190 80% 45%) 100%);
+    --gradient-primary-soft: linear-gradient(135deg, hsl(152 75% 46% / 0.22), hsl(190 80% 45% / 0.12));
+    --gradient-mesh: radial-gradient(at 16% 10%, hsl(152 75% 50% / 0.16) 0px, transparent 42%),
+                     radial-gradient(at 88% 6%, hsl(190 78% 50% / 0.14) 0px, transparent 40%),
+                     radial-gradient(at 82% 90%, hsl(226 70% 45% / 0.16) 0px, transparent 46%),
+                     radial-gradient(at 8% 94%, hsl(166 70% 45% / 0.12) 0px, transparent 42%);
+    --shadow-soft: 0 1px 2px hsl(0 0% 0% / 0.4), 0 8px 24px hsl(152 75% 40% / 0.16), 0 28px 60px hsl(0 0% 0% / 0.45);
+    --shadow-glow: 0 0 0 1px hsl(152 85% 55% / 0.30), 0 16px 44px hsl(152 75% 40% / 0.30);
+    --sidebar-background: 226 38% 9%;
+    --sidebar-foreground: 226 25% 90%;
+    --sidebar-primary: 152 75% 46%;
+    --sidebar-primary-foreground: 152 60% 8%;
+    --sidebar-accent: 226 30% 14%;
+    --sidebar-accent-foreground: 226 25% 94%;
+    --sidebar-border: 156 40% 26%;
+    --sidebar-ring: 152 85% 55%;
+  }
+
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    @apply text-foreground font-body;
+    background-color: hsl(var(--background));
+    background-image: var(--gradient-mesh);
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-size: cover;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+  }
+
+  h1, h2, h3, h4 { font-family: var(--font-display); letter-spacing: -0.02em; }
+
+  ::selection { background: hsl(var(--primary) / 0.28); color: hsl(var(--foreground)); }
+
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--primary) / 0.35);
+    border-radius: 100px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+  ::-webkit-scrollbar-thumb:hover { background: hsl(var(--primary) / 0.55); background-clip: content-box; }
+}
+
+@layer components {
+  .glass {
+    background: hsl(var(--card) / 0.72);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid hsl(var(--border) / 0.7);
+    box-shadow: var(--shadow-soft), inset 0 1px 0 hsla(0, 0%, 100%, 0.18);
+  }
+  .dark .glass {
+    background: hsl(var(--card) / 0.6);
+    border: 1px solid hsl(var(--border) / 0.6);
+    box-shadow: var(--shadow-soft), inset 0 1px 0 hsla(0, 0%, 100%, 0.06);
+  }
+
+  .glass-card {
+    background: hsl(var(--card) / 0.66);
+    backdrop-filter: blur(16px) saturate(160%);
+    -webkit-backdrop-filter: blur(16px) saturate(160%);
+    border: 1px solid hsl(var(--border) / 0.6);
+    box-shadow: 0 1px 2px hsl(0 0% 0% / 0.04), 0 4px 14px hsl(var(--primary) / 0.05);
+  }
+  .dark .glass-card {
+    background: hsl(var(--card) / 0.5);
+    border: 1px solid hsl(var(--border) / 0.5);
+    box-shadow: 0 1px 2px hsl(0 0% 0% / 0.3), 0 6px 18px hsl(var(--primary) / 0.10);
+  }
+
+  .premium-card {
+    position: relative;
+    background: hsl(var(--card) / 0.7);
+    backdrop-filter: blur(20px) saturate(170%);
+    -webkit-backdrop-filter: blur(20px) saturate(170%);
+    border: 1px solid hsl(var(--border) / 0.7);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-soft);
+    overflow: hidden;
+  }
+  .premium-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    padding: 1px;
+    border-radius: inherit;
+    background: var(--gradient-primary);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0.35;
+    pointer-events: none;
+  }
+  .dark .premium-card { background: hsl(var(--card) / 0.55); }
+  .dark .premium-card::before { opacity: 0.5; }
+
+  .shadow-soft { box-shadow: var(--shadow-soft); }
+  .glow-primary { box-shadow: var(--shadow-glow); }
+
+  .premium-gradient {
+    background-image: var(--gradient-primary);
+  }
+  .premium-gradient-soft {
+    background-image: var(--gradient-primary-soft);
+  }
+  .gradient-text {
+    background-image: var(--gradient-primary);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .btn-press {
+    transition: transform 0.12s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.18s ease, filter 0.18s ease;
+  }
+  .btn-press:active { transform: scale(0.95); }
+
+  .premium-chip {
+    transition: all 0.18s ease;
+  }
+  .premium-chip:hover {
+    transform: translateY(-1px);
+  }
+}
+
+/* Impressão limpa: só a área marcada com .print-area vai para o papel */
+@media print {
+  body * { visibility: hidden; }
+  .print-area, .print-area * { visibility: visible; }
+  .print-area {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+  .print-area, .print-area * {
+    background: transparent !important;
+    color: #000 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+}

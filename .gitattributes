@@ -1,0 +1,9 @@
+# Normaliza fim de linha: o repositório guarda LF, o Windows faz checkout em CRLF.
+# Sem isto, o Windows avisa a cada arquivo e o CI no Linux vê o repositório diferente do disco.
+* text=auto eol=lf
+
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.ico binary

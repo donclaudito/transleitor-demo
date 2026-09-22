@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Transleitor — demonstração</title>
+  </head>
+  <body>
+    <!--
+      GitHub Pages não tem reescrita de rota para aplicação de página única. Quando alguém abre ou
+      recarrega uma rota profunda (/demo/evolucao), o servidor não acha o arquivo e entrega esta
+      página. Aqui o caminho é devolvido para o index.html em ?r=, que o restaura antes de montar o
+      aplicativo. Sem isto, recarregar a demonstração daria erro 404.
+    -->
+    <script>
+      (function () {
+        var l = window.location;
+        var partes = l.pathname.split('/').filter(Boolean);
+        // Em *.github.io o site mora em /<repo>/; em domínio próprio, na raiz.
+        var base = l.hostname.endsWith('github.io') && partes.length ? '/' + partes[0] + '/' : '/';
+        var caminho = l.pathname.slice(base.length);
+        var alvo = l.origin + base + '?r=' + encodeURIComponent('/' + caminho) +
+          (l.search ? '&' + l.search.slice(1) : '');
+        l.replace(alvo);
+      })();
+    </script>
+    <p>Redirecionando…</p>
+  </body>
+</html>
