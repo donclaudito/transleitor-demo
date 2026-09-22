@@ -13,13 +13,13 @@ import PainelMenu from '@/components/demo/PainelMenu';
 // A amostra vem do MESMO componente que desenha a tela em /demo/menu (PainelMenu): se o menu do
 // aplicativo mudar, a capa muda junto e ninguém precisa lembrar de atualizar os dois.
 //
-// TIPOGRAFIA (pedido do Dr. Claudio): a marca usa uma serifa display de alto contraste. O peso das
-// manchetes é 400 de propósito — a Instrument Serif só existe nesse peso, e forçar negrito faria o
-// navegador FABRICAR o negrito, borrando as hairlines. A regra está em `.tema-oren h1/h2` no
-// index.css, junto com o motivo.
+// TIPOGRAFIA (pedido do Dr. Claudio): a CAPA INTEIRA usa a serifa display da marca — manchete,
+// texto corrido, botões, legenda e passos — em tamanhos proporcionais. A serifa lê menor que a
+// sans no mesmo corpo, então os textos abaixo foram subidos um degrau; o que é pequeno demais fica
+// apagado com hairlines finas. Os motivos completos estão em `.tema-oren` no index.css.
 //
-// A marca aparece nas três linhas pedidas, na ordem pedida: Oren.AI (marca-mãe) → Inteligência
-// Cirúrgica por Oren.AI (a linha) → Inteligência Médica (a manchete).
+// A linha "Inteligência Cirúrgica por Oren.AI" SAIU a pedido dele: a capa fica só com a marca
+// (Oren.AI) e a manchete (Inteligência Médica).
 // ============================================================================
 export default function LandingHero() {
   return (
@@ -35,22 +35,17 @@ export default function LandingHero() {
         {/* ---------------- COLUNA ESQUERDA: marca e proposta ---------------- */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
           <div className="mb-8 flex items-center gap-4">
-            <OrenEmblema tamanho={62} className="flex-shrink-0" />
-            <div className="min-w-0">
-              <p className="fonte-marca text-3xl leading-none md:text-4xl">
-                Oren<span className="text-primary">.AI</span>
-              </p>
-              <p className="mt-2.5 text-[11px] font-bold uppercase leading-snug tracking-[0.14em] text-primary">
-                Inteligência Cirúrgica por Oren.AI
-              </p>
-            </div>
+            <OrenEmblema tamanho={68} className="flex-shrink-0" />
+            <p className="fonte-marca text-4xl leading-none md:text-5xl">
+              Oren<span className="text-primary">.AI</span>
+            </p>
           </div>
 
           <h1 className="mb-7 text-5xl leading-[1.02] tracking-tight md:text-6xl lg:text-7xl">
             Inteligência Médica
           </h1>
 
-          <p className="mb-9 max-w-xl text-base leading-relaxed text-muted-foreground md:text-lg">
+          <p className="mb-9 max-w-xl text-lg leading-relaxed text-muted-foreground md:text-xl">
             O <strong className="text-foreground">Transleitor</strong>, o produto da Oren.AI para
             documentação clínica, gera evoluções SOAP, Livres e Simples em segundos. IA que entende o
             setor, analisa evoluções anteriores cronologicamente, integra exames, prescrição e
@@ -61,24 +56,24 @@ export default function LandingHero() {
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
             <Link
               to="/demo"
-              className="group inline-flex items-center justify-center gap-2 rounded-2xl bg-primary px-8 py-4 text-sm font-bold text-primary-foreground shadow-lg transition-all hover:opacity-90 btn-press"
+              className="group inline-flex items-center justify-center gap-2 rounded-2xl bg-primary px-8 py-4 text-base text-primary-foreground shadow-lg transition-all hover:opacity-90 btn-press"
             >
               Ver a demonstração
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
             </Link>
             <a
               href="#como-funciona"
-              className="inline-flex items-center justify-center gap-2 rounded-2xl border-2 border-border px-8 py-4 text-sm font-bold text-foreground transition-colors hover:border-primary hover:text-primary"
+              className="inline-flex items-center justify-center gap-2 rounded-2xl border-2 border-border px-8 py-4 text-base text-foreground transition-colors hover:border-primary hover:text-primary"
             >
               <Play className="h-4 w-4" /> Ver Como Funciona
             </a>
           </div>
 
-          <p className="mt-6 text-[11px] font-bold uppercase tracking-[0.22em] text-muted-foreground">
+          <p className="mt-7 text-sm uppercase tracking-[0.14em] text-muted-foreground">
             Precisão · Tecnologia · Resultado
           </p>
 
-          <div className="mt-9 flex flex-wrap items-center gap-x-8 gap-y-3 text-xs font-medium text-muted-foreground">
+          <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-3 text-sm text-muted-foreground">
             {[
               { icon: Shield, text: 'Dados seguros' },
               { icon: Clock, text: 'Evolução em segundos' },
@@ -102,9 +97,9 @@ export default function LandingHero() {
             <PainelMenu />
           </MolduraApp>
 
-          <p className="mt-4 text-center text-xs leading-relaxed text-muted-foreground">
+          <p className="mt-4 text-center text-sm leading-relaxed text-muted-foreground">
             Esta é uma tela real do aplicativo. Na{' '}
-            <Link to="/demo" className="font-bold text-primary hover:underline">
+            <Link to="/demo" className="text-primary hover:underline">
               demonstração navegável
             </Link>{' '}
             são onze telas — com dado fictício e nenhuma função ativa.

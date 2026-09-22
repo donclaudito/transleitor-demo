@@ -36,9 +36,10 @@ const TELAS = [
     'Capa',
     LandingPage,
     [
-      // As três linhas de marca pedidas pelo Dr. Claudio, na ordem pedida.
+      // A linha "Inteligência Cirúrgica por Oren.AI" SAIU a pedido do Dr. Claudio: se alguém a
+      // trouxer de volta, o conferidor de marcas não acusa — por isso ela não está aqui. O que
+      // está aqui é o que TEM de aparecer.
       'Inteligência Médica',
-      'Inteligência Cirúrgica por Oren.AI',
       'Ver a demonstração',
       'Ver demonstração',
       'Oren',

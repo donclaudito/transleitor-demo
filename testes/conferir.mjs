@@ -327,18 +327,64 @@ for (const arquivo of ARQUIVOS) {
   ok(/Instrument Serif/.test(fonteDaCapa), `a capa não usa a serifa display: "${fonteDaCapa.trim()}"`)
   ok(/\bserif\b\s*$/.test(fonteDaCapa.trim()), `a cadeia de fallback não termina em serif: "${fonteDaCapa.trim()}"`)
 
-  // (d) PESO 400 NA MANCHETE. A Instrument Serif só existe em 400; com `font-extrabold` o navegador
-  //     FABRICA o negrito, e numa serifa de alto contraste isso borra as hairlines.
+  // (d) PESO 400 NA MANCHETE **E EM TODA A CAPA**. A Instrument Serif só existe em 400; com
+  //     `font-bold` o navegador FABRICA o negrito, e numa serifa de alto contraste isso borra as
+  //     hairlines. A capa usa peso único, com `!important`, porque a ênfase é por COR.
   ok(
     /\.tema-oren h1,\s*\.tema-oren h2\s*\{[^}]*font-weight:\s*400/.test(css),
     'as manchetes da capa não estão fixadas em peso 400 (risco de negrito fabricado)',
   )
-
-  // (e) O contrário também: h3/h4 são título de CARTÃO e continuam na sans do projeto. Sem esta
-  //     regra, a mudança de `--font-display` arrastaria todo cartão da capa para a serifa.
   ok(
-    /\.tema-oren h3,\s*\.tema-oren h4\s*\{[^}]*font-family:\s*var\(--font-heading\)/.test(css),
-    'os títulos de cartão da capa não voltam para a sans do projeto',
+    /\.tema-oren \*[^{]*\{[^}]*font-weight:\s*400\s*!important/.test(css),
+    'o peso único da capa caiu: `font-bold` de qualquer cartão voltaria a fabricar negrito na serifa',
+  )
+
+  // (e) A CAPA INTEIRA NA SERIFA, não só a manchete. Pedido do Dr. Claudio: manter a fonte "de
+  //     forma proporcional nas outras partes" — texto corrido, botões, legenda e passos.
+  ok(
+    /\.tema-oren\s*\{[^}]*font-family:\s*var\(--font-display\)/.test(css),
+    'a capa voltou a herdar a sans do aplicativo: só as manchetes ficariam na serifa',
+  )
+  ok(
+    /\.tema-oren h3,\s*\.tema-oren h4\s*\{[^}]*font-family:\s*var\(--font-display\)/.test(css),
+    'os títulos de cartão da capa saíram da serifa da marca',
+  )
+
+  // (f) ESCALA PROPORCIONAL. A serifa lê menor que a sans: as classes minúsculas (10/11px e xs)
+  //     sobem um degrau dentro da capa. Sem isto, o rótulo pequeno fica apagado.
+  //     Conferido por texto e não por expressão regular: os seletores têm colchete escapado
+  //     (`.text-\[10px\]`), e montar isso em RegExp erra fácil — errei na primeira tentativa.
+  for (const seletor of ['.tema-oren .text-\\[10px\\]', '.tema-oren .text-\\[11px\\]', '.tema-oren .text-xs']) {
+    const i = css.indexOf(seletor)
+    const corpo = i >= 0 ? css.slice(i, css.indexOf('}', i)) : ''
+    ok(/font-size/.test(corpo), `a escala proporcional da capa perdeu "${seletor}"`)
+  }
+
+  // (g) A LINHA REMOVIDA NÃO PODE VOLTAR.
+  //     "Inteligência Cirúrgica por Oren.AI" saiu a pedido do Dr. Claudio, e o conferidor de marcas
+  //     do render NÃO pega o retorno dela (ele só confere o que TEM de aparecer). Registrado aqui.
+  //
+  //     MEDIR CÓDIGO É TIRAR O COMENTÁRIO ANTES — esta checagem nasceu reprovando a si mesma,
+  //     porque a frase citada no comentário logo acima contava como ocorrência. É a quarta vez
+  //     que este projeto tropeça nisso; a regra vale para quem escrever a próxima.
+  const semComentario = (texto) =>
+    texto.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '')
+
+  const LANDING = arquivosDe(join(SRC, 'components', 'landing'))
+  ok(LANDING.length >= 9, `esperava varrer os componentes da capa; varri ${LANDING.length}`)
+  for (const arquivo of LANDING) {
+    const fonte = semComentario(readFileSync(arquivo, 'utf8'))
+    ok(
+      !/Inteligência Cirúrgica por Oren\.AI/i.test(fonte),
+      `a linha removida voltou em ${relative(RAIZ, arquivo)}: "Inteligência Cirúrgica por Oren.AI"`,
+    )
+  }
+
+  // Controle negativo do removedor de comentário: uma ocorrência REAL tem de ser acusada mesmo
+  // depois de os comentários saírem — senão a checagem acima passaria por estar medindo o vazio.
+  ok(
+    /Inteligência Cirúrgica por Oren\.AI/i.test('const x = "Inteligência Cirúrgica por Oren.AI"'),
+    'controle negativo: a marca textual deixou de ser reconhecida fora de comentário',
   )
 }
 

@@ -33,8 +33,8 @@ export default function LandingHowItWorks() {
                 </div>
               </div>
               <div>
-                <h3 className="font-bold text-lg mb-1">{title}</h3>
-                <p className="text-muted-foreground text-sm leading-relaxed">{desc}</p>
+                <h3 className="text-xl mb-1.5">{title}</h3>
+                <p className="text-muted-foreground text-base leading-relaxed">{desc}</p>
               </div>
             </motion.div>
           ))}

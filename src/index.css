@@ -290,6 +290,12 @@
      da capa é reduzido abaixo; sem isso o navegador FABRICA o negrito e a serifa fica suja. */
   --font-display: 'Instrument Serif', 'Playfair Display', Georgia, 'Times New Roman', serif;
 
+  /* A CAPA INTEIRA NA SERIFA, não só a manchete. O pedido do Dr. Claudio foi manter a fonte "de
+     forma proporcional nas outras partes" — o texto corrido, os botões, a legenda e os passos.
+     Como `font-family` é herdado, uma linha aqui veste todo o conteúdo da capa; quem não herda é
+     quem declara a própria família (os ícones e o que estiver fora deste escopo). */
+  font-family: var(--font-display);
+
   background-color: hsl(var(--background));
   background-image: var(--gradient-mesh);
   background-attachment: fixed;
@@ -341,21 +347,23 @@ body:has(.tema-oren) {
 }
 
 /* ============================================================================
-   TIPOGRAFIA DA CAPA — serifa display nas manchetes
+   TIPOGRAFIA DA CAPA — a serifa display na capa inteira
    ----------------------------------------------------------------------------
    A regra base do projeto (`h1..h4 { font-family: var(--font-display) }`) é boa para o aplicativo,
    mas na capa `--font-display` virou serifa — e isso arrastaria TODO h3/h4 de cartão para a serifa
    junto. Uma coisa é a manchete, outra é o título de um cartão pequeno.
 
-   Então o escopo é explícito:
+   Então o escopo do que é manchete fica explícito:
      - h1 e h2 (manchete e título de seção) -> serifa display, peso 400;
-     - h3 e h4 (título de cartão) -> volta para a sans do projeto.
-   Os seletores são mais específicos que as classes utilitárias do Tailwind, então vencem sem
-   precisar de `!important`.
+     - h3 e h4 (título de cartão) -> continua na serifa, mas o peso e o tamanho são os de cartão.
 
-   PESO 400 NÃO É ESCOLHA ESTÉTICA: a Instrument Serif só existe em 400. Com `font-extrabold` o
-   navegador FABRICA o negrito, e numa serifa de alto contraste isso borra as hairlines — o defeito
-   clássico de serifa display na web.
+   PESO 400 NÃO É ESCOLHA ESTÉTICA: a Instrument Serif só existe em 400. Com qualquer `font-bold`
+   o navegador FABRICA o negrito, e numa serifa de alto contraste isso borra as hairlines — o
+   defeito clássico de serifa display na web. Por isso o peso é único em toda a capa, com
+   `!important`: a ênfase passa a ser por COR (o texto forte usa a cor de primeiro plano e o corpo
+   usa a cor secundária), não por peso. `!important` aqui é de propósito — sem ele o resultado
+   dependeria da ordem em que o Tailwind emite as utilitárias, que é exatamente o tipo de coisa que
+   quebra em silêncio numa atualização.
    ============================================================================ */
 .tema-oren h1,
 .tema-oren h2 {
@@ -366,8 +374,39 @@ body:has(.tema-oren) {
 
 .tema-oren h3,
 .tema-oren h4 {
-  font-family: var(--font-heading);
+  font-family: var(--font-display);
+  font-weight: 400;
   letter-spacing: -0.01em;
+}
+
+.tema-oren *,
+.tema-oren *::before,
+.tema-oren *::after {
+  font-weight: 400 !important;
+}
+
+/* ============================================================================
+   ESCALA PROPORCIONAL DA CAPA
+   ----------------------------------------------------------------------------
+   "Proporcional" resolvido em um lugar só. A serifa display lê MENOR que a sans no mesmo tamanho:
+   as hairlines afinam e o texto pequeno fica apagado. Estas regras pegam AS MESMAS classes do
+   Tailwind e sobem um degrau, só dentro da capa — assim a capa cresce junta, em vez de eu ajustar
+   texto por texto e esquecer de um.
+
+   POR QUE SÓ ATÉ `text-xs`: as classes `text-sm`, `text-base` e `text-lg` aparecem com variante
+   responsiva (`md:text-lg`) em vários pontos. Sobrescrever a versão sem variante venceria também
+   no ponto de quebra por especificidade e MATARIA a responsividade. As três classes abaixo não têm
+   variante em nenhum ponto da capa (conferido), então a sobrescrita é segura. O que não é coberto
+   aqui foi ajustado direto no componente.
+   ============================================================================ */
+.tema-oren .text-\[10px\] {
+  font-size: 0.75rem;
+}
+.tema-oren .text-\[11px\] {
+  font-size: 0.8125rem;
+}
+.tema-oren .text-xs {
+  font-size: 0.8125rem;
 }
 
 /* A MARCA É SERIFA EM QUALQUER LUGAR — capa e demonstração.
