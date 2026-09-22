@@ -10,6 +10,7 @@
     "preview": "vite preview",
     "lint": "eslint . --quiet",
     "conferir": "node testes/conferir.mjs",
+    "servir": "node testes/servir-dist.mjs",
     "smoke": "vite build --ssr testes/smoke/entrada.jsx --outDir .smoke --emptyOutDir && node .smoke/entrada.js",
     "provar": "npm run lint && npm run conferir && npm run smoke && npm run build"
   },

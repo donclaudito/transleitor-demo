@@ -40,8 +40,13 @@ npm run lint       # ESLint (no-undef ligado de propósito)
 npm run conferir   # 533 asserções: imports, avisos, rotas, mojibake, proibições de rede
 npm run smoke      # renderiza as 14 telas e confere marcas de texto
 npm run build      # build de produção
+npm run servir     # serve dist/ num servidor Node puro, para conferir o que é SERVIDO
 npm run provar     # tudo acima, em ordem
 ```
+
+`npm run servir` existe porque `vite preview` também carrega o `vite.config.js` — e isso passa pelo
+esbuild. O servidor de `testes/servir-dist.mjs` só entrega arquivos de `dist/`, do mesmo jeito que o
+GitHub Pages entrega, sem depender de nada disso.
 
 ### Por que a prova de renderização existe
 
