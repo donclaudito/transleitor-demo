@@ -237,8 +237,9 @@ e `errorMessage`.
 | Conferência | Resultado |
 |---|---|
 | `GET /` | HTTP 200, é o nosso `index.html` |
-| Bundle que **a página servida** referencia | `/assets/index-D9GeH75e.js`, 505.340 bytes — **mesmo hash do build conferido localmente** |
+| Bundle que **a página servida** referencia | `/assets/index-u3iSRXXv.js`, 504.338 bytes — **mesmo hash do build conferido localmente** |
 | Marcas de texto de tela no bundle baixado | **18/18** |
+| Ícone da marca servido | `/oren-ai-192.png` → 200, `image/png`, 47.032 bytes, **sha256 idêntico ao arquivo local** (`c3dac23ee203ac80…`) |
 | `Cache-Control` dos assets | `public, max-age=31536000, immutable` |
 | `GET /demo/menu`, `/demo/evolucao`, `/demo/cirurgia`, `/demo/seguranca` | HTTP 200, devolvem o app (rewrite funcionando) |
 | `base44` e chave de serviço no bundle servido | ausentes |
