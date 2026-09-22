@@ -18,6 +18,7 @@ import DemoMonitoramento from '@/pages/demo/DemoMonitoramento'
 import DemoDireitos from '@/pages/demo/DemoDireitos'
 import DemoSeguranca from '@/pages/demo/DemoSeguranca'
 import DemoMinhaLLM from '@/pages/demo/DemoMinhaLLM'
+import DemoConformidade from '@/pages/demo/DemoConformidade'
 import DemoIntegracoes from '@/pages/demo/DemoIntegracoes'
 
 // O site pode ser servido na raiz (máquina local, domínio próprio) ou dentro de uma subpasta
@@ -49,6 +50,7 @@ export default function App() {
           <Route path="direitos" element={<DemoDireitos />} />
           <Route path="seguranca" element={<DemoSeguranca />} />
           <Route path="minha-llm" element={<DemoMinhaLLM />} />
+          <Route path="conformidade" element={<DemoConformidade />} />
           <Route path="integracoes" element={<DemoIntegracoes />} />
         </Route>
 

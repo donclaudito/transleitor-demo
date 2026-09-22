@@ -107,6 +107,12 @@ export const TELAS_DEMO = [
     resumo: 'Como o aplicativo se examina em busca de furos e o que faz com o que encontra.',
   },
   {
+    rota: '/demo/conformidade',
+    nome: 'Conformidade e critérios',
+    icone: '⚖️',
+    resumo: 'Normativas, artigos da LGPD e os critérios que o aplicativo se RECUSA a afirmar sem fonte.',
+  },
+  {
     rota: '/demo/minha-llm',
     nome: 'Use a sua própria chave de IA',
     icone: '🔑',
@@ -577,5 +583,6 @@ export const LIMITES_POR_TELA = {
   '/demo/direitos': 'Nenhuma exportação e nenhuma eliminação acontecem. A tela mostra as cinco etapas do procedimento.',
   '/demo/seguranca': 'Nenhuma varredura é executada. A tela mostra as categorias verificadas e o formato do relatório.',
   '/demo/minha-llm': 'Nenhuma chave é digitada e nenhum provedor é consultado. A lista de modelos e as linhas cadastradas são fixas.',
+  '/demo/conformidade': 'Nenhuma norma é consultada e nenhum documento é lido: o conteúdo é a leitura que eu fiz do aplicativo, com o arquivo de origem de cada afirmação. Não é parecer jurídico.',
   '/demo/integracoes': 'Nenhum destino é gravado e nenhum segredo é consultado. O envio ao hospital não existe nesta demonstração — e, no aplicativo, também não está ligado.',
 };

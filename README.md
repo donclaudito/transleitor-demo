@@ -162,7 +162,7 @@ e o texto estava certo. Agora há asserção para a fonte da amostra.
 
 ## O que este site é — e o que ele não é
 
-**É:** a capa de apresentação do produto e quatorze telas ilustrativas do aplicativo, navegáveis de
+**É:** a capa de apresentação do produto e quinze telas ilustrativas do aplicativo, navegáveis de
 verdade, com conteúdo fixo escrito para a demonstração.
 
 **Não é:** o aplicativo. Nada aqui grava, consulta, envia ou recebe nada.
@@ -188,7 +188,7 @@ npm run dev        # servidor local
 
 ```bash
 npm run lint       # ESLint (no-undef ligado de propósito)
-npm run conferir   # 728 asserções: imports, avisos, rotas, mojibake, espelho de tema, ícones, tipografia, proibições de rede
+npm run conferir   # 754 asserções: imports, avisos, rotas, mojibake, espelho de tema, ícones, tipografia, proibições de rede
 npm run smoke      # renderiza as 15 telas e confere marcas de texto
 npm run build      # build de produção
 npm run servir     # serve dist/ num servidor Node puro, para conferir o que é SERVIDO
@@ -233,19 +233,19 @@ src/
     ui/                        design system (shadcn/ui copiado do aplicativo)
   pages/
     LandingPage.jsx            capa
-    demo/                      as quatorze telas demonstradas
+    demo/                      as quinze telas demonstradas
 testes/
   conferir.mjs                 conferências estáticas
   conferir-no-ar.mjs           confere o que está NO AR
   servir-dist.mjs              serve dist/ imitando o host (rewrite + cache dos assets)
-  smoke/entrada.jsx            prova de renderização das 18 telas
+  smoke/entrada.jsx            prova de renderização das 19 telas
 ferramentas/
   gerar-icones-oren.py         recorta o PNG da marca e gera o conjunto de ícones
 public/
   oren-ai-*.png                ícones da marca — GERADOS, não editar à mão
 ```
 
-### As quatorze telas
+### As quinze telas
 
 | Rota | Tela |
 |---|---|
@@ -261,6 +261,7 @@ public/
 | `/demo/monitoramento` | Uso e trilha de IA |
 | `/demo/direitos` | Direitos do titular |
 | `/demo/seguranca` | Auditor de segurança |
+| `/demo/conformidade` | **Conformidade e critérios** — normativas, artigos da LGPD e o que o app se recusa a afirmar |
 | `/demo/minha-llm` | **Use a sua própria chave de IA** — módulo novo do aplicativo |
 | `/demo/integracoes` | **Integração com a instituição** — módulo novo, genérico, envio desligado |
 
@@ -269,6 +270,30 @@ public/
 A demonstração cobre **14 das 34 rotas** do aplicativo. O mapa (`/demo/mapa`) lista **todas**, e cada
 linha diz uma de duas coisas: *tem demonstração* (com o link) ou **não demonstrada**. A barra de
 cobertura diz 41%.
+
+**Um módulo fica FORA dessa conta, de propósito:** `Conformidade e critérios` é documentação do
+produto, não tela do aplicativo. Somá-lo faria a porcentagem parecer maior do que é — e o mapa diz
+isso, em vez de inflar o número.
+
+### Conformidade e critérios — a tela que quase nenhum produto mostra
+
+`/demo/conformidade` foi montada a partir de outra pesquisa no aplicativo, e cada afirmação carrega
+**o arquivo de onde foi lida**:
+
+| Bloco | O que traz |
+|---|---|
+| **Normativas** | Res. CFM 1.638/2002 (documento com data, hora, identificação e CRM), Res. CFM 1.821/2007 (guarda de 20 anos), LGPD arts. 33–36, Res. CD/ANPD 19/2024, 18/2024 e 15/2024 — cada uma com o que **exige**, o que o app **faz** e qual é a **trava** em código |
+| **Critérios oferecidos** | EVA, Glasgow e IPSS entram como **item que o médico registra** — o aplicativo não calcula escore nem interpreta |
+| **Critérios recusados** | **12 famílias** (Lung-RADS, BI-RADS, PI-RADS, LI-RADS, TI-RADS, CAD-RADS, NI-RADS, O-RADS, Bosniak, Fleischner, Bethesda, C-RADS) que o aplicativo **se recusa a nomear** sem trecho de fonte conferida — e o fato medido: **a base está vazia (0 registros), então hoje o laudo sai sem classificar, de propósito** |
+| **Artigos da LGPD** | 16 artigos, cada um com a funcionalidade que o implementa |
+| **Fontes** | A lista dos arquivos de onde saiu cada afirmação, para a tela poder ser **auditada** |
+
+**Uma norma ficou de fora, e é um acerto:** a **Res. CFM 1.331/89 não aparece como vigente** — o
+parecer do próprio aplicativo registra que ela foi **revogada** pela 1.638/2002. A regra deste
+projeto é não inventar exigência; listar uma norma revogada como se valesse seria inventar.
+
+> **Isto não é parecer jurídico.** A tela é a leitura que eu fiz do aplicativo, com o arquivo de
+> origem de cada item — e é a própria tela que diz isso.
 
 **A lista é lida do aplicativo, não escrita de memória:** as rotas vêm do roteador (`App.jsx`), e os
 números — **24 páginas, 34 rotas, 35 entidades, 17 funções de backend** — da contagem dos arquivos.
@@ -329,7 +354,7 @@ O arquivo `vercel.json` já resolve tudo o que o Vercel precisa saber:
 | `outputDirectory: dist` | Saída do Vite. |
 | `framework: vite` | Detecção explícita, em vez de depender do palpite da plataforma. |
 | `Cache-Control` imutável em `/assets/` | O nome do arquivo tem hash do conteúdo: se mudar, muda o nome. Segurar em cache é seguro. |
-| `buildCommand` com as verificações | O deploy **não publica código não conferido**: lint, 728 asserções e prova de renderização rodam antes do build. |
+| `buildCommand` com as verificações | O deploy **não publica código não conferido**: lint, 754 asserções e prova de renderização rodam antes do build. |
 
 **No Vercel o site fica na raiz**, então `VITE_BASE_PATH` **não** deve ser definida (o padrão do
 `vite.config.js` é `/`).
@@ -430,8 +455,8 @@ Para publicar, uma das duas:
 
 ## Limites declarados
 
-- **Não verificado em navegador.** O que está provado é: lint sem erros, 728 asserções de
-  conferência, renderização das 18 telas com 75 marcas de texto e build `exit 0`. A aparência na
+- **Não verificado em navegador.** O que está provado é: lint sem erros, 754 asserções de
+  conferência, renderização das 19 telas com 81 marcas de texto e build `exit 0`. A aparência na
   tela (layout, toque no iPad, comportamento de rolagem) não foi medida: não há navegador no
   ambiente onde isto foi construído.
 - **A demonstração não demonstra o aplicativo funcionando.** Ela mostra o formato das telas e o

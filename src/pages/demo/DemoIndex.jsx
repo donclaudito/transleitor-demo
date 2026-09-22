@@ -18,7 +18,7 @@ export default function DemoIndex() {
           Veja o Transleitor por dentro — sem instalar nada e sem cadastro
         </h1>
         <p className="max-w-3xl text-sm leading-relaxed text-muted-foreground">
-          As quatorze telas abaixo são a demonstração do aplicativo. Você pode clicar, navegar e explorar
+          As quinze telas abaixo são a demonstração do aplicativo. Você pode clicar, navegar e explorar
           à vontade para entender como ele é na mão de quem usa.
         </p>
         <div className="grid gap-3 sm:grid-cols-3">

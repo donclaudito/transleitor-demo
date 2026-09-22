@@ -82,8 +82,20 @@ export const MAPA_DO_APP = [
   },
 ]
 
-// A verdade sobre a vitrine: nem toda tela do aplicativo tem demonstração navegável.
+// A verdade sobre a vitrine: nem toda tela do aplicativo tem demonstração navegável — e nem toda
+// tela da demonstração corresponde a uma tela do aplicativo.
 export const COBERTURA = {
   telasDoApp: 34,
   comDemonstracao: MAPA_DO_APP.flatMap((g) => g.telas).filter((t) => t.demo).length,
 }
+
+// MÓDULOS QUE SÓ EXISTEM AQUI. São documentação do produto, não tela do aplicativo — e por isso
+// ficam FORA da conta de cobertura. Somá-los faria a porcentagem parecer maior do que é.
+export const MODULOS_SO_DA_DEMONSTRACAO = [
+  {
+    nome: 'Conformidade e critérios',
+    rota: '/demo/conformidade',
+    o_que:
+      'Normativas, artigos da LGPD e os critérios clínicos que o aplicativo oferece ou se recusa a afirmar. É leitura do aplicativo, não tela dele.',
+  },
+]

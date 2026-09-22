@@ -103,7 +103,7 @@ export default function LandingHero() {
             <Link to="/demo" className="text-primary hover:underline">
               demonstração navegável
             </Link>{' '}
-            são quatorze telas — com dado fictício e nenhuma função ativa.
+            são quinze telas — com dado fictício e nenhuma função ativa.
           </p>
         </motion.div>
       </div>

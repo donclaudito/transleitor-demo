@@ -30,6 +30,7 @@ import DemoMonitoramento from '@/pages/demo/DemoMonitoramento'
 import DemoDireitos from '@/pages/demo/DemoDireitos'
 import DemoSeguranca from '@/pages/demo/DemoSeguranca'
 import DemoMinhaLLM from '@/pages/demo/DemoMinhaLLM'
+import DemoConformidade from '@/pages/demo/DemoConformidade'
 import DemoIntegracoes from '@/pages/demo/DemoIntegracoes'
 import DemoShell from '@/components/demo/DemoShell'
 
@@ -89,6 +90,11 @@ const TELAS = [
     'Use a sua própria chave de IA',
     DemoMinhaLLM,
     ['Use a sua própria chave de IA', 'Sem gastar créditos da plataforma', 'Minhas linhas', 'transferência para outro serviço'],
+  ],
+  [
+    'Conformidade e critérios',
+    DemoConformidade,
+    ['Conformidade — normativas e critérios', 'Res. CFM 1.638/2002', 'Recusados sem fonte conferida', 'BI-RADS', 'Artigos da LGPD, um a um', 'A trava'],
   ],
   [
     'Integração com a instituição',

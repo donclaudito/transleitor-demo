@@ -110,7 +110,7 @@ ok(importsConferidos > 50, `esperava conferir muitos imports nomeados; conferi $
 // A regra dura desta peça: quem abre um link direto precisa saber que é ilustrativo.
 // ---------------------------------------------------------------------------
 const PAGINAS_DEMO = arquivosDe(join(SRC, 'pages', 'demo'))
-ok(PAGINAS_DEMO.length === 15, `esperava 15 arquivos de tela em pages/demo; achei ${PAGINAS_DEMO.length}`)
+ok(PAGINAS_DEMO.length === 16, `esperava 16 arquivos de tela em pages/demo; achei ${PAGINAS_DEMO.length}`)
 
 for (const pagina of PAGINAS_DEMO) {
   const fonte = readFileSync(pagina, 'utf8')
@@ -122,7 +122,7 @@ for (const pagina of PAGINAS_DEMO) {
 // Toda tela declarada na navegação precisa existir de verdade (rota sem arquivo = link morto).
 const dadosDemo = readFileSync(join(SRC, 'data', 'demo.js'), 'utf8')
 const rotas = [...dadosDemo.matchAll(/rota:\s*'(\/demo\/[a-z-]+)'/g)].map((m) => m[1])
-ok(rotas.length === 14, `esperava 14 telas na navegação; achei ${rotas.length}`)
+ok(rotas.length === 15, `esperava 15 telas na navegação; achei ${rotas.length}`)
 
 const app = readFileSync(join(SRC, 'App.jsx'), 'utf8')
 for (const rota of rotas) {
@@ -482,7 +482,12 @@ ok(
 // ---------------------------------------------------------------------------
 {
   const mapa = readFileSync(join(SRC, 'data', 'mapaDoApp.js'), 'utf8')
-  const apontados = [...mapa.matchAll(/demo:\s*'(\/demo\/[a-z-]+)'/g)].map((m) => m[1])
+  // Dois destinos diferentes apontam para telas daqui: `demo:` (tela do app que tem equivalente) e
+  // `rota:` nos módulos que só existem na demonstração. Os dois precisam existir.
+  const apontados = [
+    ...[...mapa.matchAll(/demo:\s*'(\/demo\/[a-z-]+)'/g)].map((m) => m[1]),
+    ...[...mapa.matchAll(/rota:\s*'(\/demo\/[a-z-]+)'/g)].map((m) => m[1]),
+  ]
   ok(apontados.length >= 10, `esperava o mapa apontar para várias telas; apontou ${apontados.length}`)
 
   const dados = readFileSync(join(SRC, 'data', 'demo.js'), 'utf8')

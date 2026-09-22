@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowUpRight, Layers, MinusCircle, MousePointerClick } from 'lucide-react'
-import { COBERTURA, MAPA_DO_APP, NUMEROS_DO_APP } from '@/data/mapaDoApp'
+import { ArrowUpRight, BookOpen, Layers, MinusCircle, MousePointerClick } from 'lucide-react'
+import { COBERTURA, MAPA_DO_APP, MODULOS_SO_DA_DEMONSTRACAO, NUMEROS_DO_APP } from '@/data/mapaDoApp'
 import TelaDemo from '@/components/demo/TelaDemo'
 import { EtiquetaExemplo } from '@/components/demo/AvisoDemo'
 
@@ -99,6 +99,39 @@ export default function DemoMapa() {
           </ul>
         </section>
       ))}
+
+      {/* MÓDULOS QUE SÓ EXISTEM AQUI — fora da conta de cobertura, de propósito */}
+      <section className="glass-card rounded-2xl p-5">
+        <h2 className="flex items-center gap-2 text-base">
+          <BookOpen className="h-4 w-4 text-primary" /> O que existe só aqui
+        </h2>
+        <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
+          Estes módulos são <strong className="text-foreground">documentação do produto</strong>, não
+          tela do aplicativo — por isso ficam <strong className="text-foreground">fora</strong> da conta
+          de cobertura acima. Somá-los faria a porcentagem parecer maior do que é.
+        </p>
+        <ul className="mt-3 space-y-2">
+          {MODULOS_SO_DA_DEMONSTRACAO.map((m) => (
+            <li
+              key={m.rota}
+              className="flex flex-col gap-2 rounded-xl border border-border bg-card/50 p-3 sm:flex-row sm:items-center sm:justify-between"
+            >
+              <div className="min-w-0">
+                <p className="text-sm text-foreground">{m.nome}</p>
+                <p className="font-mono text-[11px] text-primary">{m.rota}</p>
+                <p className="mt-1 text-[11px] leading-relaxed text-muted-foreground">{m.o_que}</p>
+              </div>
+              <Link
+                to={m.rota}
+                className="inline-flex flex-shrink-0 items-center gap-1.5 self-start rounded-xl border border-primary/30 bg-primary/10 px-3 py-1.5 text-[11px] text-primary transition-colors hover:bg-primary/20"
+              >
+                <MousePointerClick className="h-3.5 w-3.5" /> Abrir
+                <ArrowUpRight className="h-3 w-3" />
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </section>
 
       <p className="rounded-2xl border border-border bg-card/60 p-4 text-xs leading-relaxed text-muted-foreground">
         <strong className="text-foreground">De onde vem esta lista:</strong> das rotas declaradas no
