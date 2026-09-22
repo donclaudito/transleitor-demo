@@ -200,7 +200,7 @@ e `errorMessage`.
 | Conferência | Resultado |
 |---|---|
 | `GET /` | HTTP 200, é o nosso `index.html` |
-| Bundle que **a página servida** referencia | o mesmo hash do build conferido localmente |
+| Bundle que **a página servida** referencia | `/assets/index-D9GeH75e.js`, 505.340 bytes — **mesmo hash do build conferido localmente** |
 | Marcas de texto de tela no bundle baixado | **18/18** |
 | `Cache-Control` dos assets | `public, max-age=31536000, immutable` |
 | `GET /demo/menu`, `/demo/evolucao`, `/demo/cirurgia`, `/demo/seguranca` | HTTP 200, devolvem o app (rewrite funcionando) |
