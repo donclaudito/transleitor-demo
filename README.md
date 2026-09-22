@@ -15,6 +15,25 @@ existe backend, banco, login nem chave de API. É uma peça estática.
 (`MarcaOren` em `src/components/marca/OrenEmblema.jsx`) e o rodapé. Nunca os dois nomes soltos, um
 substituindo o outro.
 
+**E a marca é o SUJEITO da ação, não "a IA".** Segundo pedido dele: *"em todas as partes onde a IA
+aparece dando força à marca"*. Onde a frase dizia quem **faz**, agora quem faz é a Oren.AI:
+
+| Antes | Depois |
+|---|---|
+| A IA muda conforme o setor do paciente | **A Oren.AI** muda conforme o setor do paciente |
+| A IA processa e correlaciona | **A Oren.AI** processa e correlaciona |
+| Escolha o formato, a IA cuida do resto | Escolha o formato, **a Oren.AI** cuida do resto |
+| IA que entende o setor, analisa… | **A Oren.AI** entende o setor, analisa… |
+| a IA transcreve e anonimiza o documento | **a Oren.AI** transcreve e anonimiza o documento |
+| alergias entram no raciocínio da IA | alergias entram no raciocínio **da Oren.AI** |
+| o uso da IA é monitorado | o uso **da Oren.AI** é monitorado |
+
+**A regra é sobre o SUJEITO, não sobre a palavra.** "Multi-modelo **de** IA", "trilha **de** IA" e
+"extração de texto **por** IA" descrevem a **categoria** da tecnologia — trocar ali produziria frase
+errada. Por isso a conferência exige o artigo antes (`a IA` / `o IA`) e tem **controle negativo dos
+dois lados**: a categoria continua permitida, e o sujeito continua sendo detectado. Medido no bundle
+servido: **0 ocorrências** do sujeito genérico.
+
 A identidade (azul-marinho profundo, ciano, traçado de pulso) vale **na capa** — e só nela:
 
 | Escopo | Onde | O que veste |
@@ -154,7 +173,7 @@ npm run dev        # servidor local
 
 ```bash
 npm run lint       # ESLint (no-undef ligado de propósito)
-npm run conferir   # 650 asserções: imports, avisos, rotas, mojibake, espelho de tema, ícones, tipografia, proibições de rede
+npm run conferir   # 662 asserções: imports, avisos, rotas, mojibake, espelho de tema, ícones, tipografia, proibições de rede
 npm run smoke      # renderiza as 15 telas e confere marcas de texto
 npm run build      # build de produção
 npm run servir     # serve dist/ num servidor Node puro, para conferir o que é SERVIDO
@@ -263,7 +282,7 @@ O arquivo `vercel.json` já resolve tudo o que o Vercel precisa saber:
 | `outputDirectory: dist` | Saída do Vite. |
 | `framework: vite` | Detecção explícita, em vez de depender do palpite da plataforma. |
 | `Cache-Control` imutável em `/assets/` | O nome do arquivo tem hash do conteúdo: se mudar, muda o nome. Segurar em cache é seguro. |
-| `buildCommand` com as verificações | O deploy **não publica código não conferido**: lint, 650 asserções e prova de renderização rodam antes do build. |
+| `buildCommand` com as verificações | O deploy **não publica código não conferido**: lint, 662 asserções e prova de renderização rodam antes do build. |
 
 **No Vercel o site fica na raiz**, então `VITE_BASE_PATH` **não** deve ser definida (o padrão do
 `vite.config.js` é `/`).
@@ -364,8 +383,8 @@ Para publicar, uma das duas:
 
 ## Limites declarados
 
-- **Não verificado em navegador.** O que está provado é: lint sem erros, 650 asserções de
-  conferência, renderização das 15 telas com 54 marcas de texto e build `exit 0`. A aparência na
+- **Não verificado em navegador.** O que está provado é: lint sem erros, 662 asserções de
+  conferência, renderização das 15 telas com 58 marcas de texto e build `exit 0`. A aparência na
   tela (layout, toque no iPad, comportamento de rolagem) não foi medida: não há navegador no
   ambiente onde isto foi construído.
 - **A demonstração não demonstra o aplicativo funcionando.** Ela mostra o formato das telas e o

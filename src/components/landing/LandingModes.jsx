@@ -37,7 +37,7 @@ export default function LandingModes() {
         <div className="text-center mb-16">
           <span className="text-xs font-bold text-primary tracking-widest uppercase">Modos de Geração</span>
           <h2 className="text-3xl md:text-5xl font-extrabold mt-3 tracking-tight">
-            Escolha o formato, <br className="hidden md:block" />a IA cuida do resto
+            Escolha o formato, <br className="hidden md:block" />a Oren.AI cuida do resto
           </h2>
         </div>
         <div className="grid md:grid-cols-3 gap-5">

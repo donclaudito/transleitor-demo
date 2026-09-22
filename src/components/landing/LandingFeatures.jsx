@@ -39,7 +39,7 @@ const features = [
     icon: Camera,
     title: 'Captura de laudos e exames',
     def: 'Fotografia de exames pela câmera do celular com extração de texto por IA.',
-    func: 'Fotografe na beira do leito: a IA transcreve e anonimiza o documento, e a captura fica em fila para inserir depois.',
+    func: 'Fotografe na beira do leito: a Oren.AI transcreve e anonimiza o documento, e a captura fica em fila para inserir depois.',
     benefit: 'Nada de digitar laudos — o exame vira texto pronto, na hora que sobrar tempo.',
   },
   {
@@ -88,7 +88,7 @@ const features = [
     icon: Pill,
     title: 'Comorbidades & alergias',
     def: 'Contexto clínico inteligente do paciente.',
-    func: 'Selecione comorbidades e as medicações crônicas vêm junto; alergias entram no raciocínio da IA.',
+    func: 'Selecione comorbidades e as medicações crônicas vêm junto; alergias entram no raciocínio da Oren.AI.',
     benefit: 'Histórico completo integrado, sem procurar no papel.',
   },
   {
@@ -109,7 +109,7 @@ const features = [
     icon: ShieldCheck,
     title: 'Segurança & monitoramento',
     def: 'Isolamento de dados por médico com auditoria contínua.',
-    func: 'Cada médico acessa apenas seus próprios registros; o uso da IA é monitorado com nota de precisão.',
+    func: 'Cada médico acessa apenas seus próprios registros; o uso da Oren.AI é monitorado com nota de precisão.',
     benefit: 'Dados clínicos protegidos, no espírito da LGPD.',
   },
 ];

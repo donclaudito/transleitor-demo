@@ -47,10 +47,11 @@ export default function LandingHero() {
 
           <p className="mb-9 max-w-xl text-lg leading-relaxed text-muted-foreground md:text-xl">
             O <strong className="text-foreground">Transleitor</strong>, o produto da Oren.AI para
-            documentação clínica, gera evoluções SOAP, Livres e Simples em segundos. IA que entende o
-            setor, analisa evoluções anteriores cronologicamente, integra exames, prescrição e
-            comorbidades — e ainda <strong className="text-foreground">relê a evolução</strong>{' '}
-            apontando o que falta documentar antes de você assinar.
+            documentação clínica, gera evoluções SOAP, Livres e Simples em segundos. A Oren.AI
+            entende o setor, analisa evoluções anteriores cronologicamente, integra exames,
+            prescrição e comorbidades — e ainda{' '}
+            <strong className="text-foreground">relê a evolução</strong> apontando o que falta
+            documentar antes de você assinar.
           </p>
 
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center">

@@ -17,7 +17,7 @@ export default function LandingSectors() {
         <div className="text-center mb-16">
           <span className="text-xs font-bold text-primary tracking-widest uppercase">IA Setorial</span>
           <h2 className="text-3xl md:text-5xl font-extrabold mt-3 tracking-tight">
-            A IA muda conforme <br className="hidden md:block" />o setor do paciente
+            A Oren.AI muda conforme <br className="hidden md:block" />o setor do paciente
           </h2>
           <p className="text-muted-foreground mt-4 max-w-xl mx-auto">
             Cada setor tem um raciocínio clínico próprio. O Transleitor adapta o tom, a estrutura e os alertas automaticamente.

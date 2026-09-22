@@ -4,7 +4,7 @@ import { ClipboardEdit, BrainCircuit, FileCheck2 } from 'lucide-react';
 
 const steps = [
   { n: '01', icon: ClipboardEdit, title: 'Preencha o contexto clínico', desc: 'Setor, identificação, comorbidades, evoluções anteriores, enfermagem, exames e prescrição — cole tudo livremente.' },
-  { n: '02', icon: BrainCircuit, title: 'A IA processa e correlaciona', desc: 'Raciocínio setorial + análise cronológica das evoluções e exames, integrando prescrição e comorbidades.' },
+  { n: '02', icon: BrainCircuit, title: 'A Oren.AI processa e correlaciona', desc: 'Raciocínio setorial + análise cronológica das evoluções e exames, integrando prescrição e comorbidades.' },
   { n: '03', icon: FileCheck2, title: 'Copie a evolução pronta', desc: 'Receba a evolução no formato escolhido (SOAP, Livre ou Simples) em terminologia médica formal, pronta para o prontuário.' },
 ];
 

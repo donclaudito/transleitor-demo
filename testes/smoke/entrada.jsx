@@ -41,6 +41,10 @@ const TELAS = [
       // está aqui é o que TEM de aparecer.
       'Inteligência Médica',
       'Ver a demonstração',
+      // A MARCA COMO SUJEITO: quem age é a Oren.AI, não "a IA".
+      'A Oren.AI muda conforme',
+      'A Oren.AI processa e correlaciona',
+      'a Oren.AI cuida do resto',
       'Ver demonstração',
       'Oren',
       'Precisão · Tecnologia · Resultado',

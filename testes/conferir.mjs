@@ -423,6 +423,39 @@ for (const arquivo of ARQUIVOS) {
 }
 
 // ---------------------------------------------------------------------------
+// 8. NA CAPA, A MARCA É O SUJEITO DA AÇÃO — não "a IA"
+//
+// Pedido do Dr. Claudio: em todas as partes onde a IA aparece como quem age, quem age é a Oren.AI.
+// "A IA muda conforme o setor do paciente" virou "A Oren.AI muda conforme o setor do paciente".
+//
+// A REGRA É SOBRE O SUJEITO, NÃO SOBRE A PALAVRA. "Multi-modelo de IA", "trilha de IA" e
+// "extração de texto por IA" descrevem a CATEGORIA da tecnologia, e trocar ali produziria frase
+// errada. Por isso o padrão exige o artigo antes: `a IA` / `o IA` — e é isso que o controle
+// negativo logo abaixo protege.
+// ---------------------------------------------------------------------------
+{
+  const semComentario = (texto) =>
+    texto.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '')
+
+  const LANDING = arquivosDe(join(SRC, 'components', 'landing'))
+  ok(LANDING.length >= 9, `esperava varrer os componentes da capa; varri ${LANDING.length}`)
+
+  for (const arquivo of LANDING) {
+    const fonte = semComentario(readFileSync(arquivo, 'utf8'))
+    const achados = [...fonte.matchAll(/\b[ao] IA\b/gi)].map((m) => m[0])
+    ok(
+      achados.length === 0,
+      `a capa voltou a dizer "${achados[0]}" em ${relative(RAIZ, arquivo)} — quem age é a Oren.AI`,
+    )
+  }
+
+  // CONTROLE NEGATIVO, dois lados: a categoria tem de continuar permitida, e o sujeito tem de ser
+  // detectado. Sem os dois, a regra poderia estar proibindo a palavra "IA" — ou não medindo nada.
+  ok(!/\b[ao] IA\b/i.test('Multi-modelo de IA'), 'controle negativo: a categoria "de IA" passou a ser proibida')
+  ok(/\b[ao] IA\b/i.test('A IA muda conforme o setor'), 'controle negativo: o sujeito "A IA" deixou de ser detectado')
+}
+
+// ---------------------------------------------------------------------------
 console.log(`\n${assercoes} asserções, ${falhas.length} falha(s)`)
 if (falhas.length) {
   console.log('\nFALHAS:')
