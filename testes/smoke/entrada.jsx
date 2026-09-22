@@ -49,7 +49,7 @@ const TELAS = [
       'A Oren.AI muda conforme',
       'A Oren.AI processa e correlaciona',
       'a Oren.AI cuida do resto',
-      'Colegas da Oren.AI que trabalham com você',
+      'Nossos profissionais e nossos Assistentes da Oren.AI que trabalham com você',
       // O RODAPÉ EM TRÊS LINHAS. O nome da marca quebra em `<span>` (o ".AI" é colorido), então a
       // marca da frase tem de começar DEPOIS do span — foi por isso que o marcador é o trecho final.
       'Inteligência Cirúrgica',

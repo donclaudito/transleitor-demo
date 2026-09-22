@@ -576,6 +576,45 @@ ok(
 }
 
 // ---------------------------------------------------------------------------
+// 12. QUEM TRABALHA COM O MÉDICO: profissionais dele + Assistentes da Oren.AI
+//
+// Duas passadas a pedido do Dr. Claudio. A primeira tirou "de IA" e pôs a marca como sujeito
+// ("Colegas da Oren.AI"). A segunda tirou "Colegas" de vez: quem trabalha com o médico são os
+// profissionais dele e os assistentes da Oren.AI — não "colegas".
+//
+// A palavra "colega" sozinha continua permitida no texto corrido (é português correto e aparece
+// nas descrições dos cartões). O que a trava proíbe são os TÍTULOS antigos.
+// ---------------------------------------------------------------------------
+{
+  const TITULO = 'Nossos profissionais e nossos Assistentes da Oren.AI que trabalham com você'
+  const CAPA = join(SRC, 'components', 'landing', 'LandingAgents.jsx')
+  const SMOKE = join(RAIZ, 'testes', 'smoke', 'entrada.jsx')
+  const README = join(RAIZ, 'README.md')
+
+  for (const arquivo of [...ARQUIVOS, SMOKE, README]) {
+    const fonte = readFileSync(arquivo, 'utf8')
+    const nome = relative(RAIZ, arquivo)
+    ok(!/colegas de ia/i.test(fonte), `voltou "Colegas de IA" em ${nome}`)
+    ok(!/colegas da oren\.ai/i.test(fonte), `voltou "Colegas da Oren.AI" em ${nome}`)
+  }
+
+  // O TÍTULO NOVO ONDE SE LÊ: na capa, no smoke e no README — os três lugares que escaparam
+  // em trocas anteriores deste mesmo texto.
+  ok(readFileSync(CAPA, 'utf8').includes(TITULO), 'o título novo da seção de agentes saiu da capa')
+  ok(readFileSync(SMOKE, 'utf8').includes(TITULO), 'o título novo da seção de agentes saiu do smoke')
+  ok(readFileSync(README, 'utf8').includes(TITULO), 'o título novo da seção de agentes saiu do README')
+
+  // CONTROLE NEGATIVO: as regras têm de PEGAR os títulos antigos.
+  ok(/colegas de ia/i.test('Colegas de IA que trabalham com você'),
+    'controle negativo: a regra deixou de reconhecer "Colegas de IA"')
+  ok(/colegas da oren\.ai/i.test('Colegas da Oren.AI que trabalham com você'),
+    'controle negativo: a regra deixou de reconhecer "Colegas da Oren.AI"')
+  // E o controle do outro lado: "colega" no meio de uma frase NÃO pode ser proibido.
+  ok(!/colegas de ia/i.test('Uma colega virtual com quem você conversa'),
+    'controle negativo: a regra está banindo "colega" no texto corrido')
+}
+
+// ---------------------------------------------------------------------------
 console.log(`\n${assercoes} asserções, ${falhas.length} falha(s)`)
 if (falhas.length) {
   console.log('\nFALHAS:')

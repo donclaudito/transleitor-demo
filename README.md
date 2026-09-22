@@ -47,7 +47,8 @@ Repare que **não há peso separando as linhas**: a capa inteira usa peso único
 display não tem outro. A hierarquia do rodapé vem de **tamanho e cor**. O "IA" saiu de "IA Clínica
 Adaptativa" — a marca já está dita na linha.
 
-O título da seção de agentes também mudou: **"Colegas da Oren.AI que trabalham com você"**.
+O título da seção de agentes mudou duas vezes — hoje ele nomeia quem trabalha com você:
+**"Nossos profissionais e nossos Assistentes da Oren.AI que trabalham com você"**.
 
 A identidade (azul-marinho profundo, ciano, traçado de pulso) vale **na capa** — e só nela:
 
