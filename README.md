@@ -125,11 +125,30 @@ publica o conteúdo de `dist/`.
 `index.html` em `?r=`; o `index.html` restaura a rota antes de o React montar. Sem esse par de
 arquivos, recarregar uma tela da demonstração daria 404.
 
-### Repositório privado × GitHub Pages
+### Repositório privado × GitHub Pages — medido
 
-O GitHub Pages em repositório **privado** exige plano pago (Pro/Team/Enterprise). Se a publicação
-falhar por isso, as saídas são: tornar o repositório público, ou publicar o `dist/` em Vercel,
-Netlify ou Cloudflare Pages — o projeto é estático e não muda nada para isso.
+O GitHub Pages em repositório **privado** exige plano pago (Pro/Team/Enterprise). Medido nesta
+conta, no repositório privado `donclaudito/transleitor-demo`:
+
+```
+POST /repos/donclaudito/transleitor-demo/pages
+→ 422 {"message":"Your current plan does not support GitHub Pages for this repository."}
+```
+
+Por isso o workflow é **condicional**: ele sempre roda lint, conferências, prova de renderização e
+build — e só publica se o Pages aceitar o repositório. Quando não aceita, a execução passa **verde**
+e escreve no resumo o motivo e as duas saídas. Um X vermelho ali pareceria defeito do site, quando é
+limitação de plano.
+
+Para publicar, uma das duas:
+
+1. **Tornar o repositório público** — Settings → General → Danger Zone → Change visibility. Depois
+   rode o workflow de novo (Actions → *Conferir e publicar a demonstração* → Run workflow), ou apenas
+   faça um push em `main`.
+2. **Publicar a pasta `dist/` em Vercel, Netlify ou Cloudflare Pages**, que aceitam repositório
+   privado. O projeto é estático e não muda nada para isso — só não defina `VITE_BASE_PATH` (o site
+   fica na raiz).
+
 
 ---
 

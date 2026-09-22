@@ -1,4 +1,4 @@
-name: Publicar a demonstração no GitHub Pages
+name: Conferir e publicar a demonstração
 
 on:
   push:
@@ -18,6 +18,8 @@ jobs:
   build:
     name: Conferir e construir
     runs-on: ubuntu-latest
+    outputs:
+      pages: ${{ steps.pages.outputs.disponivel }}
     steps:
       - uses: actions/checkout@v4
 
@@ -48,15 +50,61 @@ jobs:
       - name: Desligar o Jekyll
         run: touch dist/.nojekyll
 
+      # O PAGES NEM SEMPRE ESTÁ DISPONÍVEL: em repositório PRIVADO ele exige plano pago
+      # (Pro/Team/Enterprise). Sem esta checagem, o trabalho todo passaria e o deploy falharia
+      # com um X vermelho que parece defeito do site — quando é limitação de plano.
+      # Aqui a publicação é CONDICIONAL e o motivo fica escrito no resumo da execução.
+      - name: O GitHub Pages está disponível para este repositório?
+        id: pages
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set +e
+          # Tenta habilitar; se já estiver habilitado, a leitura confirma.
+          if gh api -X POST "/repos/${{ github.repository }}/pages" -f build_type=workflow > /dev/null 2>&1; then
+            disponivel=1
+          elif gh api "/repos/${{ github.repository }}/pages" > /dev/null 2>&1; then
+            disponivel=1
+          else
+            disponivel=0
+          fi
+
+          if [ "$disponivel" = "1" ]; then
+            echo "disponivel=true" >> "$GITHUB_OUTPUT"
+            echo "GitHub Pages disponível: a publicação vai acontecer." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "disponivel=false" >> "$GITHUB_OUTPUT"
+            {
+              echo "## Publicação não configurada (o site está conferido e construído)"
+              echo ""
+              echo "O GitHub Pages recusou este repositório. Em repositório **privado**, ele exige"
+              echo "plano pago (Pro/Team/Enterprise) — é limitação de plano, não defeito do site."
+              echo ""
+              echo "O que já foi feito nesta execução: lint, 533 asserções de conferência, prova de"
+              echo "renderização das 14 telas e build de produção. O conteúdo de \`dist/\` está pronto."
+              echo ""
+              echo "Para publicar, uma das duas:"
+              echo ""
+              echo "1. tornar o repositório público (Settings → General → Danger Zone → Change visibility);"
+              echo "2. publicar a pasta \`dist/\` em Vercel, Netlify ou Cloudflare Pages — o projeto é"
+              echo "   estático e não muda nada para isso."
+              echo ""
+              echo "Depois de qualquer uma delas, rode este workflow de novo (\`workflow_dispatch\`)."
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
+
       - uses: actions/configure-pages@v5
+        if: steps.pages.outputs.disponivel == 'true'
 
       - uses: actions/upload-pages-artifact@v3
+        if: steps.pages.outputs.disponivel == 'true'
         with:
           path: dist
 
   deploy:
     name: Publicar
     needs: build
+    if: needs.build.outputs.pages == 'true'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
