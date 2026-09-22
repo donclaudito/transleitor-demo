@@ -195,8 +195,8 @@ npm run dev        # servidor local
 
 ```bash
 npm run lint       # ESLint (no-undef ligado de propósito)
-npm run conferir   # 1162 asserções: imports, avisos, rotas, mojibake, espelho de tema, ícones, tipografia, proibições de rede
-npm run smoke      # renderiza as 19 telas e confere 81 marcas de texto
+npm run conferir   # 1177 asserções: imports, avisos, rotas, mojibake, espelho de tema, ícones, tipografia, proibições de rede
+npm run smoke      # renderiza as 19 telas + as 12 áreas nas 2 telas de painel (23 renders) e confere 224 marcas de texto
 npm run build      # build de produção
 npm run servir     # serve dist/ num servidor Node puro, para conferir o que é SERVIDO
 npm run no-ar https://SEU-SITE.vercel.app   # confere o que está NO AR (não o que foi enviado)
@@ -221,6 +221,54 @@ desenhar. Build verde, lint verde, tela morta.
 Por isso `npm run smoke` não lê o fonte: ele **renderiza** cada tela com `react-dom/server` e
 confere marcas de **texto de tela** no HTML resultante (o que o usuário lê, não nome de função), com
 controle negativo para garantir que o conferidor não aceita tudo.
+
+#### O defeito que a prova de renderização não pegava
+
+Em 22/09/2026 o site foi publicado com um crash: **clicar em "Pediatria" derrubava a tela**, com
+
+```
+TypeError: Cannot read properties of undefined (reading 'map')
+```
+
+A causa não foi digitação. Uma área **pode não ter todas as seções** — no aplicativo isso é
+legítimo, e o código de lá itera o que existe (`Object.entries(cfg.secoes)`) e lê cada seção com
+`?.groups || []`. A demonstração reescreveu isso como **quatro chaves fixas** numa lista, em dois
+arquivos diferentes:
+
+```js
+{ chave: 'exames', ...curado.secoes.exames },   // Pediatria não tem `exames`
+```
+
+Espalhar `undefined` não dá erro: dá um objeto `{ chave: 'exames' }`, **sem `groups`**. E aí
+`s.groups.map(...)` morre. Pediatria é a única das 11 áreas curadas nessa situação — tem queixa,
+exame e conduta (49 itens, 3 seções) e não tem exames.
+
+**Por que o smoke não pegou:** ele renderiza cada tela no **estado inicial**, e a tela de evolução
+abre em urologia. O crash só existe **depois do clique**. A prova estava correta e insuficiente —
+renderizar uma tela não é o mesmo que renderizar todos os **estados** dela. É a mesma lição que
+originou este arquivo, um nível mais fundo.
+
+**O conserto, em três partes:**
+
+1. `src/lib/painelDaArea.js` passa a ser a **única** fonte da montagem do painel. As duas telas que
+   mostram o painel e a prova de renderização chamam a mesma função, então nenhuma pode divergir da
+   outra. Uma seção só entra se existir **e** tiver `groups` em lista.
+2. As duas telas aceitam `slugInicial`, para a prova poder montá-las em cada área.
+3. O smoke ganha dois blocos: mede a **forma** de cada config (seção presente tem de ter `groups` —
+   sem isso a tolerância esconderia a seção malformada em silêncio, que é pior do que quebrar) e
+   **renderiza as 12 áreas** nas 2 telas, em 23 renders.
+
+**Nenhum item clínico foi inventado.** Os itens de Pediatria são os que o Dr. Claudio escreveu. O
+que mudou é a tela saber mostrar uma área de 3 seções em vez de 4 — e dizer isso ao visitante, em
+texto derivado dos dados, com a explicação de que não é falha de carregamento.
+
+O `transleitor9` **não** tem esse defeito: lá a leitura é `?.groups || []` e a lista de seções vem de
+`Object.entries(cfg.secoes)`, então a seção ausente simplesmente não existe. É defeito de
+portabilidade, nascido na demonstração.
+
+**Controle negativo do conserto:** a lógica antiga, transcrita palavra por palavra, reproduz o erro
+do navegador em **1 de 11 áreas** — Pediatria — e em nenhuma outra. Sem isso, "consertado" poderia
+ser só "não consegui reproduzir".
 
 ---
 
@@ -361,7 +409,7 @@ O arquivo `vercel.json` já resolve tudo o que o Vercel precisa saber:
 | `outputDirectory: dist` | Saída do Vite. |
 | `framework: vite` | Detecção explícita, em vez de depender do palpite da plataforma. |
 | `Cache-Control` imutável em `/assets/` | O nome do arquivo tem hash do conteúdo: se mudar, muda o nome. Segurar em cache é seguro. |
-| `buildCommand` com as verificações | O deploy **não publica código não conferido**: lint, 754 asserções e prova de renderização rodam antes do build. |
+| `buildCommand` com as verificações | O deploy **não publica código não conferido**: lint, 1177 asserções e prova de renderização rodam antes do build. |
 
 **No Vercel o site fica na raiz**, então `VITE_BASE_PATH` **não** deve ser definida (o padrão do
 `vite.config.js` é `/`).
@@ -462,10 +510,14 @@ Para publicar, uma das duas:
 
 ## Limites declarados
 
-- **Não verificado em navegador.** O que está provado é: lint sem erros, 754 asserções de
-  conferência, renderização das 19 telas com 81 marcas de texto e build `exit 0`. A aparência na
-  tela (layout, toque no iPad, comportamento de rolagem) não foi medida: não há navegador no
-  ambiente onde isto foi construído.
+- **Não verificado em navegador.** O que está provado é: lint sem erros, 1177 asserções de
+  conferência, renderização das 19 telas + das 12 áreas nas 2 telas de painel (23 renders, 224 marcas
+  de texto) e build `exit 0`. A aparência na tela (layout, toque no iPad, comportamento de rolagem)
+  não foi medida: não há navegador no ambiente onde isto foi construído.
+- **Só um caminho de clique está provado.** O smoke renderiza cada tela no estado inicial e, agora,
+  cada área do seletor de especialidade — foi assim que o crash de Pediatria apareceu e foi
+  consertado. Os OUTROS cliques (marcar um item do painel, trocar de aba, abrir um `<details>`) não
+  são simulados: um defeito que só apareça depois deles continua invisível para a prova.
 - **A demonstração não demonstra o aplicativo funcionando.** Ela mostra o formato das telas e o
   fluxo. Nenhuma IA é chamada, nenhum cálculo é feito, nenhum arquivo é lido.
 - **Os números do monitoramento são de exemplo.** Servem para mostrar o que a trilha registra — não

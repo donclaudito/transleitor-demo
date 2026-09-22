@@ -1,8 +1,7 @@
 import React, { useMemo, useState } from 'react'
 import { Eraser, FileText, Printer, RefreshCw, Sparkles, Stethoscope } from 'lucide-react'
-import { PANELS_ESPECIALIDADE } from '@/data/paineisEspecialidade'
-import { SYMPTOMS_DATA } from '@/data/painelSintomas'
 import { ESPECIALIDADES_DEMO, ESTRUTURA_EVOLUCAO, PRESCRICAO_DEMO } from '@/data/demo'
+import { montarPainelDaArea, explicarAusencia } from '@/lib/painelDaArea'
 import TelaDemo from '@/components/demo/TelaDemo'
 import BotaoDemo from '@/components/demo/BotaoDemo'
 import { EtiquetaExemplo } from '@/components/demo/AvisoDemo'
@@ -24,35 +23,20 @@ import { cn } from '@/lib/utils'
 // Como cada seção do painel cai na estrutura SOAP no aplicativo real.
 const LETRA_POR_SECAO = { queixa: 'S', exame: 'O', exames: 'O', conduta: 'P', subjetivo: 'S', objetivo: 'O', observacoes: 'P' }
 
-function montarPainel(slug) {
-  const curado = PANELS_ESPECIALIDADE[slug]
-  if (curado) {
-    return {
-      origem: 'curado',
-      secoes: [
-        { chave: 'queixa', ...curado.secoes.queixa },
-        { chave: 'exame', ...curado.secoes.exame },
-        { chave: 'exames', ...curado.secoes.exames },
-        { chave: 'conduta', ...curado.secoes.conduta },
-      ],
-    }
-  }
-  return {
-    origem: 'generico',
-    secoes: [
-      { chave: 'subjetivo', ...SYMPTOMS_DATA.subjetivo },
-      { chave: 'objetivo', ...SYMPTOMS_DATA.objetivo },
-      { chave: 'observacoes', ...SYMPTOMS_DATA.observacoes },
-    ],
-  }
-}
+// O painel de cada área vem de `@/lib/painelDaArea` — a mesma função que a tela "Painel por
+// especialidade" e a prova de renderização usam. Ficava aqui uma cópia que espalhava as quatro
+// chaves fixas; era ela que derrubava a tela na área sem seção de exames.
 
-export default function DemoEvolucao() {
-  const [slug, setSlug] = useState('urologia')
+// `slugInicial` existe para a prova de renderização poder montar esta tela em CADA área. Sem isso
+// o smoke só provava o estado inicial (urologia) — e foi por esse buraco que o crash em Pediatria
+// foi publicado: a tela só quebra depois do clique do visitante.
+export default function DemoEvolucao({ slugInicial = 'urologia' }) {
+  const [slug, setSlug] = useState(slugInicial)
   const [escolhidos, setEscolhidos] = useState({})
 
-  const painel = useMemo(() => montarPainel(slug), [slug])
+  const painel = useMemo(() => montarPainelDaArea(slug), [slug])
   const area = ESPECIALIDADES_DEMO.find((e) => e.slug === slug)
+  const avisoDeAusencia = useMemo(() => explicarAusencia(painel.semSecao), [painel])
 
   const alternar = (secao, item) => {
     const chave = `${secao.chave}|${item}`
@@ -130,6 +114,9 @@ export default function DemoEvolucao() {
             </>
           )}
         </p>
+        {avisoDeAusencia ? (
+          <p className="mt-3 text-xs leading-relaxed text-muted-foreground">{avisoDeAusencia}</p>
+        ) : null}
       </section>
 
       <div className="grid gap-6 lg:grid-cols-[1fr_380px]">

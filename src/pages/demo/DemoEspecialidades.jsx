@@ -1,8 +1,8 @@
 import React, { useMemo, useState } from 'react'
 import { Layers, Tag } from 'lucide-react'
 import { PANELS_ESPECIALIDADE } from '@/data/paineisEspecialidade'
-import { SYMPTOMS_DATA } from '@/data/painelSintomas'
 import { ESPECIALIDADES_DEMO } from '@/data/demo'
+import { montarPainelDaArea, explicarAusencia } from '@/lib/painelDaArea'
 import TelaDemo from '@/components/demo/TelaDemo'
 import { EtiquetaExemplo } from '@/components/demo/AvisoDemo'
 import { cn } from '@/lib/utils'
@@ -21,35 +21,18 @@ function contar(secao) {
   return secao.groups.reduce((soma, g) => soma + g.items.length, 0)
 }
 
-function secoesDe(slug) {
-  const curado = PANELS_ESPECIALIDADE[slug]
-  if (!curado) {
-    return {
-      origem: 'generico',
-      secoes: [
-        { chave: 'subjetivo', ...SYMPTOMS_DATA.subjetivo },
-        { chave: 'objetivo', ...SYMPTOMS_DATA.objetivo },
-        { chave: 'observacoes', ...SYMPTOMS_DATA.observacoes },
-      ],
-    }
-  }
-  return {
-    origem: 'curado',
-    secoes: [
-      { chave: 'queixa', ...curado.secoes.queixa },
-      { chave: 'exame', ...curado.secoes.exame },
-      { chave: 'exames', ...curado.secoes.exames },
-      { chave: 'conduta', ...curado.secoes.conduta },
-    ],
-  }
-}
+// O painel de cada área vem de `@/lib/painelDaArea` — a mesma função da tela principal e da prova
+// de renderização. Aqui ficava a SEGUNDA cópia das quatro chaves fixas, que quebrava pelo mesmo
+// motivo: área sem uma das seções virava `{ chave: 'exames' }`, sem `groups`.
 
-export default function DemoEspecialidades() {
+// `slugInicial` existe para a prova de renderização montar esta tela em cada área curada.
+export default function DemoEspecialidades({ slugInicial = 'urologia' }) {
   const comPainel = useMemo(() => ESPECIALIDADES_DEMO.filter((e) => PANELS_ESPECIALIDADE[e.slug]), [])
-  const [slug, setSlug] = useState('urologia')
+  const [slug, setSlug] = useState(slugInicial)
 
-  const painel = useMemo(() => secoesDe(slug), [slug])
+  const painel = useMemo(() => montarPainelDaArea(slug), [slug])
   const area = ESPECIALIDADES_DEMO.find((e) => e.slug === slug)
+  const avisoDeAusencia = useMemo(() => explicarAusencia(painel.semSecao), [painel])
   const total = painel.secoes.reduce((soma, s) => soma + contar(s), 0)
 
   return (
@@ -90,6 +73,10 @@ export default function DemoEspecialidades() {
             {painel.secoes.length} seções · <strong className="text-foreground">{total} itens</strong>
           </span>
         </div>
+
+        {avisoDeAusencia ? (
+          <p className="mb-4 text-xs leading-relaxed text-muted-foreground">{avisoDeAusencia}</p>
+        ) : null}
 
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {painel.secoes.map((s) => (
