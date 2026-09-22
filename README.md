@@ -257,7 +257,7 @@ public/
 | `/demo/cirurgia` | Descrição cirúrgica e conferência do registro |
 | `/demo/passagem` | Passagem de visita por leito |
 | `/demo/especialidades` | Painel por especialidade |
-| `/demo/elio` | Elvira, a assistente clínica |
+| `/demo/elio` | Ellah, a assistente clínica |
 | `/demo/monitoramento` | Uso e trilha de IA |
 | `/demo/direitos` | Direitos do titular |
 | `/demo/seguranca` | Auditor de segurança |

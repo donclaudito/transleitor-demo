@@ -35,7 +35,7 @@ export const MAPA_DO_APP = [
       { rota: '/imagem-medica', nome: 'Análise de imagem médica', o_que: 'Leitura estruturada em cinco seções, com o que não foi possível afirmar.', demo: '/demo/imagem' },
       { rota: '/descricao-cirurgia', nome: 'Descrição cirúrgica', o_que: 'O documento do ato cirúrgico e a conferência dos campos que a auditoria procura.', demo: '/demo/cirurgia' },
       { rota: '/passagem', nome: 'Passagem de visita', o_que: 'O resumo por leito que o próximo plantão recebe, com as pendências ditas.', demo: '/demo/passagem' },
-      { rota: '/elio', nome: 'Elvira — assistente clínica', o_que: 'Conversa em linguagem natural, com o modelo de IA que o médico escolher.', demo: '/demo/elio' },
+      { rota: '/elio', nome: 'Ellah — assistente clínica', o_que: 'Conversa em linguagem natural, com o modelo de IA que o médico escolher.', demo: '/demo/elio' },
       { rota: '/urologia (e mais 11)', nome: 'As variantes por especialidade', o_que: 'Cada área tem a sua rota e o seu raciocínio clínico próprio — 12 no total.', demo: '/demo/especialidades' },
     ],
   },

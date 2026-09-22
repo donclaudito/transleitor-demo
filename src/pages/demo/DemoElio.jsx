@@ -7,7 +7,7 @@ import { EtiquetaExemplo } from '@/components/demo/AvisoDemo'
 import { cn } from '@/lib/utils'
 
 // ============================================================================
-// ELVIRA — ASSISTENTE CLÍNICA
+// ELLAH — ASSISTENTE CLÍNICA
 //
 // A conversa abaixo é um roteiro fixo, escrito para a demonstração. Não há modelo de IA aqui, e o
 // ponto do roteiro não é a resposta bonita: é o comportamento. Ela organiza o que o médico trouxe,
@@ -17,7 +17,7 @@ import { cn } from '@/lib/utils'
 export default function DemoElio() {
   return (
     <TelaDemo
-      titulo="💬 Elvira — assistente clínica"
+      titulo="💬 Ellah — assistente clínica"
       descricao="Uma colega virtual com quem o médico conversa em linguagem natural, dentro do aplicativo. Ela trabalha com o modelo de IA que o médico escolher e só com os dados que ele fornecer."
       acoes={<EtiquetaExemplo>conversa fixa de exemplo</EtiquetaExemplo>}
     >
@@ -68,7 +68,7 @@ export default function DemoElio() {
               <Bot className="h-4 w-4 text-primary" />
             </span>
             <div>
-              <p className="text-sm font-bold">Elvira</p>
+              <p className="text-sm font-bold">Ellah</p>
               <p className="text-[11px] text-muted-foreground">{ELIO_DEMO.avisoConversa}</p>
             </div>
           </div>

@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { Bot, ShieldAlert, ScanLine, CheckCircle2, ArrowRight, ClipboardCheck } from 'lucide-react';
 
 // Cards baseados nos assistentes REAIS do aplicativo — só o que existe hoje:
-// - Elvira: assistente clínica, conversa dentro do app e usa o modelo escolhido pelo médico.
+// - Ellah: assistente clínica, conversa dentro do app e usa o modelo escolhido pelo médico.
 // - Revisor da evolução: relê a evolução como quem vai assumir o caso e aponta o que falta
 //   documentar. Pergunta, não decide.
 // - Auditor de segurança: examina o próprio aplicativo em busca de furos, com evidência.
@@ -14,7 +14,7 @@ import { Bot, ShieldAlert, ScanLine, CheckCircle2, ArrowRight, ClipboardCheck } 
 const AGENTES = [
   {
     icon: Bot,
-    nome: 'Elvira',
+    nome: 'Ellah',
     papel: 'Assistente clínica de plantão, 24h',
     oQueE: 'Uma colega virtual com quem você conversa por chat, em linguagem natural, dentro do app.',
     oQueFaz: 'Redige evoluções com você, interpreta exames, discute condutas e planeja tratamentos a partir do caso que você descreve — respondendo com o modelo de IA que você escolher (DeepSeek, Gemini e outros).',

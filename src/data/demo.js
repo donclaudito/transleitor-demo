@@ -84,7 +84,7 @@ export const TELAS_DEMO = [
   },
   {
     rota: '/demo/elio',
-    nome: 'Elvira — assistente clínica',
+    nome: 'Ellah — assistente clínica',
     icone: '💬',
     resumo: 'Conversa em linguagem natural, usando o modelo de IA que o médico escolher.',
   },
@@ -494,7 +494,7 @@ export const DIREITOS_DEMO = {
 };
 
 // ---------------------------------------------------------------------------
-// Elvira — conversa de exemplo
+// Ellah — conversa de exemplo
 // ---------------------------------------------------------------------------
 export const ELIO_DEMO = {
   avisoConversa:
@@ -508,7 +508,7 @@ export const ELIO_DEMO = {
         'a evolução.',
     },
     {
-      de: 'elvira',
+      de: 'ellah',
       texto:
         'Organizei assim, usando apenas o que você trouxe:\n\n' +
         '• Subjetivo — dor em hipocôndrio direito, 4/10, 3º dia de pós-operatório; nega febre.\n' +
@@ -524,7 +524,7 @@ export const ELIO_DEMO = {
       texto: 'Abdome flácido, doloroso à palpação em hipocôndrio direito, sem sinais de irritação peritoneal. Já eliminou gases.',
     },
     {
-      de: 'elvira',
+      de: 'ellah',
       texto:
         'Registrado. Com esses dois dados a evolução fica completa pelo critério da Res. CFM ' +
         '1.638/2002, art. 5º, I: data e hora, procedimento discriminado, identificação do profissional ' +

@@ -534,6 +534,48 @@ ok(
 }
 
 // ---------------------------------------------------------------------------
+// 11. A ASSISTENTE CHAMA-SE ELLAH — e os ids internos continuam `elio`
+//
+// Regra copiada do aplicativo, onde a troca foi feita em 22/09/2026: o nome que o MÉDICO LÊ muda
+// para Ellah, mas os ids internos NÃO — a rota segue `/elio` e a função segue `elioChat`. Renomear
+// id interno trocaria a chave do histórico de conversas já salvo e não melhoraria nada para quem usa.
+//
+// A trava é a mesma de lá: nenhum "elvira" pode sobrar, e o nome novo tem de estar onde se lê.
+// ---------------------------------------------------------------------------
+{
+  // A checagem do aplicativo varre `src/**` E `base44/**`. Aqui não há base44 — mas a regra é a
+  // mesma, e o README entra junto porque foi ele que escapou na primeira passada da troca.
+  const semComentario = (texto) =>
+    texto.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '')
+
+  for (const arquivo of ARQUIVOS) {
+    const fonte = readFileSync(arquivo, 'utf8')
+    const nome = relative(RAIZ, arquivo)
+    // Comentário também conta: o nome antigo em comentário confunde quem for ler depois.
+    ok(!/elvira/i.test(fonte), `sobrou "Elvira" em ${nome}`)
+  }
+
+  const readme = readFileSync(join(RAIZ, 'README.md'), 'utf8')
+  ok(!/elvira/i.test(readme), 'sobrou "Elvira" no README')
+
+  // O NOME NOVO ONDE SE LÊ: na tela da demonstração e no cartão da capa.
+  const pagina = readFileSync(join(SRC, 'pages', 'demo', 'DemoElio.jsx'), 'utf8')
+  ok(/Ellah/.test(pagina), 'a tela da assistente não mostra o nome Ellah')
+  const capa = readFileSync(join(SRC, 'components', 'landing', 'LandingAgents.jsx'), 'utf8')
+  ok(/nome:\s*'Ellah'/.test(capa), 'o cartão da capa não usa o nome Ellah')
+
+  // OS IDS INTERNOS NÃO MUDAM. Se alguém renomear a rota para `/ellah`, isto reprova — e é o
+  // ponto: o id é chave, não rótulo.
+  const dados = readFileSync(join(SRC, 'data', 'demo.js'), 'utf8')
+  ok(/rota:\s*'\/demo\/elio'/.test(dados), 'a rota interna da assistente deixou de ser /demo/elio')
+  const app = readFileSync(join(SRC, 'App.jsx'), 'utf8')
+  ok(/path="elio"/.test(app), 'a rota da assistente no roteador deixou de ser "elio"')
+
+  // CONTROLE NEGATIVO: a regra tem de PEGAR o nome antigo — senão ela passaria por não medir nada.
+  ok(/elvira/i.test(semComentario('const x = "Elvira"')), 'controle negativo: a regra deixou de reconhecer o nome antigo')
+}
+
+// ---------------------------------------------------------------------------
 console.log(`\n${assercoes} asserções, ${falhas.length} falha(s)`)
 if (falhas.length) {
   console.log('\nFALHAS:')

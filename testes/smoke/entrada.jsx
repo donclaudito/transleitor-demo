@@ -77,7 +77,7 @@ const TELAS = [
   ['Descrição cirúrgica', DemoCirurgia, ['Descrição cirúrgica', 'Lichtenstein', 'Não encontrei menção a', 'Conferência do registro']],
   ['Passagem de visita', DemoPassagem, ['Passagem de visita', 'Paciente A', 'Passagem do plantão']],
   ['Painel por especialidade', DemoEspecialidades, ['Painel por especialidade', 'Urologia', 'seções']],
-  ['Elvira', DemoElio, ['Elvira', 'conversa fixa', 'O que ela não faz', 'Modelo em uso']],
+  ['Ellah', DemoElio, ['Ellah', 'conversa fixa', 'O que ela não faz', 'Modelo em uso']],
   ['Monitoramento', DemoMonitoramento, ['Monitoramento e trilha de IA', 'O que nunca entra', 'Trilha de uso']],
   ['Direitos do titular', DemoDireitos, ['Direitos do titular', '15 dias', '20 anos']],
   ['Auditor de segurança', DemoSeguranca, ['Auditor de segurança', 'Ficha de achado', 'Severidade']],
