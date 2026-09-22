@@ -33,16 +33,23 @@ export default function LandingCTA() {
         </motion.div>
       </section>
 
-      <footer className="px-6 py-10 text-center text-xs text-muted-foreground border-t border-border">
-        <p className="font-bold text-foreground">
+      <footer className="px-6 py-10 text-center text-muted-foreground border-t border-border">
+        {/* AS TRÊS LINHAS DO RODAPÉ, na ordem pedida pelo Dr. Claudio: as duas leituras da marca
+            (Médica, a ampla; Cirúrgica, a específica) e a linha do produto. O peso não separa
+            nada aqui — a capa inteira usa peso único (400) porque a serifa display não tem outro;
+            a hierarquia vem do TAMANHO e da COR. */}
+        <p className="text-xl leading-none text-foreground">
+          Oren<span className="text-primary">.AI</span> — Inteligência Médica
+        </p>
+        <p className="mt-2 text-base leading-none">
           Oren<span className="text-primary">.AI</span> — Inteligência Cirúrgica
         </p>
-        <p className="mt-1">Transleitor · IA Clínica Adaptativa · Documentação médica inteligente</p>
-        <p className="mx-auto mt-3 max-w-2xl leading-relaxed">
+        <p className="mt-2 text-sm">Transleitor · Clínica Adaptativa · Documentação médica inteligente</p>
+        <p className="mx-auto mt-5 max-w-2xl text-xs leading-relaxed">
           Página de apresentação do produto. A demonstração é ilustrativa: pacientes fictícios, sem
           identificação, e nenhuma coleta de dados nesta página.
         </p>
-        <p className="mt-3">© {new Date().getFullYear()} Oren.AI</p>
+        <p className="mt-3 text-xs">© {new Date().getFullYear()} Oren.AI</p>
       </footer>
     </>
   );

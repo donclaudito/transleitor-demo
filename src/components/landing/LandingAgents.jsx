@@ -60,7 +60,7 @@ export default function LandingAgents() {
       <div className="max-w-6xl mx-auto px-6">
         <div className="text-center max-w-2xl mx-auto mb-12">
           <span className="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold mb-4">AGENTES DE IA</span>
-          <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight mb-4">Colegas de IA que trabalham com você</h2>
+          <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight mb-4">Colegas da Oren.AI que trabalham com você</h2>
           <p className="text-muted-foreground">Cada assistente tem um papel definido — e todos seguem a mesma regra clínica: nada de inventar dado, e a palavra final é sempre do médico.</p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

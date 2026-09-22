@@ -34,6 +34,21 @@ errada. Por isso a conferência exige o artigo antes (`a IA` / `o IA`) e tem **c
 dois lados**: a categoria continua permitida, e o sujeito continua sendo detectado. Medido no bundle
 servido: **0 ocorrências** do sujeito genérico.
 
+**O rodapé tem três linhas** (pedido dele): as duas leituras da marca — *Médica*, a ampla, e
+*Cirúrgica*, a específica — e a linha do produto:
+
+```
+Oren.AI — Inteligência Médica
+Oren.AI — Inteligência Cirúrgica
+Transleitor · Clínica Adaptativa · Documentação médica inteligente
+```
+
+Repare que **não há peso separando as linhas**: a capa inteira usa peso único (400) porque a serifa
+display não tem outro. A hierarquia do rodapé vem de **tamanho e cor**. O "IA" saiu de "IA Clínica
+Adaptativa" — a marca já está dita na linha.
+
+O título da seção de agentes também mudou: **"Colegas da Oren.AI que trabalham com você"**.
+
 A identidade (azul-marinho profundo, ciano, traçado de pulso) vale **na capa** — e só nela:
 
 | Escopo | Onde | O que veste |
@@ -384,7 +399,7 @@ Para publicar, uma das duas:
 ## Limites declarados
 
 - **Não verificado em navegador.** O que está provado é: lint sem erros, 662 asserções de
-  conferência, renderização das 15 telas com 58 marcas de texto e build `exit 0`. A aparência na
+  conferência, renderização das 15 telas com 61 marcas de texto e build `exit 0`. A aparência na
   tela (layout, toque no iPad, comportamento de rolagem) não foi medida: não há navegador no
   ambiente onde isto foi construído.
 - **A demonstração não demonstra o aplicativo funcionando.** Ela mostra o formato das telas e o
