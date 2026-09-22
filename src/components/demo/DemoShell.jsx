@@ -37,8 +37,14 @@ export default function DemoShell() {
       <div className="mx-auto grid max-w-6xl gap-6 px-4 py-6 lg:grid-cols-[264px_1fr] lg:py-10">
         {/* NAVEGAÇÃO — barra horizontal no celular, coluna fixa no computador */}
         <nav aria-label="Telas da demonstração">
-          <p className="mb-2 hidden text-[10px] font-bold uppercase tracking-wider text-muted-foreground lg:block">
-            Telas demonstradas
+          {/* RÓTULO COM FAIXA — pedido do Dr. Claudio, no estilo do material dele: texto forte
+              sobre uma faixa sólida. O `-mx-1` faz a faixa sangrar um pouco além do texto, que é
+              o que dá o ar de marca-texto em vez de botão. A cor sai de `--primary`, a mesma do
+              item ativo da lista logo abaixo, para o rótulo e a navegação falarem a mesma língua. */}
+          <p className="mb-3 hidden lg:block">
+            <span className="-mx-1 inline-block bg-primary px-2.5 py-1 text-[11px] font-extrabold uppercase leading-none tracking-wider text-primary-foreground">
+              Telas demonstradas
+            </span>
           </p>
           <ul className="flex gap-2 overflow-x-auto pb-2 lg:flex-col lg:overflow-visible lg:pb-0">
             {TELAS_DEMO.map((t) => (

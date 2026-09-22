@@ -51,7 +51,7 @@ const TELAS = [
       'oren-ai-192.png',
     ],
   ],
-  ['Molde da demonstração', DemoShell, ['demonstração', 'Voltar à apresentação']],
+  ['Molde da demonstração', DemoShell, ['demonstração', 'Voltar à apresentação', 'Telas demonstradas']],
   ['Índice da demonstração', DemoIndex, ['Demonstração navegável', 'Evolução SOAP', 'Auditor de segurança']],
   [
     'Menu do aplicativo',
