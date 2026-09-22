@@ -41,6 +41,7 @@ npm run conferir   # 533 asserções: imports, avisos, rotas, mojibake, proibiç
 npm run smoke      # renderiza as 14 telas e confere marcas de texto
 npm run build      # build de produção
 npm run servir     # serve dist/ num servidor Node puro, para conferir o que é SERVIDO
+npm run no-ar https://SEU-SITE.vercel.app   # confere o que está NO AR (não o que foi enviado)
 npm run provar     # tudo acima, em ordem
 ```
 
@@ -119,6 +120,8 @@ Duas hospedagens estão preparadas: **Vercel** (a escolhida) e GitHub Pages (que
 
 ### Vercel — a hospedagem escolhida
 
+**No ar em https://transleitor-demo.vercel.app**
+
 O arquivo `vercel.json` já resolve tudo o que o Vercel precisa saber:
 
 | Configuração | Por quê |
@@ -131,6 +134,21 @@ O arquivo `vercel.json` já resolve tudo o que o Vercel precisa saber:
 
 **No Vercel o site fica na raiz**, então `VITE_BASE_PATH` **não** deve ser definida (o padrão do
 `vite.config.js` é `/`).
+
+#### Verificação feita na produção (medida)
+
+`node testes/conferir-no-ar.mjs https://transleitor-demo.vercel.app` → **0 falhas**:
+
+| Conferência | Resultado |
+|---|---|
+| `GET /` | HTTP 200, é o nosso `index.html` |
+| Bundle que **a página servida** referencia | `/assets/index-Cwe1mpKo.js`, 495.594 bytes — **mesmo hash do build conferido localmente** |
+| Marcas de texto de tela no bundle baixado | **14/14** |
+| `Cache-Control` dos assets | `public, max-age=31536000, immutable` |
+| `GET /demo/evolucao`, `/demo/cirurgia`, `/demo/seguranca` | HTTP 200, devolvem o app (rewrite funcionando) |
+| `base44` e chave de serviço no bundle servido | ausentes |
+| Controle negativo do conferidor | reprova marca inexistente |
+
 
 ### GitHub Pages — o caminho que este plano não permitiu
 
