@@ -164,14 +164,35 @@ rolagem e sem aviso nenhum. Trocado por `overflow-x-auto`, e a coluna de rótulo
 
 **Mais dois, relatados pelo Dr. Claudio na tela `/demo` do celular ("não está alinhado"):**
 
+**O de verdade, e não era "desalinhamento" — era transbordo horizontal de 2.636px.** Medido no
+navegador, em viewport de 390px:
+
+| Página | `scrollWidth` antes | `clientWidth` | Depois |
+|---|---|---|---|
+| `/demo` | **3026px** | 390px | **390px** |
+| `/demo/evolucao` | 3024px | 390px | 390px |
+| `/` (capa) | 390px | 390px | 390px |
+
+O `<nav>` da demonstração é **item de grid**, e item de grid nasce com `min-width: auto` — isto é,
+**não encolhe abaixo do próprio conteúdo**. O conteúdo é a faixa horizontal das 15 telas: 3010px
+numa tela de 390px. A coluna do grid virava 3010px, o `main` herdava essa largura e **a página
+inteira passava a rolar de lado**, com tudo espremido nos primeiros 390px e o resto vazio. É o que
+se lê como "não está alinhado". O `overflow-x-auto` do `<ul>` não resolvia porque ele é **filho**,
+não o item de grid: quem precisa poder encolher é o `nav`.
+
+O autor já conhecia a armadilha — o `main` tinha `min-w-0` desde o começo. O `nav` era o único sem.
+Correção de uma palavra, e a §15 do `conferir.mjs` passa a exigir `min-w-0` nos dois.
+
+**E dois menores, corrigidos no caminho:**
+
 1. O link "Abrir esta tela" dos 15 cartões estava com `mt-2`. Sem `mt-auto` ele **não fica preso no
    rodapé do cartão**: sobe ou desce conforme o tamanho do resumo, e quando a grade vira duas
    colunas os dois links da mesma linha aparecem em alturas diferentes. `LandingAgents` e
    `DemoPassagem` já usavam `mt-auto` — o `/demo` era o único fora do padrão do próprio projeto.
-2. O rótulo "Voltar à apresentação" do cabeçalho ocupa ~130px e, somado à marca, aperta os 320px das
-   telas menores. Item de flex tem `min-width: auto`, então a linha **não encolhe: transborda** — e a
-   página ganha rolagem horizontal, que é o que faz o conteúdo parecer fora de alinhamento. Abaixo de
-   `sm` o rótulo passa a ser só "Voltar", a mesma técnica já usada no rótulo "demonstração".
+2. O rótulo "Voltar à apresentação" do cabeçalho ocupa ~130px e aperta os 320px das telas menores.
+   Abaixo de `sm` ele passa a ser só "Voltar", a mesma técnica já usada no rótulo "demonstração".
+   *(Este foi o meu primeiro palpite para o defeito e **não era a causa** — o transbordo do `nav`
+   acontecia de qualquer forma. Ficou porque melhora as telas de 320px.)*
 
 **Duas medições que viraram decisão:**
 

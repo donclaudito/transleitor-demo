@@ -42,8 +42,19 @@ export default function DemoShell() {
       </header>
 
       <div className="mx-auto grid max-w-6xl gap-6 px-4 py-6 lg:grid-cols-[264px_1fr] lg:py-10">
-        {/* NAVEGAÇÃO — barra horizontal no celular, coluna fixa no computador */}
-        <nav aria-label="Telas da demonstração">
+        {/* NAVEGAÇÃO — barra horizontal no celular, coluna fixa no computador.
+
+            `min-w-0` NÃO É OPCIONAL AQUI, e a falta dele era o defeito relatado no celular.
+            `nav` é um item de grid; item de grid nasce com `min-width: auto`, isto é, NÃO encolhe
+            abaixo do próprio conteúdo. O conteúdo é a faixa de 15 telas — 3010px numa tela de 390px.
+            A coluna do grid virava 3010px, o `main` herdava essa largura e a PÁGINA INTEIRA passava a
+            rolar de lado: tudo espremido nos primeiros 390px, o resto vazio. É o que se vê como
+            "não está alinhado".
+
+            O `overflow-x-auto` do <ul> não resolve sozinho: ele é filho, não o item de grid — quem
+            precisa poder encolher é o `nav`. O `main` logo abaixo já tinha `min-w-0`; o `nav` era o
+            único sem, e é o mesmo esquecimento do `mt-2` dos cartões. */}
+        <nav aria-label="Telas da demonstração" className="min-w-0">
           {/* RÓTULO COM FAIXA — pedido do Dr. Claudio, no estilo do material dele: texto forte
               sobre uma faixa sólida. O `-mx-1` faz a faixa sangrar um pouco além do texto, que é
               o que dá o ar de marca-texto em vez de botão. A cor sai de `--primary`, a mesma do

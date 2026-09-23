@@ -764,11 +764,23 @@ ok(
   ok(/sm:hidden">Voltar</.test(molde),
     'o botão de voltar do cabeçalho perdeu a versão curta do celular (o rótulo longo transborda em tela estreita)')
 
+  // (c) O DEFEITO DE VERDADE do celular, medido no navegador: o `<nav>` é item de grid e nasce com
+  //     `min-width: auto`, então NÃO encolhia abaixo do conteúdo — a faixa das 15 telas, 3010px numa
+  //     tela de 390px. A coluna do grid virava 3010px, o `main` herdava, e a PÁGINA INTEIRA passava a
+  //     rolar de lado: tudo espremido nos primeiros 390px. Medido: `scrollWidth` 3026 -> 390.
+  //     O `main` já tinha `min-w-0`; o `nav` não. Sem esta asserção, volta no próximo ajuste.
+  ok(/<nav[^>]*className="[^"]*min-w-0/.test(molde),
+    'o <nav> da demonstração perdeu o min-w-0 — item de grid sem ele faz a página inteira transbordar no celular')
+  ok(/<main[^>]*className="[^"]*min-w-0/.test(molde),
+    'o <main> da demonstração perdeu o min-w-0')
+
   // CONTROLE NEGATIVO dos dois lados: a regra tem de PEGAR o errado e ACEITAR o certo.
   ok(/mt-2 inline-flex/.test(semComentario('<span className="mt-2 inline-flex">x</span>')),
     'controle negativo: a regra deixou de reconhecer o mt-2 que precisa ser reprovado')
   ok(/mt-auto/.test(semComentario('<span className="mt-auto inline-flex">x</span>')),
     'controle negativo: a regra deixou de reconhecer o mt-auto correto')
+  ok(!/<nav[^>]*className="[^"]*min-w-0/.test('<nav className="flex">'),
+    'controle negativo: a regra está aceitando um <nav> SEM min-w-0')
 }
 
 // ---------------------------------------------------------------------------
