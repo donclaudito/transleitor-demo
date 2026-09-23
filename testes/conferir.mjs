@@ -700,6 +700,43 @@ ok(
 }
 
 // ---------------------------------------------------------------------------
+// 14. "ONDE VIVE" SAIU DA TELA DE CONFORMIDADE
+//
+// Pedido do Dr. Claudio (22/09/2026): o campo mostrava o caminho do arquivo DENTRO do aplicativo
+// (`{n.onde}`) em cada cartão de normativa. Isso é detalhe de implementação, e numa página de
+// apresentação não ajuda quem lê.
+//
+// O DADO continua em `src/data/conformidade.js` — o que saiu foi a EXIBIÇÃO. E o resto da
+// auditabilidade permanece: o bloco de Fontes e a coluna "Onde o aplicativo implementa" da tabela
+// de LGPD não foram tocados, e as duas asserções abaixo existem justamente para garantir que
+// ninguém, ao limpar o campo removido, leve junto o que foi pedido para ficar.
+// ---------------------------------------------------------------------------
+{
+  const tela = readFileSync(join(SRC, 'pages', 'demo', 'DemoConformidade.jsx'), 'utf8')
+  const semComentario = (t) =>
+    t.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '')
+  const codigo = semComentario(tela)
+
+  ok(!/Onde vive/.test(codigo), 'o rótulo "Onde vive" voltou à tela de conformidade')
+  ok(!/\{n\.onde\}/.test(codigo), 'a tela de conformidade voltou a exibir o caminho do arquivo (n.onde)')
+  // A descrição da tela não pode prometer o que a tela não faz mais.
+  ok(!/Cada item diz de onde foi lido/.test(codigo),
+    'a descrição da tela promete o campo "Onde vive", que foi removido')
+
+  // O QUE FICOU — e que não pode ser removido por arrasto:
+  ok(/\{a\.onde\}/.test(codigo),
+    'a coluna "Onde o aplicativo implementa" da tabela de LGPD saiu sem ter sido pedida')
+  ok(/FONTES/.test(codigo), 'o bloco de Fontes saiu da tela de conformidade sem ter sido pedido')
+
+  // CONTROLE NEGATIVO: a regra tem de PEGAR o que foi removido.
+  ok(/Onde vive/.test('Onde vive'), 'controle negativo: a regra deixou de reconhecer o rótulo removido')
+  ok(/\{n\.onde\}/.test('{n.onde}'), 'controle negativo: a regra deixou de reconhecer a expressão removida')
+  // E o outro lado: a expressão da tabela de LGPD NÃO pode ser confundida com a removida.
+  ok(!/\{n\.onde\}/.test('{a.onde}'),
+    'controle negativo: a regra está confundindo {a.onde} (tabela, ficou) com {n.onde} (cartão, saiu)')
+}
+
+// ---------------------------------------------------------------------------
 console.log(`\n${assercoes} asserções, ${falhas.length} falha(s)`)
 if (falhas.length) {
   console.log('\nFALHAS:')

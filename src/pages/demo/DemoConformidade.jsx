@@ -27,7 +27,7 @@ export default function DemoConformidade() {
   return (
     <TelaDemo
       titulo="⚖️ Conformidade — normativas e critérios"
-      descricao="A que o aplicativo se submete, o que ele faz para cumprir, e a trava em código que impede o contrário. Cada item diz de onde foi lido — inclusive o que ainda NÃO está pronto."
+      descricao="A que o aplicativo se submete, o que ele faz para cumprir, e a trava em código que impede o contrário — inclusive o que ainda NÃO está pronto. Os arquivos de origem de cada afirmação estão no bloco de Fontes, no fim."
       acoes={<EtiquetaExemplo>lido do aplicativo</EtiquetaExemplo>}
     >
       {/* NORMATIVAS */}
@@ -64,12 +64,6 @@ export default function DemoConformidade() {
                   <ShieldCheck className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-primary" />
                   <span>{n.trava}</span>
                 </dd>
-              </div>
-              <div>
-                <dt className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-                  Onde vive
-                </dt>
-                <dd className="mt-1 font-mono text-[11px] leading-relaxed text-primary">{n.onde}</dd>
               </div>
             </dl>
           </article>

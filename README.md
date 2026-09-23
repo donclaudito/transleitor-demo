@@ -374,8 +374,16 @@ isso, em vez de inflar o número.
 
 ### Conformidade e critérios — a tela que quase nenhum produto mostra
 
-`/demo/conformidade` foi montada a partir de outra pesquisa no aplicativo, e cada afirmação carrega
-**o arquivo de onde foi lida**:
+`/demo/conformidade` foi montada a partir de outra pesquisa no aplicativo, e a tela é **auditável**:
+o bloco de Fontes, no fim, lista os arquivos de origem de cada afirmação, e a tabela de artigos da
+LGPD diz onde cada um é implementado.
+
+**O campo "Onde vive" saiu dos cartões de Normativas** (pedido do Dr. Claudio, 22/09/2026). Ele
+mostrava o caminho do arquivo dentro do aplicativo — detalhe de implementação, que numa página de
+apresentação não ajuda quem lê. O **dado continua** em `src/data/conformidade.js`; o que saiu foi só
+a exibição. O bloco de Fontes e a coluna "Onde o aplicativo implementa" da tabela de LGPD **não**
+foram tocados — são eles que sustentam a auditabilidade —, e a §14 do `conferir.mjs` reprova tanto o
+retorno do rótulo quanto a remoção desses dois por arrasto.
 
 | Bloco | O que traz |
 |---|---|
