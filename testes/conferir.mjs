@@ -737,6 +737,41 @@ ok(
 }
 
 // ---------------------------------------------------------------------------
+// 15. ALINHAMENTO DOS CARTÕES E DO CABEÇALHO NO CELULAR
+//
+// Dois defeitos que só aparecem em tela estreita — e por isso não têm como ser vistos numa revisão
+// feita no computador, que é justamente onde este projeto foi revisado até agora.
+//
+// (a) O link "Abrir esta tela" do /demo estava com `mt-2` em vez de `mt-auto`. Sem `mt-auto` ele NÃO
+//     fica preso no rodapé do cartão: sobe ou desce conforme o tamanho do resumo, e quando a grade
+//     vira duas colunas os dois links ficam em alturas diferentes. `LandingAgents` e `DemoPassagem`
+//     já usavam `mt-auto` — o /demo era o único fora do padrão, e é o defeito que o Dr. Claudio viu.
+// (b) O rótulo "Voltar à apresentação" do cabeçalho ocupa ~130px e, somado à marca, aperta os 320px
+//     das telas menores. A linha não encolhe (`min-width: auto` no item de flex): ela TRANSBORDA, e
+//     a página ganha rolagem horizontal — que é o que faz o conteúdo parecer fora de alinhamento.
+// ---------------------------------------------------------------------------
+{
+  const semComentario = (t) =>
+    t.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '')
+
+  const indice = semComentario(readFileSync(join(SRC, 'pages', 'demo', 'DemoIndex.jsx'), 'utf8'))
+  ok(/mt-auto[^"]*text-xs font-bold text-primary/.test(indice),
+    'o link "Abrir esta tela" do /demo perdeu o mt-auto e voltou a desalinhar entre as colunas')
+  ok(!/mt-2 inline-flex/.test(indice),
+    'o link "Abrir esta tela" do /demo voltou ao mt-2, que não prende o link no rodapé do cartão')
+
+  const molde = semComentario(readFileSync(join(SRC, 'components', 'demo', 'DemoShell.jsx'), 'utf8'))
+  ok(/sm:hidden">Voltar</.test(molde),
+    'o botão de voltar do cabeçalho perdeu a versão curta do celular (o rótulo longo transborda em tela estreita)')
+
+  // CONTROLE NEGATIVO dos dois lados: a regra tem de PEGAR o errado e ACEITAR o certo.
+  ok(/mt-2 inline-flex/.test(semComentario('<span className="mt-2 inline-flex">x</span>')),
+    'controle negativo: a regra deixou de reconhecer o mt-2 que precisa ser reprovado')
+  ok(/mt-auto/.test(semComentario('<span className="mt-auto inline-flex">x</span>')),
+    'controle negativo: a regra deixou de reconhecer o mt-auto correto')
+}
+
+// ---------------------------------------------------------------------------
 console.log(`\n${assercoes} asserções, ${falhas.length} falha(s)`)
 if (falhas.length) {
   console.log('\nFALHAS:')

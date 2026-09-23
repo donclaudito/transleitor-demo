@@ -25,11 +25,18 @@ export default function DemoShell() {
               demonstração
             </span>
           </Link>
+          {/* O RÓTULO ENCOLHE NO CELULAR. "Voltar à apresentação" ocupa ~130px, e junto com a marca
+              (~120px) mais o padding isso estoura os 320px das telas menores — sem `flex-wrap` e com
+              `min-width: auto`, a linha não encolhe: ela TRANSBORDA, e a página inteira ganha rolagem
+              horizontal, que é o que faz tudo parecer fora de alinhamento.
+              É a mesma técnica já usada no rótulo "demonstração" logo acima. */}
           <Link
             to="/"
-            className="inline-flex items-center gap-1.5 rounded-xl border border-border px-3 py-1.5 text-xs font-bold text-muted-foreground transition-colors hover:border-primary hover:text-primary"
+            className="inline-flex flex-shrink-0 items-center gap-1.5 rounded-xl border border-border px-3 py-1.5 text-xs font-bold text-muted-foreground transition-colors hover:border-primary hover:text-primary"
           >
-            <ArrowLeft className="h-3.5 w-3.5" /> Voltar à apresentação
+            <ArrowLeft className="h-3.5 w-3.5 flex-shrink-0" />
+            <span className="hidden sm:inline">Voltar à apresentação</span>
+            <span className="sm:hidden">Voltar</span>
           </Link>
         </div>
       </header>

@@ -162,6 +162,17 @@ e o `<section>` que os contém tem `overflow-hidden`.
 rolagem e sem aviso nenhum. Trocado por `overflow-x-auto`, e a coluna de rótulo passou a
 `w-32 sm:w-40` para devolver largura ao valor.
 
+**Mais dois, relatados pelo Dr. Claudio na tela `/demo` do celular ("não está alinhado"):**
+
+1. O link "Abrir esta tela" dos 15 cartões estava com `mt-2`. Sem `mt-auto` ele **não fica preso no
+   rodapé do cartão**: sobe ou desce conforme o tamanho do resumo, e quando a grade vira duas
+   colunas os dois links da mesma linha aparecem em alturas diferentes. `LandingAgents` e
+   `DemoPassagem` já usavam `mt-auto` — o `/demo` era o único fora do padrão do próprio projeto.
+2. O rótulo "Voltar à apresentação" do cabeçalho ocupa ~130px e, somado à marca, aperta os 320px das
+   telas menores. Item de flex tem `min-width: auto`, então a linha **não encolhe: transborda** — e a
+   página ganha rolagem horizontal, que é o que faz o conteúdo parecer fora de alinhamento. Abaixo de
+   `sm` o rótulo passa a ser só "Voltar", a mesma técnica já usada no rótulo "demonstração".
+
 **Duas medições que viraram decisão:**
 
 | O que | Medido | Decisão |

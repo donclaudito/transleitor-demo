@@ -60,7 +60,12 @@ export default function DemoIndex() {
             </span>
             <h2 className="text-base font-extrabold tracking-tight">{t.nome}</h2>
             <p className="text-xs leading-relaxed text-muted-foreground">{t.resumo}</p>
-            <span className="mt-2 inline-flex items-center gap-1.5 text-xs font-bold text-primary">
+            {/* `mt-auto` e não `mt-2` — é o que PRENDE o link no rodapé do cartão. Sem ele, o link
+                sobe ou desce conforme o tamanho do resumo, e dois cartões lado a lado ficam com os
+                "Abrir esta tela" em alturas diferentes: exatamente o desalinhamento que aparece
+                quando a grade vira duas colunas. O padrão já era este no resto do projeto
+                (`LandingAgents`, `DemoPassagem`); este cartão era o único fora dele. */}
+            <span className="mt-auto inline-flex items-center gap-1.5 pt-2 text-xs font-bold text-primary">
               Abrir esta tela
               <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
             </span>
