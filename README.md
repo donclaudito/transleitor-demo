@@ -399,7 +399,9 @@ Duas hospedagens estão preparadas: **Vercel** (a escolhida) e GitHub Pages (que
 
 ### Vercel — a hospedagem escolhida
 
-**No ar em https://transleitor-demo.vercel.app**
+**No ar em https://orenai.med.br** — o endereço próprio da marca. `https://www.orenai.med.br`
+redireciona para o apex (308), e o HTTP redireciona para HTTPS (308). O endereço antigo,
+`https://transleitor-demo.vercel.app`, continua funcionando e serve exatamente a mesma coisa.
 
 O arquivo `vercel.json` já resolve tudo o que o Vercel precisa saber:
 
@@ -413,6 +415,44 @@ O arquivo `vercel.json` já resolve tudo o que o Vercel precisa saber:
 
 **No Vercel o site fica na raiz**, então `VITE_BASE_PATH` **não** deve ser definida (o padrão do
 `vite.config.js` é `/`).
+
+#### O domínio próprio: `orenai.med.br`
+
+Registrado no Registro.br, com a zona editada **lá mesmo** — o domínio usa os servidores do
+Registro.br, não os do Vercel. Trocar os nameservers para `ns1`/`ns2.vercel-dns.com` **é recusado**
+(`Pesquisa recusada`): o Vercel atende o domínio, mas não hospeda zona para ele, e a validação do
+Registro.br consulta o servidor antes de aceitar a troca.
+
+Três registros na zona, e **nenhum deles é dispensável**:
+
+| Tipo | Nome | Dados | Por quê |
+|---|---|---|---|
+| `A` | *(vazio)* | `76.76.21.21` | O apex. |
+| `CNAME` | `www` | `cname.vercel-dns.com` | O `www`. |
+| `TXT` | *(vazio)* | `v=spf1 -all` | Ninguém envia e-mail por este domínio. Sem isto, qualquer um pode falsificar `@orenai.med.br`. |
+
+**Duas armadilhas do editor de zona do Registro.br, as duas medidas na prática:**
+
+1. **O campo Nome recusa `@`.** A própria tela avisa que não aceita `@`, `*` nem entrada SRV. O apex
+   se escreve com o campo **vazio**; o subdomínio, com o nome sem o domínio (`www`).
+2. **O editor recusa MX nulo.** `servidor ., prioridade 0` é a forma correta de declarar "este domínio
+   não recebe e-mail" no protocolo DNS, mas o formulário exige um nome de servidor de verdade:
+   *"O valor servidor ., prioridade 0 dos dados do record é inválido"*. E o erro **bloqueia o
+   salvamento da zona inteira**, não só daquela linha — enquanto ela estiver lá, nenhum registro
+   sobe. O `TXT v=spf1 -all` cobre o efeito prático.
+
+**E uma armadilha do Vercel, que custou mais tempo:** o certificado do apex não saiu sozinho. O
+domínio estava `verified: true` e `misconfigured: false`, com o DNS correto, e mesmo assim nenhum
+certificado — enquanto o `www`, anexado minutos antes, recebeu o dele em cerca de 2 minutos. O
+pedido do apex era **velho** (feito quando o DNS ainda não apontava para o Vercel) e a plataforma não
+refaz na hora. O conserto é forçar um pedido novo, e **a ordem importa**:
+
+1. soltar o redirecionamento do `www` — o Vercel recusa remover um domínio que é alvo de
+   redirecionamento (`domain_is_redirect`);
+2. remover e reanexar o apex (isto dispara o pedido limpo);
+3. repor o redirecionamento do `www` para o apex (308).
+
+O certificado novo saiu em menos de 2 minutos. Sem o passo 1, o passo 2 falha.
 
 #### Publicação automática — e o que a bloqueava (medido)
 
@@ -446,18 +486,22 @@ e `errorMessage`.
 
 #### Verificação feita na produção (medida)
 
-`node testes/conferir-no-ar.mjs https://transleitor-demo.vercel.app` → **0 falhas**:
+`node testes/conferir-no-ar.mjs https://orenai.med.br` → **0 falhas**:
 
 | Conferência | Resultado |
 |---|---|
 | `GET /` | HTTP 200, é o nosso `index.html` |
-| Bundle que **a página servida** referencia | `/assets/index-EbUO5MMU.js`, 545.004 bytes — **mesmo hash do build conferido localmente** |
+| Bundle que **a página servida** referencia | `/assets/index-A3ERaZbO.js`, 545.555 bytes — **mesmo hash do build conferido localmente** |
 | Marcas de texto de tela no bundle baixado | **18/18** |
 | Ícone da marca servido | `/oren-ai-192.png` → 200, `image/png`, 47.032 bytes, **sha256 idêntico ao arquivo local** (`c3dac23ee203ac80…`) |
 | `Cache-Control` dos assets | `public, max-age=31536000, immutable` |
 | `GET /demo/menu`, `/demo/evolucao`, `/demo/cirurgia`, `/demo/seguranca` | HTTP 200, devolvem o app (rewrite funcionando) |
 | `base44` e chave de serviço no bundle servido | ausentes |
 | Controle negativo do conferidor | reprova marca inexistente |
+
+Certificado Let's Encrypt emitido para `orenai.med.br` e para `www.orenai.med.br` (válidos até
+22/12/2026), com a cadeia de redirecionamento fechada: `http://` → `https://` → apex, tudo 308 e sem
+laço.
 
 Esta verificação foi o que pegou o rebrand **não publicado**: o conferidor acusou 4 marcas ausentes
 no ar enquanto o build local estava correto — o que levou ao diagnóstico do bloqueio de autor.
