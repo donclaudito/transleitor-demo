@@ -426,6 +426,28 @@ body:has(.tema-oren) {
   font-size: 0.8125rem;
 }
 
+/* ============================================================================
+   PISO DE LEITURA NO CELULAR — só na demonstração, só abaixo de 640px
+   ----------------------------------------------------------------------------
+   A demonstração mostra o aplicativo fielmente, e o aplicativo usa rótulos de 10px e 11px. Num
+   monitor isso é adequado. Num celular não é: 10px numa tela de 375px de largura não se lê.
+
+   As duas coisas não cabem ao mesmo tempo, então cada uma fica onde faz sentido: a fidelidade
+   permanece de 640px para cima, onde a tela é comparável ao aplicativo; a legibilidade entra no
+   celular, onde a comparação nem é possível. O `sm:` do Tailwind vale a partir de 640px, e é o
+   mesmo ponto de quebra que as correções de alvo de toque usam.
+
+   SÓ 10px e 11px sobem, para 12px — o mesmo degrau que a capa já usa em `.tema-oren`. O `text-xs`
+   (12px) NÃO sobe: ele é o corpo de texto do próprio aplicativo, aparece 123 vezes, e mexer nele
+   empurraria o layout inteiro em vez de consertar a leitura.
+   ============================================================================ */
+@media (max-width: 639px) {
+  .leitura-no-celular .text-\[10px\],
+  .leitura-no-celular .text-\[11px\] {
+    font-size: 0.75rem;
+  }
+}
+
 /* A MARCA É SERIFA EM QUALQUER LUGAR — capa e demonstração.
    O nome Oren.AI é a marca, não elemento de interface: ele não deve mudar de tipo conforme a tela
    em que aparece. Por isso esta classe não depende do escopo do tema. */

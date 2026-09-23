@@ -52,7 +52,8 @@ export default function DemoEspecialidades({ slugInicial = 'urologia' }) {
               type="button"
               onClick={() => setSlug(e.slug)}
               className={cn(
-                'rounded-xl border px-3 py-1.5 text-xs font-semibold transition-colors',
+                // Alvo de toque: cresce no celular e volta ao tamanho do aplicativo em 640px+.
+                'rounded-xl border px-3 py-2 text-xs font-semibold transition-colors sm:py-1.5',
                 e.slug === slug
                   ? 'border-primary bg-primary text-primary-foreground'
                   : 'border-border bg-card/60 text-muted-foreground hover:border-primary/40 hover:text-foreground',

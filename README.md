@@ -145,6 +145,48 @@ diferentes — não duas.
 Resultado: **duas famílias, e só duas** no carregamento — Instrument Serif (capa) e Poppins
 (demonstração). `conferir.mjs` reprova se Inter ou Sora voltarem a ser pedidas sem uso.
 
+#### No celular: piso de leitura e alvo de toque
+
+Revisão de 22/09/2026, feita **medindo as classes**, não olhando — não há navegador neste ambiente.
+
+**O que já estava certo** (medido, não suposto): o `viewport` está no `index.html`; todas as grades
+estão ancoradas na base (`grid gap-6 lg:grid-cols-2` = uma coluna no celular, sem exceção); a
+navegação da demonstração vira barra horizontal com `overflow-x-auto` no celular e coluna fixa no
+computador; o cabeçalho da capa troca os links por menu sanfona abaixo de `lg`; e as tabelas de
+captura, monitoramento e conformidade já estavam dentro de contêiner de rolagem. Nenhuma largura fixa
+em pixels escapa de um `overflow-hidden` — as únicas que existem são os brilhos decorativos do herói,
+e o `<section>` que os contém tem `overflow-hidden`.
+
+**O defeito encontrado:** a tabela do documento cirúrgico (`DemoCirurgia`) estava dentro de
+`overflow-hidden`. Em tela estreita ela era **cortada** — o valor do campo desaparecia, sem barra de
+rolagem e sem aviso nenhum. Trocado por `overflow-x-auto`, e a coluna de rótulo passou a
+`w-32 sm:w-40` para devolver largura ao valor.
+
+**Duas medições que viraram decisão:**
+
+| O que | Medido | Decisão |
+|---|---|---|
+| Rótulos de 10px e 11px | 31 + 90 ocorrências, quase todas na demonstração | sobem para 12px **abaixo de 640px** |
+| Alvo de toque das telas interativas | `py-1` / `py-1.5` = 24 a 30px de altura | `py-2` no celular, valor do aplicativo em 640px+ |
+
+A regra que governa as duas: **só o celular muda; de 640px para cima nada é alterado.** A
+demonstração existe para mostrar o aplicativo fielmente, e num monitor isso é possível; num celular
+de 375px a comparação não é possível de qualquer forma, e aí a legibilidade ganha. O `text-xs` (12px,
+123 ocorrências) **não** sobe: é o corpo de texto do próprio aplicativo, e mexer nele empurraria o
+layout em vez de consertar a leitura.
+
+**A trava (§13 do `conferir.mjs`)** reprova `<table>` de página sem `overflow-x-auto` por perto e
+dentro de `overflow-hidden`, exige a classe e a media query do piso de leitura e exige os alvos de
+toque maiores. A primeira execução dela **reprovou a si mesma**: o comentário que explica por que o
+`overflow-hidden` saiu contém a palavra `overflow-hidden`, e o medidor de fonte crua leu a explicação
+como se fosse código. Daí o `semComentario()` dentro da regra e o controle negativo dos dois lados.
+É a quinta vez que este projeto tropeça em medir fonte crua; a lição está escrita no lugar onde ela
+morde.
+
+**O que continua não verificado:** a aparência num celular de verdade. O que está provado é o
+código, o CSS construído (a media query está no bundle) e o render das 19 telas + 23 áreas. Um
+aparelho na mão não foi usado, porque não há um aqui.
+
 #### O defeito que essa mudança revelou
 
 A moldura do herói (a "amostra da tela real do aplicativo") fica **dentro** de `.tema-oren`, que

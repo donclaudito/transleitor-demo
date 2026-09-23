@@ -14,7 +14,7 @@ import { MarcaOren } from '@/components/marca/OrenEmblema'
 // ============================================================================
 export default function DemoShell() {
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="leitura-no-celular min-h-screen bg-background text-foreground">
       <FaixaDemo />
 
       <header className="sticky top-0 z-40 glass">

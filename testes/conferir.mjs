@@ -634,6 +634,72 @@ ok(
 }
 
 // ---------------------------------------------------------------------------
+// 13. CELULAR: tabela não pode ser CORTADA, e o texto pequeno tem piso
+//
+// Nada disso é visível no desktop, e é exatamente por isso que precisa de trava: um defeito que só
+// aparece em tela estreita passa por qualquer revisão feita numa tela larga.
+//
+// O caso concreto: a tabela do documento cirúrgico estava dentro de `overflow-hidden`. Em tela
+// estreita ela era CORTADA — o valor do campo desaparecia, sem barra de rolagem e sem aviso. Trocar
+// por `overflow-x-auto` faz rolar em vez de esconder. Esta regra impede que volte.
+// ---------------------------------------------------------------------------
+{
+  // `sep` não é importado aqui de propósito: a barra do caminho varia com o sistema, então a
+  // comparação aceita as duas formas em vez de depender de `node:path`.
+  const paginas = ARQUIVOS.filter((a) => /[\\/]pages[\\/]/.test(a))
+
+  // COMENTÁRIO FORA DA MEDIÇÃO. Esta regra reprovou a si mesma na primeira execução: o comentário
+  // que explica por que o `overflow-hidden` saiu contém a palavra `overflow-hidden`, e o medidor de
+  // fonte crua leu a explicação como se fosse o código. É a quinta vez que este projeto tropeça
+  // nisso, então a lição fica escrita aqui, no lugar onde ela morde.
+  const semComentario = (t) =>
+    t.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '')
+
+  // Toda tabela de página precisa de contenção por perto, senão ela estoura a largura do celular.
+  let tabelasVistas = 0
+  for (const arquivo of paginas) {
+    const fonte = semComentario(readFileSync(arquivo, 'utf8'))
+    const nome = relative(RAIZ, arquivo)
+    for (const m of fonte.matchAll(/<table\b/g)) {
+      tabelasVistas++
+      const antes = fonte.slice(Math.max(0, m.index - 400), m.index)
+      ok(antes.includes('overflow-x-auto'),
+        `${nome}: <table> sem contêiner "overflow-x-auto" por perto — em tela estreita ela é cortada`)
+      ok(!antes.includes('overflow-hidden'),
+        `${nome}: <table> dentro de "overflow-hidden" — em tela estreita o conteúdo some em silêncio`)
+    }
+  }
+  // CONTROLE NEGATIVO da própria busca: se o padrão parar de casar, a regra acima passaria vazia.
+  ok(tabelasVistas >= 3, `controle negativo: a busca por <table> achou só ${tabelasVistas} — a regra está medindo pouco`)
+
+  // E o controle dos DOIS LADOS do medidor de comentário, que é o que quase me enganou:
+  // (a) um comentário que apenas CITA o problema não pode reprovar;
+  // (b) um problema de verdade, no código, tem de reprovar.
+  ok(!semComentario('<div className="overflow-x-auto">\n{/* antes era overflow-hidden */}').includes('overflow-hidden'),
+    'controle negativo: o medidor está lendo comentário como se fosse código')
+  ok(semComentario('<div className="overflow-hidden">').includes('overflow-hidden'),
+    'controle negativo: o medidor deixou de reconhecer um overflow-hidden de verdade no código')
+
+  // O piso de leitura móvel: a classe no molde, a regra no CSS e o ponto de quebra certo.
+  const molde = readFileSync(join(SRC, 'components', 'demo', 'DemoShell.jsx'), 'utf8')
+  ok(/leitura-no-celular/.test(molde), 'o molde da demonstração perdeu a classe do piso de leitura')
+
+  const css = readFileSync(join(SRC, 'index.css'), 'utf8')
+  ok(/@media \(max-width: 639px\)/.test(css), 'o piso de leitura do celular saiu do CSS')
+  ok(/\.leitura-no-celular \.text-\\\[10px\\\]/.test(css), 'o piso de leitura deixou de cobrir os rótulos de 10px')
+  ok(/\.leitura-no-celular \.text-\\\[11px\\\]/.test(css), 'o piso de leitura deixou de cobrir os rótulos de 11px')
+  // E NÃO pode subir o text-xs: é o corpo de texto do aplicativo, e mexer nele empurraria o layout.
+  ok(!/leitura-no-celular \.text-xs/.test(css), 'o piso de leitura passou a subir o text-xs, que é o corpo do aplicativo')
+
+  // O alvo de toque das telas interativas: no celular, maior; a partir de 640px, o do aplicativo.
+  const evolucao = readFileSync(join(SRC, 'pages', 'demo', 'DemoEvolucao.jsx'), 'utf8')
+  ok(/px-3 py-2 text-xs font-semibold transition-colors sm:py-1\.5/.test(evolucao),
+    'o seletor de especialidade perdeu o alvo de toque maior no celular')
+  ok(/px-2\.5 py-2 text-xs transition-all sm:py-1/.test(evolucao),
+    'os itens do painel perderam o alvo de toque maior no celular')
+}
+
+// ---------------------------------------------------------------------------
 console.log(`\n${assercoes} asserções, ${falhas.length} falha(s)`)
 if (falhas.length) {
   console.log('\nFALHAS:')

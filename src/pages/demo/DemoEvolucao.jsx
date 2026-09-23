@@ -90,7 +90,10 @@ export default function DemoEvolucao({ slugInicial = 'urologia' }) {
               type="button"
               onClick={() => trocarArea(e.slug)}
               className={cn(
-                'rounded-xl border px-3 py-1.5 text-xs font-semibold transition-colors',
+                // Alvo de toque: no celular o botão cresce (py-2 = ~32px de altura); de 640px para
+                // cima volta ao tamanho do aplicativo. É o gesto central desta tela, e dedo não
+                // acerta 24px de altura.
+                'rounded-xl border px-3 py-2 text-xs font-semibold transition-colors sm:py-1.5',
                 e.slug === slug
                   ? 'border-primary bg-primary text-primary-foreground'
                   : 'border-border bg-card/60 text-muted-foreground hover:border-primary/40 hover:text-foreground',
@@ -155,7 +158,10 @@ export default function DemoEvolucao({ slugInicial = 'urologia' }) {
                             aria-pressed={marcado}
                             onClick={() => alternar(s, item)}
                             className={cn(
-                              'rounded-lg border px-2.5 py-1 text-xs transition-all',
+                              // Os itens são o gesto mais repetido da demonstração — o médico clica
+                              // dezenas seguidos. No celular sobem para ~32px de altura; de 640px
+                              // para cima ficam idênticos ao aplicativo.
+                              'rounded-lg border px-2.5 py-2 text-xs transition-all sm:py-1',
                               marcado
                                 ? 'border-primary bg-primary text-primary-foreground shadow'
                                 : 'border-border bg-card/70 text-foreground/80 hover:border-primary/50 hover:text-foreground',

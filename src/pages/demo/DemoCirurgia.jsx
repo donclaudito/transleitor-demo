@@ -33,12 +33,15 @@ export default function DemoCirurgia() {
               <h2 className="text-sm font-bold">Documento para o prontuário</h2>
             </div>
 
-            <div className="overflow-hidden rounded-xl border border-border">
+            {/* `overflow-x-auto` e não `overflow-hidden`: com `hidden` a tabela era CORTADA em tela
+                estreita — o valor do campo simplesmente desaparecia, sem barra e sem aviso. Aqui ela
+                passa a rolar. O `w-32 sm:w-40` devolve largura à coluna de valor no celular. */}
+            <div className="overflow-x-auto rounded-xl border border-border">
               <table className="w-full text-xs">
                 <tbody>
                   {CIRURGIA_DEMO.cabecalho.map(([campo, valor]) => (
                     <tr key={campo} className="border-b border-border/60 last:border-0">
-                      <th className="w-40 bg-muted/50 px-3 py-2 text-left align-top font-bold text-foreground">
+                      <th className="w-32 bg-muted/50 px-3 py-2 text-left align-top font-bold text-foreground sm:w-40">
                         {campo}
                       </th>
                       <td className="px-3 py-2 text-foreground/85">{valor}</td>
