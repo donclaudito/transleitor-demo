@@ -9,7 +9,10 @@ const stats = [
   { value: '3', label: 'Modos de evolução', sub: 'SOAP, Livre e Simples' },
   { value: '11', label: 'Especialidades', sub: 'com painel clínico próprio' },
   { value: '415', label: 'Opções clínicas', sub: 'no painel de sinais e sintomas' },
-  { value: '20', label: 'Anos de guarda', sub: 'do prontuário (Res. CFM 1.821/2007)' },
+  // CORRIGIDO em 24/09/2026: a Res. CFM 1.821/2007 dá guarda PERMANENTE ao prontuário ELETRÔNICO
+  // (art. 7º); os 20 anos são o mínimo do PAPEL (art. 8º). Resumir as duas como "20 anos de guarda"
+  // é imprecisão — e num aplicativo eletrônico é justamente a metade que ficaria de fora.
+  { value: '20', label: 'Anos de guarda no papel', sub: 'e permanente no eletrônico (Res. CFM 1.821/2007)' },
 ];
 
 export default function LandingStats() {

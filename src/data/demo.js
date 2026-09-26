@@ -477,8 +477,9 @@ export const DIREITOS_DEMO = {
     {
       titulo: '4. Eliminação (só o que a lei permite)',
       texto:
-        'O que não tem guarda legal é eliminado. O que tem — o prontuário, com guarda de 20 anos ' +
-        '(Res. CFM 1.821/2007) — é bloqueado ou anonimizado, com o motivo escrito. Eliminar prontuário ' +
+        'O que não tem guarda legal é eliminado. O que tem — o prontuário eletrônico, com guarda ' +
+        'PERMANENTE (Res. CFM 1.821/2007, art. 7º; no papel, o mínimo é 20 anos, art. 8º) — é ' +
+        'bloqueado ou anonimizado, com o motivo escrito. Eliminar prontuário ' +
         'por pedido não é direito do titular: é infração do médico.',
     },
     {

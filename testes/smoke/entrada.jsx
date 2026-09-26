@@ -83,7 +83,10 @@ const TELAS = [
   ['Painel por especialidade', DemoEspecialidades, ['Painel por especialidade', 'Urologia', 'seções']],
   ['Ellah', DemoElio, ['Ellah', 'conversa fixa', 'O que ela não faz', 'Modelo em uso']],
   ['Monitoramento', DemoMonitoramento, ['Monitoramento e trilha de IA', 'O que nunca entra', 'Trilha de uso']],
-  ['Direitos do titular', DemoDireitos, ['Direitos do titular', '15 dias', '20 anos']],
+  // A guarda do prontuário em DUAS partes: permanente no eletrônico (art. 7º), 20 anos no papel
+  // (art. 8º). Antes o marcador era só '20 anos', que é a metade imprecisa — a mesma correção de
+  // 24/09/2026. Agora ele exige as duas.
+  ['Direitos do titular', DemoDireitos, ['Direitos do titular', '15 dias', 'Permanente', '20', 'art. 8º']],
   ['Auditor de segurança', DemoSeguranca, ['Auditor de segurança', 'Ficha de achado', 'Severidade']],
   [
     'Mapa do aplicativo',

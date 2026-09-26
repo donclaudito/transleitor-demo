@@ -26,12 +26,13 @@ export const NORMATIVAS = [
   {
     norma: 'Res. CFM 1.821/2007',
     tema: 'Guarda do prontuário',
-    exige: 'Guarda do prontuário por 20 anos, além das regras de digitalização.',
+    exige:
+      'Guarda PERMANENTE do prontuário ELETRÔNICO (art. 7º) e prazo mínimo de 20 anos para o PAPEL (art. 8º). Autoriza a digitalização desde que o sistema atenda ao NGS2 do Manual de Certificação SBIS/CFM, e exige assinatura digital padrão ICP-Brasil para eliminar o papel (art. 5º).',
     faz:
       'A eliminação a pedido do titular NÃO apaga o que está sob guarda legal: o que não tem guarda é eliminado; o que tem é bloqueado ou anonimizado, com o motivo escrito.',
     trava:
       'A recusa vem com a razão anexada — e o motivo cita a norma. Nada é eliminado em silêncio, e nada é preservado em silêncio.',
-    onde: 'src/lib/dsar.js (guarda de 20 anos) · src/pages/DireitosTitular.jsx',
+    onde: 'src/lib/dsar.js · src/pages/DireitosTitular.jsx',
   },
   {
     norma: 'LGPD, arts. 33 a 36',

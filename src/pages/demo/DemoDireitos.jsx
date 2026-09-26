@@ -32,9 +32,10 @@ export default function DemoDireitos() {
         </div>
         <div className="glass-card rounded-2xl p-4">
           <Scale className="mb-2 h-4 w-4 text-primary" />
-          <p className="text-sm font-bold">20 anos</p>
+          <p className="text-sm font-bold">Permanente</p>
           <p className="mt-1 text-[11px] leading-relaxed text-muted-foreground">
-            Guarda do prontuário. É ela que impede a eliminação de parte do registro.
+            Guarda do prontuário eletrônico (Res. CFM 1.821/2007, art. 7º). No papel, o mínimo é 20
+            anos (art. 8º). É ela que impede a eliminação de parte do registro.
           </p>
         </div>
         <div className="glass-card rounded-2xl p-4">

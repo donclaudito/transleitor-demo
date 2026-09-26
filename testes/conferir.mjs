@@ -784,6 +784,58 @@ ok(
 }
 
 // ---------------------------------------------------------------------------
+// 16. A GUARDA DO PRONTUÁRIO: 20 anos no PAPEL, PERMANENTE no ELETRÔNICO
+//
+// Correção de 24/09/2026, vinda do `AGENTS.md` do workspace e do app, com a fonte transcrita em
+// `transleitor9/.lgpd/prontuario-evolucao-robustez.md`: os "20 anos" da Res. CFM 1.821/2007 são do
+// **art. 8º** e valem para o PAPEL; para o prontuário ELETRÔNICO o **art. 7º** manda guarda
+// PERMANENTE.
+//
+// Este site fala de um aplicativo ELETRÔNICO — citar só os 20 anos omite exatamente a regra que se
+// aplica a ele. A trava tem os DOIS lados: reprova as frases antigas e EXIGE as duas metades onde a
+// guarda é citada, senão alguém "limpa" a menção ao papel e a imprecisão volta pela outra ponta.
+// ---------------------------------------------------------------------------
+{
+  const semComentario = (t) =>
+    t.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '')
+
+  const FRASES_ANTIGAS = [
+    /guarda de 20 anos/i,
+    /guarda do prontuário por 20 anos/i,
+    /guarda legal de 20 anos/i,
+  ]
+
+  for (const arquivo of [...ARQUIVOS, join(RAIZ, 'testes', 'smoke', 'entrada.jsx'), join(RAIZ, 'README.md')]) {
+    const nome = relative(RAIZ, arquivo)
+    const codigo = semComentario(readFileSync(arquivo, 'utf8'))
+    for (const re of FRASES_ANTIGAS) {
+      ok(!re.test(codigo), `${nome}: voltou a frase imprecisa "${re.source}" — a guarda tem DUAS metades`)
+    }
+  }
+
+  // AS DUAS METADES ONDE A GUARDA É CITADA.
+  const conformidade = semComentario(readFileSync(join(SRC, 'data', 'conformidade.js'), 'utf8'))
+  ok(/art\.\s*7º/.test(conformidade) && /PERMANENTE/.test(conformidade),
+    'a normativa da guarda perdeu a metade do ELETRÔNICO (art. 7º, guarda permanente)')
+  ok(/art\.\s*8º/.test(conformidade),
+    'a normativa da guarda perdeu a metade do PAPEL (art. 8º, 20 anos)')
+
+  const direitos = semComentario(readFileSync(join(SRC, 'pages', 'demo', 'DemoDireitos.jsx'), 'utf8'))
+  ok(/Permanente/.test(direitos), 'a tela de Direitos perdeu a guarda permanente do eletrônico')
+  ok(/20\s+anos/.test(direitos), 'a tela de Direitos perdeu os 20 anos do papel')
+
+  const capa = semComentario(readFileSync(join(SRC, 'components', 'landing', 'LandingStats.jsx'), 'utf8'))
+  ok(/Anos de guarda no papel/.test(capa), 'o cartão da capa voltou a dizer só "Anos de guarda"')
+  ok(/permanente no eletrônico/.test(capa), 'o cartão da capa perdeu a guarda permanente do eletrônico')
+
+  // CONTROLE NEGATIVO dos dois lados.
+  ok(FRASES_ANTIGAS.some((re) => re.test('o prontuário, com guarda de 20 anos (Res. CFM 1.821/2007)')),
+    'controle negativo: a regra deixou de reconhecer a frase imprecisa que precisa reprovar')
+  ok(!FRASES_ANTIGAS.some((re) => re.test('Anos de guarda no papel, e permanente no eletrônico')),
+    'controle negativo: a regra está reprovando o texto CORRETO')
+}
+
+// ---------------------------------------------------------------------------
 console.log(`\n${assercoes} asserções, ${falhas.length} falha(s)`)
 if (falhas.length) {
   console.log('\nFALHAS:')

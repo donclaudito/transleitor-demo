@@ -269,8 +269,8 @@ npm run dev        # servidor local
 
 ```bash
 npm run lint       # ESLint (no-undef ligado de propósito)
-npm run conferir   # 1177 asserções: imports, avisos, rotas, mojibake, espelho de tema, ícones, tipografia, proibições de rede
-npm run smoke      # renderiza as 19 telas + as 12 áreas nas 2 telas de painel (23 renders) e confere 224 marcas de texto
+npm run conferir   # 1516 asserções: imports, avisos, rotas, mojibake, espelho de tema, ícones, tipografia, proibições de rede
+npm run smoke      # renderiza as 19 telas + as 12 áreas nas 2 telas de painel (23 renders) e confere 226 marcas de texto
 npm run build      # build de produção
 npm run servir     # serve dist/ num servidor Node puro, para conferir o que é SERVIDO
 npm run no-ar https://SEU-SITE.vercel.app   # confere o que está NO AR (não o que foi enviado)
@@ -419,7 +419,7 @@ retorno do rótulo quanto a remoção desses dois por arrasto.
 
 | Bloco | O que traz |
 |---|---|
-| **Normativas** | Res. CFM 1.638/2002 (documento com data, hora, identificação e CRM), Res. CFM 1.821/2007 (guarda de 20 anos), LGPD arts. 33–36, Res. CD/ANPD 19/2024, 18/2024 e 15/2024 — cada uma com o que **exige**, o que o app **faz** e qual é a **trava** em código |
+| **Normativas** | Res. CFM 1.638/2002 (documento com data, hora, identificação e CRM), Res. CFM 1.821/2007 (**guarda permanente do eletrônico, art. 7º; 20 anos no papel, art. 8º**), LGPD arts. 33–36, Res. CD/ANPD 19/2024, 18/2024 e 15/2024 — cada uma com o que **exige**, o que o app **faz** e qual é a **trava** em código |
 | **Critérios oferecidos** | EVA, Glasgow e IPSS entram como **item que o médico registra** — o aplicativo não calcula escore nem interpreta |
 | **Critérios recusados** | **12 famílias** (Lung-RADS, BI-RADS, PI-RADS, LI-RADS, TI-RADS, CAD-RADS, NI-RADS, O-RADS, Bosniak, Fleischner, Bethesda, C-RADS) que o aplicativo **se recusa a nomear** sem trecho de fonte conferida — e o fato medido: **a base está vazia (0 registros), então hoje o laudo sai sem classificar, de propósito** |
 | **Artigos da LGPD** | 16 artigos, cada um com a funcionalidade que o implementa |
@@ -428,6 +428,22 @@ retorno do rótulo quanto a remoção desses dois por arrasto.
 **Uma norma ficou de fora, e é um acerto:** a **Res. CFM 1.331/89 não aparece como vigente** — o
 parecer do próprio aplicativo registra que ela foi **revogada** pela 1.638/2002. A regra deste
 projeto é não inventar exigência; listar uma norma revogada como se valesse seria inventar.
+
+### A guarda do prontuário: 20 anos no PAPEL, permanente no ELETRÔNICO
+
+Correção de **24/09/2026**, aplicada também no `AGENTS.md` do workspace e no do aplicativo. Os
+"20 anos" da Res. CFM 1.821/2007 são do **art. 8º**, e valem para o **PAPEL**; para o prontuário
+**ELETRÔNICO** o art. 7º manda guarda **PERMANENTE**. Fonte lida na íntegra e transcrita em
+`transleitor9/.lgpd/prontuario-evolucao-robustez.md`.
+
+Resumir as duas como "20 anos de guarda" é imprecisão — e num aplicativo eletrônico é justamente a
+metade que ficaria de fora. O site dizia isso em **sete lugares** (cartão da capa, normativa,
+Direitos do titular, mapa do aplicativo, dados de demonstração e dois comentários de módulo), e
+todos foram acertados. A §16 do `conferir.mjs` reprova a volta das frases antigas e **exige** as
+duas metades onde a guarda é citada.
+
+> A mesma frase continua no `laboratorio*` e no `transleitor8-tratado`, que são somente leitura —
+> a decisão de mexer lá é do Dr. Claudio.
 
 > **Isto não é parecer jurídico.** A tela é a leitura que eu fiz do aplicativo, com o arquivo de
 > origem de cada item — e é a própria tela que diz isso.
@@ -493,7 +509,7 @@ O arquivo `vercel.json` já resolve tudo o que o Vercel precisa saber:
 | `outputDirectory: dist` | Saída do Vite. |
 | `framework: vite` | Detecção explícita, em vez de depender do palpite da plataforma. |
 | `Cache-Control` imutável em `/assets/` | O nome do arquivo tem hash do conteúdo: se mudar, muda o nome. Segurar em cache é seguro. |
-| `buildCommand` com as verificações | O deploy **não publica código não conferido**: lint, 1177 asserções e prova de renderização rodam antes do build. |
+| `buildCommand` com as verificações | O deploy **não publica código não conferido**: lint, 1516 asserções e prova de renderização rodam antes do build. |
 
 **No Vercel o site fica na raiz**, então `VITE_BASE_PATH` **não** deve ser definida (o padrão do
 `vite.config.js` é `/`).
@@ -636,10 +652,16 @@ Para publicar, uma das duas:
 
 ## Limites declarados
 
-- **Não verificado em navegador.** O que está provado é: lint sem erros, 1177 asserções de
-  conferência, renderização das 19 telas + das 12 áreas nas 2 telas de painel (23 renders, 224 marcas
-  de texto) e build `exit 0`. A aparência na tela (layout, toque no iPad, comportamento de rolagem)
-  não foi medida: não há navegador no ambiente onde isto foi construído.
+- **Verificado em navegador — desde 23/09/2026, e a limitação anterior caiu.** Até então este
+  projeto nunca tinha visto as próprias telas: só render no servidor e leitura de código. Agora há
+  **Chrome 153 headless controlado pelo protocolo do próprio navegador** (`Page.captureScreenshot`
+  com `captureBeyondViewport`, `Emulation.setDeviceMetricsOverride`), sem instalar dependência
+  nenhuma. Foi assim que o transbordo de 2.636px do `/demo` no celular apareceu — **dois palpites
+  meus lidos no código erraram o alvo, e a medição do DOM acertou na primeira tentativa**. Ler
+  código não encontra erro de layout; medir o DOM encontra.
+- **O que o navegador ainda NÃO prova:** toque em aparelho de verdade (dedo, iPad, rolagem por
+  inércia) e estados que dependem de clique — o smoke cobre o estado inicial e o seletor de
+  especialidade, mais nada.
 - **Só um caminho de clique está provado.** O smoke renderiza cada tela no estado inicial e, agora,
   cada área do seletor de especialidade — foi assim que o crash de Pediatria apareceu e foi
   consertado. Os OUTROS cliques (marcar um item do painel, trocar de aba, abrir um `<details>`) não

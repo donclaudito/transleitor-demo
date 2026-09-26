@@ -44,7 +44,7 @@ export const MAPA_DO_APP = [
     icone: '⚖️',
     descricao: 'O que responde por você depois: direito do titular, trilha de IA e auditoria de segurança.',
     telas: [
-      { rota: '/direitos-titular', nome: 'Direitos do titular', o_que: 'Exportar, corrigir e eliminar — conciliando o pedido com a guarda legal de 20 anos.', demo: '/demo/direitos' },
+      { rota: '/direitos-titular', nome: 'Direitos do titular', o_que: 'Exportar, corrigir e eliminar — conciliando o pedido com a guarda legal.', demo: '/demo/direitos' },
       { rota: '/monitoramento', nome: 'Monitoramento e trilha de IA', o_que: 'Quanto se usou, com qual modelo, com que resultado — sem guardar uma linha clínica.', demo: '/demo/monitoramento' },
       { rota: '/seguranca', nome: 'Auditor de segurança', o_que: 'O aplicativo se examina em busca de furos e só registra com a sua permissão.', demo: '/demo/seguranca' },
     ],
